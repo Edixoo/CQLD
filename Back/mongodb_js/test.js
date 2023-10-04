@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const User = require('./models/users'); // Import the User model
+const User = require('./models/userModel'); // Import the User model
 // If the user.js file is in another directory, adjust the path accordingly
 console.log(User)
 // Connect to MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/cqld?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.10.6', {
+mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
