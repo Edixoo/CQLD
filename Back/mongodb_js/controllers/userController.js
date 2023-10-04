@@ -1,16 +1,10 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
+const{ decryptField} = require('../controllers/functionNeeded');
 
 // Register a new user
-const decryptField = (combinedData, secretKey) => {
-  // Extract IV and encrypted data
-  const iv = Buffer.from(combinedData.slice(0, 32), 'hex');  // IV is 16 bytes, so 32 hex characters
-  const encryptedData = combinedData.slice(32);
 
-  const decipher = crypto.createDecipheriv('aes-256-cbc', secretKey, iv);
-  return decipher.update(encryptedData, 'hex', 'utf8') + decipher.final('utf8');
-};
 
 exports.register = async (req, res) => {
   try {

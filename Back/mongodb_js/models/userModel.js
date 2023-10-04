@@ -1,9 +1,9 @@
-// Imports
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const {encryptField} = require('../controllers/functionNeeded');
 require('dotenv').config();
-
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -55,13 +55,6 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   }
 });
-
-const encryptField = (field, secretKey) => {
-  const iv = crypto.randomBytes(16);  // Initialization vector of 16 bytes (128 bits)
-  const cipher = crypto.createCipheriv('aes-256-cbc', secretKey, iv);
-  const encryptedData = cipher.update(field, 'utf8', 'hex') + cipher.final('hex');
-  return iv.toString('hex') + encryptedData;  // Prepend IV to encrypted data
-};
 
 UserSchema.pre('save', function(next) {
   const user = this;

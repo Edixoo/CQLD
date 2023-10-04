@@ -1,0 +1,76 @@
+const Connection = require('../models/connectionModel');  // Adjust the path as needed
+const bcrypt = require('bcrypt'); // Used for password comparison
+const crypto = require('crypto');
+const{ decryptField} = require('../controllers/functionNeeded');
+
+
+exports.listConnections = async (req, res) => {
+  try {
+    const connections = await Connection.find().populate(['word1', 'word2']);
+    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
+
+    connections.forEach(connection => {
+      connection.proposed_by = decryptField(connection.proposed_by, secretKey);
+      if (connection.approved_by) {
+        connection.approved_by = decryptField(connection.approved_by, secretKey);
+      }
+    });
+
+    res.status(200).send(connections);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+exports.createConnection = async (req, res) => {
+  try {
+    const connection = new Connection(req.body);
+    await connection.save();
+    res.status(201).send(connection);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+exports.getConnectionById = async (req, res) => {
+  try {
+    const connection = await Connection.findById(req.params.id).populate(['word1', 'word2']);
+    if (!connection) {
+      return res.status(404).send('Connection not found');
+    }
+
+    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
+    connection.proposed_by = decryptField(connection.proposed_by, secretKey);
+    if (connection.approved_by) {
+        connection.approved_by = decryptField(connection.approved_by, secretKey);
+    }
+
+    res.status(200).send(connection);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+exports.updateConnection = async (req, res) => {
+  try {
+    const connection = await Connection.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!connection) {
+      return res.status(404).send('Connection not found');
+    }
+    res.status(200).send(connection);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+exports.deleteConnection = async (req, res) => {
+  try {
+    const connection = await Connection.findByIdAndDelete(req.params.id);
+    if (!connection) {
+      return res.status(404).send('Connection not found');
+    }
+    res.status(200).send({ message: 'Connection deleted successfully!' });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
