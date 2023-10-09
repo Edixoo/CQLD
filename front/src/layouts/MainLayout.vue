@@ -10,9 +10,7 @@
           />
         </q-toolbar-title>
 
-        <q-btn-dropdown label="Catégories" flat
-        >
-          
+        <q-btn-dropdown label="Catégories" flat>
           <q-list>
             <q-item clickable v-close-popup @click="onItemClick">
               <q-item-section>
@@ -34,25 +32,29 @@
           </q-list>
         </q-btn-dropdown>
 
-        <q-btn flat color="primary" label="Flat" 
-        text-color="withe"/>
+        <q-btn flat color="primary" label="Flat" text-color="withe" />
 
         <q-img
-            alt="login"
-            src="~assets/login.svg"
-            style="width: 35px; height: 35px"
-          />
+          alt="login"
+          src="~assets/login.svg"
+          style="width: 35px; height: 35px"
+        />
 
-          <q-input dark borderless v-model="text" :readonly="readonly" :disable="disable"
-          style="    background-color: #ffffff2b;
-                         border-radius: 5px;
-                         height: 35px;">
-        <template v-slot:append>
-          <q-icon name="search" />
-        </template>
-      </q-input>
-
-
+        <q-input
+          dark
+          bordeless
+          v-model="text"
+          dense
+          style="
+            background: #ffffff0d;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+          "
+        >
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
       </q-toolbar>
     </q-header>
 
