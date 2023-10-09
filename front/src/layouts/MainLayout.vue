@@ -32,13 +32,7 @@
           </q-list>
         </q-btn-dropdown>
 
-        <q-btn flat color="primary" label="Flat" text-color="withe" />
-
-        <q-img
-          alt="login"
-          src="~assets/login.svg"
-          style="width: 35px; height: 35px"
-        />
+        <q-btn flat color="primary" label="Qui sommes nous ?" text-color="withe" />
 
         <q-input
           dark
@@ -57,6 +51,19 @@
         </q-input>
       </q-toolbar>
     </q-header>
+
+    <q-img
+          alt="login"
+          src="~assets/login.svg"
+          style="width: 35px; height: 35px"
+        />
+
+    <q-footer elevated style="background: #a5d296; color: black">
+      <q-toolbar>
+        <q-toolbar-title>© CQLD</q-toolbar-title>
+        <q-btn flat color="primary" label="Contactez nous" text-color="withe" />
+      </q-toolbar>
+    </q-footer>
 
     <q-page-container>
       <router-view />
