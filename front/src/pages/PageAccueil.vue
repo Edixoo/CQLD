@@ -13,7 +13,7 @@
           size="lg"
         />
         <CreateLink
-          v-if="connexion.value ? (chemin = '/create') : (chemin = '/connect')"
+          v-if="connexion.value ? (chemin = '/create') : (chemin = '/login')"
           @to="chemin.value"
           class="q-ma-xl q-pa-sm"
           size="lg"
@@ -32,7 +32,6 @@ const chemin = ref("connect");
 const connexion = ref(false);
 const maxDiff = 10;
 
-const DefineAleatoire = () => (alea.value = Math.floor(Math.random() * maxDiff));
-
-console.log(alea.value);
+const DefineAleatoire = () =>
+  (alea.value = Math.floor(Math.random() * maxDiff));
 </script>

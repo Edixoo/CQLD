@@ -2,15 +2,15 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated style="height: 70px; align-items: center; display: flex">
       <q-toolbar>
-        <q-toolbar-title>
+        <a href="/" class="q-mr-xl">
           <q-img
             alt="logo_CQLD"
             src="~assets/logo_CQLD.svg"
             style="width: 120px; height: 30px"
           />
-        </q-toolbar-title>
+        </a>
 
-        <q-btn-dropdown label="Catégories" flat>
+        <q-btn-dropdown label="Catégories" flat class="q-mr-md">
           <q-list>
             <q-item clickable v-close-popup @click="onItemClick">
               <q-item-section>
@@ -32,8 +32,14 @@
           </q-list>
         </q-btn-dropdown>
 
-        <q-btn flat color="primary" label="Qui sommes nous ?" text-color="withe" />
-
+        <q-btn
+          flat
+          color="primary"
+          label="Qui sommes nous ?"
+          text-color="withe"
+          to="/contact"
+        />
+        <q-space />
         <q-input
           dark
           bordeless
@@ -53,10 +59,10 @@
     </q-header>
 
     <q-img
-          alt="login"
-          src="~assets/login.svg"
-          style="width: 35px; height: 35px"
-        />
+      alt="login"
+      src="~assets/login.svg"
+      style="width: 35px; height: 35px"
+    />
 
     <q-footer elevated style="background: #a5d296; color: black">
       <q-toolbar>
