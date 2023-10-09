@@ -68,3 +68,13 @@ exports.deleteTheme = async (req, res) => {
     res.status(400).send(error.message);
   }
 };
+
+exports.addManyThemes = async (req, res) => {
+  try {
+    const themes = req.body;  // Assume an array of themes is passed in the request body
+    const result = await Theme.insertMany(themes);
+    res.status(201).send(result);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};

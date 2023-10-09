@@ -70,3 +70,13 @@ exports.deleteWord = async (req, res) => {
     res.status(400).send(error.message);
   }
 };
+
+exports.addManyWords = async (req, res) => {
+  try {
+    const words = req.body;  // Assume an array of words is passed in the request body
+    const result = await Word.insertMany(words);
+    res.status(201).send(result);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};

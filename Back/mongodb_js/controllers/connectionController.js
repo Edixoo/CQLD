@@ -74,3 +74,13 @@ exports.deleteConnection = async (req, res) => {
     res.status(400).send(error.message);
   }
 };
+
+exports.addManyConnections = async (req, res) => {
+  try {
+    const connections = req.body;  // Assume an array of connections is passed in the request body
+    const result = await Connection.insertMany(connections);
+    res.status(201).send(result);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
