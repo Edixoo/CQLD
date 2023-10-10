@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout>
     <q-header elevated style="height: 70px; align-items: center; display: flex">
       <q-toolbar>
         <a href="/" class="q-mr-xl">
@@ -36,39 +36,37 @@
           flat
           color="primary"
           label="Qui sommes nous ?"
-          text-color="withe"
+          text-color="white"
           to="/contact"
         />
         <q-space />
         <q-input
           dark
           bordeless
-          v-model="text"
+          v-model="textInput"
           dense
-          style="
-            background: #ffffff0d;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-          "
+          filled
+          clearable
+          placeholder="Rechercher"
+          style="background: #ffffff0d; width: 300px"
         >
           <template v-slot:append>
             <q-icon name="search" />
           </template>
         </q-input>
       </q-toolbar>
+      <q-img
+        alt="login"
+        src="~assets/login.svg"
+        style="width: 60px; height: 60px"
+        class="q-mr-md q-ml-md"
+      />
     </q-header>
 
-    <q-img
-      alt="login"
-      src="~assets/login.svg"
-      style="width: 35px; height: 35px"
-    />
-
-    <q-footer elevated style="background: #a5d296; color: black">
-      <q-toolbar>
-        <q-toolbar-title>© CQLD</q-toolbar-title>
-        <q-btn flat color="primary" label="Contactez nous" text-color="withe" />
-      </q-toolbar>
+    <q-footer elevated class="row" style="background: #a5d296; height:50px; align-items: center;">
+      <div class="text-h6 q-pl-md" style="color:black" >© CQLD 2023</div>
+      <q-space />
+      <q-btn flat label="Contactez nous" text-color="black" to="/contact" class="text-subtitle1 text-weight-bold"/>
     </q-footer>
 
     <q-page-container>
@@ -77,6 +75,8 @@
   </q-layout>
 </template>
 
-<script>
-import { defineComponent, ref } from "vue";
+<script setup>
+import { ref } from "vue";
+
+const textInput = ref("");
 </script>

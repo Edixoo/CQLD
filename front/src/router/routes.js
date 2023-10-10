@@ -28,7 +28,7 @@ const routes = [
     path: "/categories",
     component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: "", component: () => import("pages/PageCategories.vue") },
+      { path: "", component: () => import("pages/PageCategorie.vue") },
     ],
   },
   {

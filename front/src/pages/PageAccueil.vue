@@ -11,13 +11,19 @@
           @click="DefineAleatoire()"
           class="q-pa-sm q-ma-xl"
           size="lg"
+          style="width: 200px"
         />
         <CreateLink
           v-if="connexion.value ? (chemin = '/create') : (chemin = '/login')"
           @to="chemin.value"
           class="q-ma-xl q-pa-sm"
           size="lg"
+          style="width: 200px"
         />
+      </div>
+
+      <div class="text-h2 text-weight-bold" font="roboto font">
+        Qu'est ce que c'est ?
       </div>
     </div>
   </q-page>
