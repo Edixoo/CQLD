@@ -7,7 +7,7 @@
         <q-btn
           color="primary"
           label="Mots Aléatoires"
-          :to="'/diff/' + alea.value"
+          :to="'/categories/' + alea.value"
           @click="DefineAleatoire()"
           class="q-pa-sm q-ma-xl"
           size="lg"
