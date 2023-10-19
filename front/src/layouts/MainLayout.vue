@@ -55,18 +55,37 @@
           </template>
         </q-input>
       </q-toolbar>
-      <q-img
+      <q-btn
+        unelevated
+        round
+        color="primary"
+        icon="account_circle"
+        size="22px"
+        to="/login"
+      />
+
+      <!-- <q-img
         alt="login"
         src="~assets/login.svg"
         style="width: 60px; height: 60px"
         class="q-mr-md q-ml-md"
-      />
+      /> -->
     </q-header>
 
-    <q-footer elevated class="row" style="background: #a5d296; height:50px; align-items: center;">
-      <div class="text-h6 q-pl-md" style="color:black" >© CQLD 2023</div>
+    <q-footer
+      elevated
+      class="row"
+      style="background: #a5d296; height: 50px; align-items: center"
+    >
+      <div class="text-h6 q-pl-md" style="color: black">© CQLD 2023</div>
       <q-space />
-      <q-btn flat label="Contactez nous" text-color="black" to="/contact" class="text-subtitle1 text-weight-bold"/>
+      <q-btn
+        flat
+        label="Contactez nous"
+        text-color="black"
+        to="/contact"
+        class="text-subtitle1 text-weight-bold"
+      />
     </q-footer>
 
     <q-page-container>
