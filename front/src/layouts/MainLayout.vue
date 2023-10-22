@@ -6,25 +6,25 @@
           <q-img
             alt="logo_CQLD"
             src="~assets/logo_CQLD.svg"
-            style="width: 120px; height: 30px"
+            class="logo_size"
           />
         </a>
 
         <q-btn-dropdown label="Catégories" flat class="q-mr-md">
           <q-list>
-            <q-item clickable v-close-popup @click="onItemClick">
+            <q-item clickable v-close-popup>
               <q-item-section>
                 <q-item-label>Paul</q-item-label>
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-close-popup @click="onItemClick">
+            <q-item clickable v-close-popup>
               <q-item-section>
                 <q-item-label>Chiens</q-item-label>
               </q-item-section>
             </q-item>
 
-            <q-item clickable v-close-popup @click="onItemClick">
+            <q-item clickable v-close-popup>
               <q-item-section>
                 <q-item-label>Marine</q-item-label>
               </q-item-section>
@@ -55,18 +55,59 @@
           </template>
         </q-input>
       </q-toolbar>
-      <q-img
+
+      <connexion-button />
+
+      <q-btn-dropdown
+        v-if="false"
+        flat
+        class="q-mr-md"
+        icon="account_circle"
+        :label="user.name"
+      >
+        <q-list>
+          <q-item clickable v-close-popup>
+            <q-item-section>
+              <q-item-label>Paul</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item clickable v-close-popup>
+            <q-item-section>
+              <q-item-label>Chiens</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item clickable v-close-popup>
+            <q-item-section>
+              <q-item-label>Marine</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-btn-dropdown>
+
+      <!-- <q-img
         alt="login"
         src="~assets/login.svg"
-        style="width: 60px; height: 60px"
+        style="width: 50px; height: 50px"
         class="q-mr-md q-ml-md"
-      />
+      /> -->
     </q-header>
 
-    <q-footer elevated class="row" style="background: #a5d296; height:50px; align-items: center;">
-      <div class="text-h6 q-pl-md" style="color:black" >© CQLD 2023</div>
-      <q-space />
-      <q-btn flat label="Contactez nous" text-color="black" to="/contact" class="text-subtitle1 text-weight-bold"/>
+    <q-footer elevated class="row bg-secondary">
+      <q-toolbar>
+        <q-toolbar-title class="text-h6 q-ml-md footer_title">
+          © CQLD 2023
+        </q-toolbar-title>
+
+        <q-btn
+          flat
+          label="Contactez nous"
+          text-color="black"
+          size="md"
+          to="/contact"
+        />
+      </q-toolbar>
     </q-footer>
 
     <q-page-container>
@@ -75,8 +116,28 @@
   </q-layout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
+import ConnexionButton from "src/components/ConnexionButton.vue";
+import CreateLink from "src/components/CreateLink.vue";
 
 const textInput = ref("");
+const connexion = ref(false);
+const chemin = ref("connect");
+
+const user = ref({
+  name: "Paul",
+  email: "",
+});
 </script>
+
+<style lang="scss">
+.logo_size {
+  width: 120px;
+  height: 30px;
+}
+
+.footer_title {
+  color: black;
+}
+</style>
