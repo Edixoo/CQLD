@@ -29,6 +29,16 @@ exports.createTheme = async (req, res) => {
   }
 };
 
+exports.makeTheme = async (test) => {
+  try {
+    const theme = new Theme(test);
+    await theme.save();
+
+  } catch (error) {
+    console.log("tototheme")
+  }
+};
+
 exports.getThemeById = async (req, res) => {
   try {
     const theme = await Theme.findById(req.params.id);
@@ -78,3 +88,4 @@ exports.addManyThemes = async (req, res) => {
     res.status(400).send(error.message);
   }
 };
+

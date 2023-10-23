@@ -7,14 +7,6 @@ const{ decryptField} = require('../controllers/functionNeeded');
 exports.listConnections = async (req, res) => {
   try {
     const connections = await Connection.find().populate(['word1', 'word2']);
-    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
-
-    connections.forEach(connection => {
-      connection.proposed_by = decryptField(connection.proposed_by, secretKey);
-      if (connection.approved_by) {
-        connection.approved_by = decryptField(connection.approved_by, secretKey);
-      }
-    });
 
     res.status(200).send(connections);
   } catch (error) {
@@ -32,19 +24,20 @@ exports.createConnection = async (req, res) => {
   }
 };
 
+exports.makeConnection = async (test) => {
+  try {
+    const connection = new Connection(test);
+    await connection.save();
+  } catch (error) {
+  }
+};
+
 exports.getConnectionById = async (req, res) => {
   try {
     const connection = await Connection.findById(req.params.id).populate(['word1', 'word2']);
     if (!connection) {
       return res.status(404).send('Connection not found');
     }
-
-    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
-    connection.proposed_by = decryptField(connection.proposed_by, secretKey);
-    if (connection.approved_by) {
-        connection.approved_by = decryptField(connection.approved_by, secretKey);
-    }
-
     res.status(200).send(connection);
   } catch (error) {
     res.status(400).send(error.message);

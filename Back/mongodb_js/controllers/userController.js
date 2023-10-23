@@ -22,6 +22,20 @@ exports.register = async (req, res) => {
   }
 };
 
+exports.createUser = async (test) => {
+  try {
+    const { name, surname, username, password, email, role } = test;
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+      console.log("user Existing")
+    }
+    const user = new User({ name, surname, username, password, email, role });
+    await user.save();
+  } catch (error) {
+    console.log("toto");
+  }
+};
+
 // Authenticate a user and return a token/session
 exports.login = async (req, res) => {
   try {
@@ -100,6 +114,7 @@ exports.listUsers = async (req, res) => {
     // Decrypt the fields for each user
     users.forEach(user => {
       user.name = decryptField(user.name, secretKey);
+      console.log(user.name)
       user.surname = decryptField(user.surname, secretKey);
       user.username = decryptField(user.username, secretKey);
       user.email = decryptField(user.email, secretKey);
@@ -111,4 +126,15 @@ exports.listUsers = async (req, res) => {
     res.status(400).send(error.message);
   }
 };
+
+exports.addManyUsers = async (req, res) => {
+  try {
+    const users = req.body;  // Assume an array of users is passed in the request body
+    const result = await User.insertMany(users);
+    res.status(201).send(result);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 

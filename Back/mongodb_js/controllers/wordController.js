@@ -30,6 +30,14 @@ exports.createWord = async (req, res) => {
   }
 };
 
+exports.makeWord = async (test) => {
+  try {
+    const word = new Word(test);
+    await word.save();
+  } catch (error) {
+  }
+};
+
 exports.getWordById = async (req, res) => {
   try {
     const word = await Word.findById(req.params.id).populate('theme');
