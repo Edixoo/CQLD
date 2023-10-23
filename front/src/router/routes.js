@@ -24,6 +24,11 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/PageWho.vue") }],
   },
+   {
+    path: "/contacteznous",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/PageContact.vue") }],
+  },
   {
     path: "/categories",
     component: () => import("layouts/MainLayout.vue"),
