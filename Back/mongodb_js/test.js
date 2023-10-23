@@ -4,6 +4,12 @@ const User = require('./models/userModel');
 const Theme = require('./models/themeModel');
 const Word = require('./models/wordModel');
 const Connection = require('./models/connectionModel');
+
+const userController = require('./controllers/userController');
+const connectionController = require('./controllers/connectionController');  
+const themeController = require('./controllers/themeController');  
+const wordController = require('./controllers/wordController');  
+
 require('dotenv').config();
 
 // Connect to MongoDB
@@ -29,7 +35,10 @@ async function createUsers() {
     last_login: faker.date.recent()
   }));
 
-  await User.insertMany(users);
+  for(let user of users){
+    await userController.createUser(user);
+  }
+
   console.log('Users populated');
 }
 
@@ -38,7 +47,9 @@ async function createThemes() {
     theme_name: faker.random.word()
   }));
 
-  await Theme.insertMany(themes);
+  for(let theme of themes){
+    await themeController.makeTheme(theme);
+  }
   console.log('Themes populated');
 }
 
@@ -50,11 +61,13 @@ async function createWords() {
     word: faker.lorem.word(),
     theme: faker.random.arrayElement(themes)._id,
     added_by: faker.random.arrayElement(users)._id,
-    approved: faker.random.boolean(),
+    approved: faker.datatype.boolean(),
     created_at: faker.date.past()
   }));
 
-  await Word.insertMany(words);
+  for(let word of words){
+    await wordController.makeWord(word);
+  }
   console.log('Words populated');
 }
 
@@ -66,12 +79,14 @@ async function createConnections() {
     word1: faker.random.arrayElement(words)._id,
     word2: faker.random.arrayElement(words)._id,
     proposed_by: faker.random.arrayElement(users)._id,
-    approved: faker.random.boolean(),
+    approved: faker.datatype.boolean(),
     approved_by: faker.random.arrayElement(users)._id,
     created_at: faker.date.past()
   }));
 
-  await Connection.insertMany(connections);
+  for(let connection of connections){
+    await connectionController.makeConnection(connection);
+  }
   console.log('Connections populated');
 }
 
