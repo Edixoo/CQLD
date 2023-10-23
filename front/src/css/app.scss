@@ -1,2 +1,15 @@
-// app global css in SCSS form
+@font-face {
+  font-family: londrinaSolid;
+  src: url(./fonts/LondrinaSolid-Regular.woff);
+  font-family: carterOne;
+  src: url(./fonts/CarterOne-Regular.woff);
+}
 
+// declare a class which applies it
+.londrinaSolid {
+  font-family: "londrinaSolid";
+}
+
+.carterOne {
+  font-family: "carterOne";
+}
