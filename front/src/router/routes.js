@@ -25,14 +25,14 @@ const routes = [
     children: [{ path: "", component: () => import("pages/PageWho.vue") }],
   },
   {
-    path: "/categories",
+    path: "/categories/:id",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       { path: "", component: () => import("pages/PageCategorie.vue") },
     ],
   },
   {
-    path: "/categories/:id",
+    path: "/categories/:id/:id",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       { path: "", component: () => import("pages/PageCategoriesUnit.vue") },
