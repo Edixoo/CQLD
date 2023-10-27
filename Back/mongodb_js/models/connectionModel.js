@@ -34,14 +34,4 @@ const ConnectionSchema = new mongoose.Schema({
   }
 });
 
-ConnectionSchema.pre('save', function(next) {
-  const connection = this;
-  const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
-  connection.proposed_by = encryptField(connection.proposed_by.toString(), secretKey);
-  if (connection.approved_by) {
-    connection.approved_by = encryptField(connection.approved_by.toString(), secretKey);
-  }
-  next();
-});
-
 module.exports = mongoose.model('Connection', ConnectionSchema);

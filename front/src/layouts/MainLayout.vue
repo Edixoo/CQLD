@@ -105,7 +105,7 @@
           label="Contactez nous"
           text-color="black"
           size="md"
-          to="/contact"
+          to="/contacteznous"
         />
       </q-toolbar>
     </q-footer>

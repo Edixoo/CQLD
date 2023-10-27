@@ -22,6 +22,6 @@ app.use('/api/themes', themeRoutes);
 app.use('/api/words', wordRoutes);
 app.use('/api/connections', connectionRoutes);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+app.listen(80, () => {
+  console.log(`Server is running on port 80`);
 });

@@ -30,6 +30,14 @@ exports.createWord = async (req, res) => {
   }
 };
 
+exports.makeWord = async (test) => {
+  try {
+    const word = new Word(test);
+    await word.save();
+  } catch (error) {
+  }
+};
+
 exports.getWordById = async (req, res) => {
   try {
     const word = await Word.findById(req.params.id).populate('theme');
@@ -66,6 +74,16 @@ exports.deleteWord = async (req, res) => {
       return res.status(404).send('Word not found');
     }
     res.status(200).send({ message: 'Word deleted successfully!' });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+exports.addManyWords = async (req, res) => {
+  try {
+    const words = req.body;  // Assume an array of words is passed in the request body
+    const result = await Word.insertMany(words);
+    res.status(201).send(result);
   } catch (error) {
     res.status(400).send(error.message);
   }

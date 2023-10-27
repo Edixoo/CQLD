@@ -39,8 +39,12 @@
               </div>
 
               <div class="q-mt-xl" style="display: flex">
-                <p class="q-mr-xs" style="font-weight: 500">Pas de compte ?</p>
-                <a href="#" class="q-mb-xs" style="text-decoration: none">
+                <p class="q-mr-sm" style="font-weight: 500">Pas de compte ?</p>
+                <a
+                  @click="$router.push('/register')"
+                  class="q-mb-xs"
+                  style="text-decoration: none"
+                >
                   Créez en un</a
                 >
               </div>
