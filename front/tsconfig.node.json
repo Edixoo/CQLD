@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "composite": true,
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "preserveSymlinks": true
+  }
+}
