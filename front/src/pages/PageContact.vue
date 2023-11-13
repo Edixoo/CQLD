@@ -59,7 +59,7 @@
 
             <div class="col">
               <div class="q-gutter-md">
-                <q-form @submit="login">
+                <q-form @submit="contact">
                   <h4 class="text-h4">Formulaire de contact</h4>
                   <q-input
                     filled
@@ -115,33 +115,24 @@
   </q-page>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      username: "",
-      email: "",
-    };
-  },
-  methods: {
-    login() {
-      if (this.username && this.email) {
-        // Faire la connexion ici
-        console.log(
-          "Connexion avec nom d'utilisateur:",
-          this.username,
-          "votre email : ",
-          this.email
-        );
-      } else {
-        // Champs vides
-        this.$q.notify({
-          type: "negative",
-          message: "Veuillez remplir tous les champs.",
-        });
-      }
-    },
-  },
+
+
+<script setup>
+import { ref } from "vue";
+
+const username = ref("");
+const email = ref("");
+
+const contact = () => {
+  if (username.value && email.value) {
+    console.log("Envoi email");
+  } else {
+    // Champs vides
+    this.$q.notify({
+      type: "negative",
+      message: "Veuillez remplir tous les champs.",
+    });
+  }
 };
 </script>
 
