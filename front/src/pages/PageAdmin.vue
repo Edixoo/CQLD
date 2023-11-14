@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-xl">
-    <q-markup-table>
+    <q-markup-table style="overflow-y: auto; max-height: 500px;">
       <thead style="background-color: #54546C; color: white;">
         <tr>
           <th class="text-left">Mot1</th>
