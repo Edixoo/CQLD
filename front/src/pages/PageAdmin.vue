@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-xl">
-    <q-markup-table style="overflow-y: auto; max-height: 500px;">
-      <thead style="background-color: #54546C; color: white;">
+    <q-markup-table class="table">
+      <thead class="header">
         <tr>
           <th class="text-left">Mot1</th>
           <th class="text-right">Mot2</th>
@@ -17,7 +17,7 @@
           <td class="text-right">{{ mot.categorie }}</td>
           <td class="text-right">{{ mot.description }}</td>
           <td class="text-right" >
-            <q-btn @click="inspectWord(index)" label="Inspecter"  style="background-color: #54546C; color: white; width: 80px;"/>
+            <q-btn class="button" @click="inspectWord(index)" label="Inspecter"/>
           </td>
         </tr>
       </tbody>
@@ -128,3 +128,22 @@ const inspectWord = (index) => {
   console.log("Inspecting word at index:", index);
 };
 </script>
+
+<style>
+.table{
+  overflow-y: auto; 
+  max-height: 500px;
+}
+
+.header{
+  background-color: #54546C;
+  color: white;
+}
+
+.button{
+  background-color: #54546C;
+  color: white;
+  font-size:x-small;
+  padding: 6px;
+}
+</style>
