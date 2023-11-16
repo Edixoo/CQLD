@@ -69,7 +69,6 @@ import { ref } from "vue";
 
 const username = ref("");
 const password = ref("");
-
 const login = () => {
   if (username.value && password.value) {
     UserServices.login({ username: username.value, password: password.value });

@@ -2,23 +2,59 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 require('dotenv').config();
 
-const decryptField = (combinedData, secretKey) => {
-    // Extract IV and encrypted data
-    const iv = Buffer.from(combinedData.slice(0, 32), 'hex');  // IV is 16 bytes, so 32 hex characters
-    const encryptedData = combinedData.slice(32);
-  
-    const decipher = crypto.createDecipheriv('aes-256-cbc', secretKey, iv);
-    return decipher.update(encryptedData, 'hex', 'utf8') + decipher.final('utf8');
-  };
+const fixedIV = Buffer.alloc(16, 0); // Fixed IV
+
+const decryptField = (encryptedData, secretKey) => {
+  try {
+    // Ensure the encrypted data is a Buffer or convert it
+    if (!Buffer.isBuffer(encryptedData)) {
+      encryptedData = Buffer.from(encryptedData, 'hex');
+    }
+
+    const decipher = crypto.createDecipheriv('aes-256-cbc', secretKey, fixedIV);
+    let decrypted = decipher.update(encryptedData);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+
+    return decrypted.toString('utf8');
+  } catch (error) {
+    console.error('Decryption error:', error);
+    return null;
+  }
+};
 
 const encryptField = (field, secretKey) => {
-    const iv = crypto.randomBytes(16);  // Initialization vector of 16 bytes (128 bits)
-    const cipher = crypto.createCipheriv('aes-256-cbc', secretKey, iv);
-    const encryptedData = cipher.update(field, 'utf8', 'hex') + cipher.final('hex');
-    return iv.toString('hex') + encryptedData;  // Prepend IV to encrypted data
-  };
+  try {
+    // Ensure the field data is a Buffer or convert it
+    if (!Buffer.isBuffer(field)) {
+      field = Buffer.from(field, 'utf8');
+    }
+
+    const cipher = crypto.createCipheriv('aes-256-cbc', secretKey, fixedIV);
+    let encrypted = cipher.update(field);
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+
+    return encrypted.toString('hex');
+  } catch (error) {
+    console.error('Encryption error:', error);
+    return null;
+  }
+};
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401); // No token found
+
+  jwt.verify(token, secretKey, (err, user) => {
+    if (err) return res.sendStatus(403); // Invalid token
+    req.user = user;
+    next();
+  });
+};
 
 module.exports = {
     decryptField, 
-    encryptField
+    encryptField,
+    authenticateToken
 }

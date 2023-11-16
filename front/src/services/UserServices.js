@@ -18,7 +18,16 @@ const register = (userData) => {
 };
 
 const login = (credentials) => {
-  return apiClient.post('/api/users/login', credentials);
+  return apiClient.post('/api/users/login', credentials)
+    .then(response => {
+      const token  = response.data.token;
+      console.log(response.data.token + " : ", response.data.username);
+      localStorage.setItem('userToken', token);
+      axios.defaults.headers.common['Authorization'] = 'Bearer ${token}';
+    })
+    .catch(error => {
+      console.error('Login error', error);
+    })
 };
 
 const getProfile = async () => {
