@@ -5,7 +5,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup >
 
 defineProps({
     title: {
@@ -20,6 +20,6 @@ h1{
     color: $third;
     font-size: 75px;
     margin-left: 100px;
-
+    text-align: left;
 }
 </style>

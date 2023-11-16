@@ -67,7 +67,7 @@
   </q-page>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import CreateLink from "src/components/CreateLink.vue";
 import { ref } from "vue";
 
@@ -76,7 +76,7 @@ const chemin = ref("connect");
 const connexion = ref(false);
 const maxDiff = 10;
 
-const DefineAleatoire = () =>
+const DefineAleatoire = () => 
   (alea.value = Math.floor(Math.random() * maxDiff));
 </script>
 

@@ -11,22 +11,10 @@
         </a>
 
         <q-btn-dropdown label="Catégories" flat class="q-mr-md">
-          <q-list>
-            <q-item clickable v-close-popup>
+          <q-list v-for="theme in themes" :key="theme._id">
+            <q-item clickable v-close-popup @click="$router.push(`/categories/` +theme.theme_name)">
               <q-item-section>
-                <q-item-label>Paul</q-item-label>
-              </q-item-section>
-            </q-item>
-
-            <q-item clickable v-close-popup>
-              <q-item-section>
-                <q-item-label>Chiens</q-item-label>
-              </q-item-section>
-            </q-item>
-
-            <q-item clickable v-close-popup>
-              <q-item-section>
-                <q-item-label>Marine</q-item-label>
+                <q-item-label>{{theme.theme_name}}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -116,14 +104,21 @@
   </q-layout>
 </template>
 
-<script setup lang="ts">
-import { ref } from "vue";
+<script setup>
+import { onMounted, ref } from "vue";
 import ConnexionButton from "src/components/ConnexionButton.vue";
 import CreateLink from "src/components/CreateLink.vue";
+import themesServices from "src/services/ThemeServices";
+
+
 
 const textInput = ref("");
-const connexion = ref(false);
-const chemin = ref("connect");
+const themes=ref([]);
+
+onMounted(async () => {
+  themes.value = await themesServices.listThemes();
+});
+
 
 const user = ref({
   name: "Paul",
