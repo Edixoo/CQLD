@@ -1,11 +1,19 @@
 <template>
     <q-card clickable @click="() => $router.push('/liens/' + connexion.id)" class="cardstyle">
         <q-card-section class="cardsection-title text-h5">
-            {{ connexion.word1.word }} VS {{ connexion.word1.word }}
+            <div class="row">
+                {{ connexion.word1.word }} 
+            </div>
+            <div class="row">
+                VS 
+            </div>
+            <div class="row">
+                {{ connexion.word1.word }}
+            </div>
         </q-card-section>
         <q-separator />
         <q-card-section>
-            <div>
+            <div class="description">
                 {{ connexion.description }}
             </div>
         </q-card-section>
@@ -13,8 +21,6 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue"
-
 
 defineProps({
     connexion: {
@@ -39,12 +45,15 @@ defineProps({
     .cardsection-title{
         color: white;
         font-weight: 1000;
-        height: 70px;
+        height: 100px;
         text-align: center;
         background-color: $primary;
         
+        div {
+            text-align: center;
+        }
     }
-    div{
+    .description{
         height: 200px;
         text-align: center;
     }
