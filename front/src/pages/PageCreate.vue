@@ -134,6 +134,11 @@ const createWord = async () => {
       approved_by: "moi",
     });
 
+    this.$q.notify({
+      type: "positive",
+      message: "La connexion a été créée avec succès.",
+    });
+
     // Reset the form after successful creation
     resetForm();
   } else {
