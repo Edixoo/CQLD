@@ -64,22 +64,21 @@
 </template>
 
 <script setup>
-import UserServices from '../services/UserServices.js';
-import {ref} from 'vue';
+import UserServices from "../services/UserServices.js";
+import { ref } from "vue";
 
-const username=ref('');
-const password=ref('');
+const username = ref("");
+const password = ref("");
 
-const login= (() => {
-      if (username.value && password.value) {
-        UserServices.login({username: username.value, password: password.value})
-      } else {
-        // Champs vides
-        this.$q.notify({
-          type: "negative",
-          message: "Veuillez remplir tous les champs.",
-      });
-    }
-  })
-
+const login = () => {
+  if (username.value && password.value) {
+    UserServices.login({ username: username.value, password: password.value });
+  } else {
+    // Champs vides
+    this.$q.notify({
+      type: "negative",
+      message: "Veuillez remplir tous les champs.",
+    });
+  }
+};
 </script>

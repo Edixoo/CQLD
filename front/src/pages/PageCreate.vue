@@ -4,7 +4,7 @@
       <q-card style="max-width: 600px" class="q-mx-auto q-pa-md q-py-md">
         <q-card-section>
           <div class="q-gutter-md">
-            <q-form @submit="login">
+            <q-form @submit="createWord">
               <h2 class="text-h4" style="text-align: center">
                 Créer une liaison
               </h2>
@@ -96,33 +96,23 @@
   </q-page>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      mot1: "",
-      mot2: "",
-    };
-  },
-  methods: {
-    login() {
-      if (this.mot1 && this.mot2) {
-        // Faire la connexion ici
-        console.log(
-          "Connexion avec nom d'utilisateur:",
-          this.mot1,
-          "et mot de passe:",
-          this.mot2
-        );
-      } else {
-        // Champs vides
-        this.$q.notify({
-          type: "negative",
-          message: "Veuillez remplir tous les champs.",
-        });
-      }
-    },
-  },
+<script setup>
+import UserServices from "../services/UserServices.js";
+import { ref } from "vue";
+
+const mot1 = ref("");
+const mot2 = ref("");
+
+const createWord = () => {
+  if (mot1.value && mot2.value) {
+    UserServices.createWord({ mot1: mot1.value, mot2: mot2.value });
+  } else {
+    // Champs vides
+    this.$q.notify({
+      type: "negative",
+      message: "Veuillez remplir tous les champs.",
+    });
+  }
 };
 </script>
 

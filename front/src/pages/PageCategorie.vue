@@ -20,7 +20,7 @@ import AppCardVS from 'src/components/categoriePage/AppCardVS.vue';
 import ThemeServices from '../services/ThemeServices';
 import ConnectionsServices from '../services/ConnexionServices'
 
-const route=useRoute()
+const route = useRoute();
 
 const categorie=ref(null)
 const connexions=ref(null)

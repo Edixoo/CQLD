@@ -115,49 +115,40 @@
 
 <!-- Le reste de votre composant Vue -->
 
-<script>
-export default {
-  data() {
-    return {
-      username: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    };
-  },
-  methods: {
-    register() {
-      if (
-        this.username &&
-        this.firstName &&
-        this.lastName &&
-        this.email &&
-        this.password &&
-        this.confirmPassword === this.password
-      ) {
-        // Faire l'inscription ici
-        console.log(
-          "Inscription avec nom d'utilisateur:",
-          this.username,
-          "prénoms:",
-          this.firstName,
-          "noms:",
-          this.lastName,
-          "adresse e-mail:",
-          this.email,
-          "et mot de passe:",
-          this.password
-        );
-      } else {
-        // Champs vides ou mots de passe non correspondants
-        this.$q.notify({
-          type: "negative",
-          message: "Veuillez remplir tous les champs correctement.",
-        });
-      }
-    },
-  },
+<script setup>
+import UserServices from "../services/UserServices.js";
+import { ref } from "vue";
+
+const username = ref("");
+const firstName = ref("");
+const lastName = ref("");
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+
+const register = () => {
+  if (
+    username.value &&
+    firstName.value &&
+    lastName.value &&
+    email.value &&
+    password.value &&
+    confirmPassword.value
+  ) {
+    UserServices.register({
+      username: username.value,
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      password: password.value,
+      confirmPassword: confirmPassword.value,
+    });
+  } else {
+    // Champs vides
+    this.$q.notify({
+      type: "negative",
+      message: "Veuillez remplir tous les champs.",
+    });
+  }
 };
 </script>
