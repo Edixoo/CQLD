@@ -6,6 +6,10 @@ const {encryptField} = require('../controllers/functionNeeded');
 require('dotenv').config();
 
 const ThemeSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+    unique: true,
+  },
   theme_name: {
     type: String,
     required: [true, 'Theme name is required'],
@@ -14,10 +18,12 @@ const ThemeSchema = new mongoose.Schema({
   }
 });
 
-ThemeSchema.pre('save', function(next) {
-  const theme = this;
-  const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
-  theme.theme_name = encryptField(theme.theme_name, secretKey);
+ThemeSchema.pre('save', async function (next) {
+  if (!this.id) {
+    // Si l'id n'est pas déjà défini
+    const count = await mongoose.model('Theme').countDocuments().exec();
+    this.id = count; // Attribue la position comme id
+  }
   next();
 });
 

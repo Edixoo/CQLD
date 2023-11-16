@@ -11,16 +11,24 @@ const apiClient = axios.create({
   },
 });
 
-const listConnections = () => {
-  return apiClient.get('/api/connections/');
+const listConnections = async() => {
+  return await apiClient.get('/api/connections/').then((response) => {return response.data})
 };
 
 const createConnection = (connectionData) => {
   return apiClient.post('/api/connections/', connectionData);
 };
 
-const getConnectionById = (id) => {
-  return apiClient.get(`/api/connections/${id}`);
+const getConnectionByTheme= async (idTheme) => {
+  return await apiClient.get(`/api/connections/theme/${idTheme}`).then((response) => {return response.data})
+};
+
+const getConnectionById = async (id) => {
+  return await apiClient.get(`/api/connections/${id}`).then((response) => {return response.data});
+};
+
+const getConnectionByIdInt = async (id) => {
+  return await apiClient.get(`/api/connections/int/${id}`).then((response) => {return response.data});
 };
 
 const updateConnection = (id, connectionData) => {
@@ -34,6 +42,7 @@ const deleteConnection = (id) => {
 export default {
   listConnections,
   createConnection,
+  getConnectionByTheme,
   getConnectionById,
   updateConnection,
   deleteConnection,

@@ -14,17 +14,21 @@ const apiClient = axios.create({
 });
 
 const listThemes = async () => {
-  console.log(apiClient.get('/api/themes'))
-  return await apiClient.get('/api/themes/');
+  return await apiClient.get('/api/themes/').then((response) => { return response.data });
 };
 
 const createTheme = (themeData) => {
   return apiClient.post('/api/themes/', themeData);
 };
 
-const getThemeById = (id) => {
-  return apiClient.get(`/api/themes/${id}`);
+const getThemeById = async (id) => {
+  return await apiClient.get(`/api/themes/${id}`).then((response) => { return response.data });
 };
+
+const getThemeByName = async (name) => {
+  return await apiClient.get(`/api/themes/name/${name}`).then((response) => { return response.data });
+};
+
 
 const updateTheme = (id, themeData) => {
   return apiClient.put(`/api/themes/${id}`, themeData);
@@ -40,4 +44,5 @@ export default {
   getThemeById,
   updateTheme,
   deleteTheme,
+  getThemeByName
 };

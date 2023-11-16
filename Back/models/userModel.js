@@ -64,7 +64,6 @@ UserSchema.pre('save', function(next) {
 
   user.name = encryptField(user.name, secretKey);
   user.surname = encryptField(user.surname, secretKey);
-  user.username = encryptField(user.username, secretKey);
   user.email = encryptField(user.email, secretKey);
 
   next();

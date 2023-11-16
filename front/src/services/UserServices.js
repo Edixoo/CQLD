@@ -7,7 +7,6 @@ const API_BASE_URL = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000'
 // Axios instance can be customized for the needs of your app, e.g., setting headers
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true, // This is needed if your API requires cookies
   headers: {
     'Content-Type': 'application/json',
     // Any other headers you need to set
@@ -22,11 +21,11 @@ const login = (credentials) => {
   return apiClient.post('/api/users/login', credentials);
 };
 
-const getProfile = () => {
-  return apiClient.get('/api/users/profile');
+const getProfile = async () => {
+  return await apiClient.get('/api/users/profile').then((response) => { return response.data});
 };
 
-const updateProfile = (userData) => {
+const updateProfile = async (userData) => {
   return apiClient.put('/api/users/profile', userData);
 };
 
@@ -34,8 +33,8 @@ const deleteUser = () => {
   return apiClient.delete('/api/users/profile');
 };
 
-const listUsers = () => {
-  return apiClient.get('/api/users/all');
+const listUsers = async () => {
+  return await apiClient.get('/api/users/all').then((response) => {return response.data});
 };
 
 export default {

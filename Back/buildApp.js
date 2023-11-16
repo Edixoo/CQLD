@@ -74,10 +74,13 @@ async function createWords() {
 async function createConnections() {
   const words = await Word.find();
   const users = await User.find();
+  const themes = await Theme.find();
 
   const connections = Array.from({ length: NUM_CONNECTIONS }).map(() => ({
     word1: faker.random.arrayElement(words)._id,
     word2: faker.random.arrayElement(words)._id,
+    description: faker.lorem.sentence(),
+    theme: faker.random.arrayElement(themes)._id,
     proposed_by: faker.random.arrayElement(users)._id,
     approved: faker.datatype.boolean(),
     approved_by: faker.random.arrayElement(users)._id,

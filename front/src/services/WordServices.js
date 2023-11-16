@@ -11,16 +11,16 @@ const apiClient = axios.create({
   },
 });
 
-const listWords = () => {
-  return apiClient.get('/api/words/');
+const listWords = async () => {
+  return await apiClient.get('/api/words/').then((response) => {return response.data});
 };
 
 const createWord = (wordData) => {
   return apiClient.post('/api/words/', wordData);
 };
 
-const getWordById = (id) => {
-  return apiClient.get(`/api/words/${id}`);
+const getWordById = async (id) => {
+  return await apiClient.get(`/api/words/${id}`).then((response) => { return response.data});
 };
 
 const updateWord = (id, wordData) => {

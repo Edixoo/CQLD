@@ -30,14 +30,14 @@ const routes = [
     children: [{ path: "", component: () => import("pages/PageContact.vue") }],
   },
   {
-    path: "/categories/:id",
+    path: "/categories/:name",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       { path: "", component: () => import("pages/PageCategorie.vue") },
     ],
   },
   {
-    path: "/categories/:id/:id",
+    path: "/liens/:id",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       { path: "", component: () => import("pages/PageCategoriesUnit.vue") },

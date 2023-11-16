@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 app.use('/api/users', userRoutes);
 app.use('/api/themes', themeRoutes);
 app.use('/api/words', wordRoutes);

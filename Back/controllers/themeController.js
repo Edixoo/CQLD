@@ -1,19 +1,15 @@
 const Theme = require('../models/themeModel');  // Adjust the path as needed
 const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
-const{ decryptField} = require('../controllers/functionNeeded');
+const{ decryptField, encryptField} = require('../controllers/functionNeeded');
 
 
 exports.listThemes = async (req, res) => {
   try {
     const themes = await Theme.find();
-    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
-
-    themes.forEach(theme => {
-      theme.theme_name = decryptField(theme.theme_name, secretKey);
-    });
-
+    
     res.status(200).send(themes);
+
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -35,7 +31,7 @@ exports.makeTheme = async (test) => {
     await theme.save();
 
   } catch (error) {
-    console.log("tototheme")
+    console.log(error.message)
   }
 };
 
@@ -46,8 +42,19 @@ exports.getThemeById = async (req, res) => {
       return res.status(404).send('Theme not found');
     }
 
-    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
-    theme.theme_name = decryptField(theme.theme_name, secretKey);
+    res.status(200).send(theme);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+exports.getThemeByName = async (req, res) => {
+  try {
+    const theme = await Theme.findOne({ theme_name: req.params.name });
+
+    if (!theme) {
+      return res.status(404).send('Theme not found');
+    }
 
     res.status(200).send(theme);
   } catch (error) {

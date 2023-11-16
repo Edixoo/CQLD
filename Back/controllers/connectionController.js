@@ -44,6 +44,30 @@ exports.getConnectionById = async (req, res) => {
   }
 };
 
+exports.getConnectionByTheme = async (req, res) => {
+  try {
+    const connection = await Connection.find({theme: req.params.id}).populate(['word1', 'word2']);
+    if (!connection) {
+      return res.status(404).send('Connection not found');
+    }
+    res.status(200).send(connection);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+exports.getConnectionByIdInt = async (req, res) => {
+  try {
+    const connection = await Connection.find({id: req.params.id}).populate(['word1', 'word2']);
+    if (!connection) {
+      return res.status(404).send('Connection not found');
+    }
+    res.status(200).send(connection);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 exports.updateConnection = async (req, res) => {
   try {
     const connection = await Connection.findByIdAndUpdate(req.params.id, req.body, { new: true });

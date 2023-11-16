@@ -7,7 +7,7 @@ const{ decryptField} = require('../controllers/functionNeeded');
 exports.listWords = async (req, res) => {
   try {
     const words = await Word.find().populate('theme');
-    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
+
 
     words.forEach(word => {
       word.word = decryptField(word.word, secretKey);

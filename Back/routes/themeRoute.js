@@ -6,6 +6,7 @@ const router = express.Router();
 router.get('/', themeController.listThemes);
 router.post('/', themeController.createTheme);
 router.get('/:id', themeController.getThemeById);
+router.get('/name/:name', themeController.getThemeByName);
 router.put('/:id', themeController.updateTheme);
 router.delete('/:id', themeController.deleteTheme);
 
