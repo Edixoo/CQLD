@@ -23,6 +23,10 @@ const getConnectionByTheme= async (idTheme) => {
   return await apiClient.get(`/api/connections/theme/${idTheme}`).then((response) => {return response.data})
 };
 
+const getConnectionsByApproved = async() => {
+  return await apiClient.get('/api/connections/approved').then((response) => {return response.data})
+};
+
 const getConnectionById = async (id) => {
   return await apiClient.get(`/api/connections/${id}`).then((response) => {return response.data});
 };
@@ -42,7 +46,9 @@ const deleteConnection = (id) => {
 export default {
   listConnections,
   createConnection,
+  getConnectionByIdInt,
   getConnectionByTheme,
+  getConnectionsByApproved,
   getConnectionById,
   updateConnection,
   deleteConnection,
