@@ -42,7 +42,7 @@
                 <label for="description" class="label-large">Description</label>
                 <div>
                   <q-input
-                    v-model="text"
+                    v-model="description"
                     filled
                     label="Ex. Deux mots similaires"
                     type="textarea"
@@ -54,33 +54,15 @@
               <div class="q-mt-md">
                 <label for="catégories" class="label-large">Catégories</label>
                 <div>
-                  <q-btn-dropdown
-                    flat
-                    class="q-mr-md btn-dropdown-pageCreate"
-                    label="zzzzzzzzzz"
-                  >
-                    <q-list>
-                      <q-item clickable v-close-popup @click="onItemClick">
-                        <q-item-section>
-                          <q-item-label>Paul</q-item-label>
-                        </q-item-section>
-                      </q-item>
-
-                      <q-item clickable v-close-popup @click="onItemClick">
-                        <q-item-section>
-                          <q-item-label>Chiens</q-item-label>
-                        </q-item-section>
-                      </q-item>
-
-                      <q-item clickable v-close-popup @click="onItemClick">
-                        <q-item-section>
-                          <q-item-label>Marine</q-item-label>
-                        </q-item-section>
-                      </q-item>
-                    </q-list>
-                  </q-btn-dropdown>
+                  <q-select
+                    v-model="selectedCategory"
+                    filled
+                    label="Choisir une catégorie"
+                    :options="categories"
+                  />
                 </div>
               </div>
+
               <q-btn
                 label="Envoyer"
                 type="submit"
@@ -97,17 +79,64 @@
 </template>
 
 <script setup>
-import UserServices from "../services/UserServices.js";
-import { ref } from "vue";
+import WordServices from "../services/WordServices.js";
+import ThemeServices from "../services/ThemeServices.js";
+import ConnexionServices from "../services/ConnexionServices.js";
+import { ref, onMounted } from "vue";
 
 const mot1 = ref("");
 const mot2 = ref("");
+const description = ref("");
+const selectedCategory = ref("");
+const categories = ref([]);
 
-const createWord = () => {
-  if (mot1.value && mot2.value) {
-    UserServices.createWord({ mot1: mot1.value, mot2: mot2.value });
+const fetchThemes = async () => {
+  const result = await ThemeServices.listThemes();
+  categories.value = result.map((theme) => theme.theme_name);
+};
+
+onMounted(fetchThemes);
+
+const resetForm = () => {
+  // Reset form fields and set formSubmitted to false
+  mot1.value = "";
+  mot2.value = "";
+  description.value = "";
+  selectedCategory.value = "";
+};
+
+const createWord = async () => {
+  const theme = await ThemeServices.getThemeByName(selectedCategory.value);
+  const themeId = theme._id;
+
+  if (mot1.value && mot2.value && selectedCategory.value) {
+    WordServices.createWord({
+      word: mot1.value,
+      theme: selectedCategory.value,
+      added_by: "eee",
+      approved: true,
+    });
+
+    WordServices.createWord({
+      word: mot2.value,
+      theme: selectedCategory.value,
+      added_by: "eee",
+      approved: true,
+    });
+
+    ConnexionServices.createConnection({
+      word1: "65563f5e753238ddaec51051",
+      word2: "65563f5e753238ddaec51053",
+      theme: themeId,
+      description: description.value,
+      proposed_by: "moi",
+      approved: false,
+      approved_by: "moi",
+    });
+
+    // Reset the form after successful creation
+    resetForm();
   } else {
-    // Champs vides
     this.$q.notify({
       type: "negative",
       message: "Veuillez remplir tous les champs.",
@@ -115,13 +144,9 @@ const createWord = () => {
   }
 };
 </script>
-
 <style>
 .label-large {
-  font-size: 16px; /* Ajustez la taille de la police selon vos préférences */
+  font-size: 16px;
   font-weight: 500;
-}
-.btn-dropdown-pageCreate {
-  border: 0.5px solid #0000001d; /* Ajoutez une bordure avec le style souhaité */
 }
 </style>

@@ -23,6 +23,11 @@ const getWordById = async (id) => {
   return await apiClient.get(`/api/words/${id}`).then((response) => { return response.data});
 };
 
+// IDEM VOIR ICI 
+const getWordByName = async (name) => {
+  return await apiClient.get(`/api/words/name/${name}`).then((response) => { return response.data });
+};
+
 const updateWord = (id, wordData) => {
   return apiClient.put(`/api/words/${id}`, wordData);
 };
@@ -37,4 +42,5 @@ export default {
   getWordById,
   updateWord,
   deleteWord,
+  getWordByName
 };

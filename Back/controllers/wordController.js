@@ -55,6 +55,23 @@ exports.getWordById = async (req, res) => {
   }
 };
 
+
+// ATTENTION A VOIR ICI
+exports.getWordByName = async (req, res) => {
+  try {
+    const word = await Word.findOne({ word : req.params.name });
+
+    if (!word) {
+      return res.status(404).send('Word not found');
+    }
+
+    res.status(200).send(word);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+
 exports.updateWord = async (req, res) => {
   try {
     const word = await Word.findByIdAndUpdate(req.params.id, req.body, { new: true });

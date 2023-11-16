@@ -64,7 +64,7 @@ async function createWords() {
 
   const words = Array.from({ length: NUM_WORDS }).map(() => ({
     word: faker.lorem.word(),
-    theme: faker.random.arrayElement(themes)._id,
+    theme: faker.random.arrayElement(themes).theme_name,
     added_by: faker.random.arrayElement(users)._id,
     approved: faker.datatype.boolean(),
     created_at: faker.date.past()
