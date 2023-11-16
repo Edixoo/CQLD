@@ -10,8 +10,9 @@ const WordSchema = new mongoose.Schema({
     trim: true
   },
   theme: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Theme'
+    type: String,
+    ref: 'Theme',
+    required: true
   },
   added_by: {
     type: String,
