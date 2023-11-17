@@ -29,12 +29,12 @@ exports.createUser = async (test) => {
     const { name, surname, username, password, email, role } = test;
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
-      console.log("user Existing")
+      return ("user Existing");
     }
     const user = new User({ name, surname, username, password, email, role });
     await user.save();
   } catch (error) {
-    console.log("toto");
+    return ("toto");
   }
 };
 
@@ -81,7 +81,7 @@ exports.getProfile = async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found.");
     }
-
+    
     // Fetch the secret key from the environment variable
     const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
 

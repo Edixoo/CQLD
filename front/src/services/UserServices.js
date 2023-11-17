@@ -21,14 +21,28 @@ const login = (credentials) => {
   return apiClient.post('/api/users/login', credentials)
     .then(response => {
       const token  = response.data.token;
+      const role = responde.data.role;
       console.log(response.data.token + " : ", response.data.username);
       localStorage.setItem('userToken', token);
+      localStorage.setItem('userRole', role);
       axios.defaults.headers.common['Authorization'] = 'Bearer ${token}';
     })
     .catch(error => {
       console.error('Login error', error);
     })
 };
+
+
+const logout = () => {
+  // Remove the token from local storage
+  localStorage.removeItem('userToken');
+
+  // Remove the default Authorization header
+  delete axios.defaults.headers.common['Authorization'];
+
+  // Redirect to login page or update the state as logged out
+  // ...
+}
 
 const getProfile = async () => {
   return await apiClient.get('/api/users/profile').then((response) => { return response.data});
