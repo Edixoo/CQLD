@@ -57,7 +57,7 @@
 
       <section>
         <h3 class="h3">Pourquoi Nous ?</h3>
-        <p>
+        <p class="last-paragraph">
           Nous sommes motivés par la conviction profonde que l'apprentissage
           peut être une aventure divertissante. La découverte des subtilités
           entre deux mots peut être aussi captivante qu'instructive, et c'est
@@ -104,11 +104,14 @@ p {
   font-weight: 400;
   line-height: 28px;
   font-size: 18px;
-  height: 50px;
   letter-spacing: 0.5px;
-  text-align: center;
+  text-align: justify;
   color: $third;
   margin: auto;
   width: 80%;
+}
+
+.last-paragraph {
+  margin-bottom: 50px;
 }
 </style>
