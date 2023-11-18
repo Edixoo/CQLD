@@ -10,7 +10,7 @@
           />
         </a>
 
-        <q-btn-dropdown label="Catégories" flat class="q-mr-md">
+        <q-btn-dropdown label="CATÉGORIES" flat class="q-mr-md">
           <q-list v-for="theme in themes" :key="theme._id">
             <q-item
               clickable
@@ -27,7 +27,7 @@
         <q-btn
           flat
           color="primary"
-          label="Qui sommes nous ?"
+          label="QUI SOMMES NOUS ?"
           text-color="white"
           to="/contact"
         />
@@ -50,7 +50,7 @@
 
       <connexion-button />
 
-      <q-btn-dropdown
+      <!-- <q-btn-dropdown
         v-if="false"
         flat
         class="q-mr-md"
@@ -76,9 +76,8 @@
             </q-item-section>
           </q-item>
         </q-list>
-      </q-btn-dropdown>
+      </q-btn-dropdown> -->
     </q-header>
-
     <q-footer elevated class="row bg-secondary">
       <div class="footer-content">
         <div class="footer-column">

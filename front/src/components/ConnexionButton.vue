@@ -4,7 +4,7 @@
       <q-btn
         class="q-mr-xl"
         flat
-        label="S'inscrire"
+        label="S'INSCRIRE"
         text-color="white"
         size="md"
         @click="$router.push('/register')"
@@ -12,7 +12,7 @@
     </div>
     <div class="q-ma-sm">
       <q-btn
-        label="se connecter"
+        label="SE CONNECTER"
         color="white"
         text-color="primary"
         @click="$router.push('/login')"
