@@ -124,18 +124,21 @@ const createWord = async () => {
       approved: true,
     });
 
-    const id_word1 = await WordServices.getWordByName({ name: mot1.value });
-    console.log(id_word1);
+    const id_word1 = await WordServices.getWordByName(mot1.value);
+    const id1 = id_word1._id;
 
-    // ConnexionServices.createConnection({
-    //   word1: "65563f5e753238ddaec51051",
-    //   word2: "65563f5e753238ddaec51053",
-    //   theme: themeId,
-    //   description: description.value,
-    //   proposed_by: "moi",
-    //   approved: false,
-    //   approved_by: "moi",
-    // });
+    const id_word2 = await WordServices.getWordByName(mot2.value);
+    const id2 = id_word2._id;
+
+    ConnexionServices.createConnection({
+      word1: id1,
+      word2: id2,
+      theme: themeId,
+      description: description.value,
+      proposed_by: "moi",
+      approved: false,
+      approved_by: "moi",
+    });
 
     this.$q.notify({
       type: "positive",

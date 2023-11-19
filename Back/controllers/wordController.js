@@ -61,8 +61,8 @@ exports.getWordById = async (req, res) => {
 exports.getWordByName = async (req, res) => {
   try { 
     console.log("toto");
-    console.log(req.body.name);
-    const word = await Word.findOne({ word: req.body.name });
+    console.log(req.params.name);
+    const word = await Word.findOne({ word: req.params.name });
 
     if (!word) {
       return res.status(404).send('Word not found');
