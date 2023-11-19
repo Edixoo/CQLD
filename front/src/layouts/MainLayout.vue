@@ -82,64 +82,59 @@
       <div class="footer-content">
         <div class="footer-column">
           <div class="footer-section" style="text-align: center">
-            <div class="footer-column align-items-footer">
-              <q-btn
-                size="12px"
-                flat
-                label="Données personnelles"
-                text-color="black"
-                to="/contactez-nous"
+            <a
+              href="https://www.instagram.com/votreprofil"
+              target="_blank"
+              class="q-px-xs"
+            >
+              <img
+                src="~assets/instagram.png"
+                alt="Instagram"
+                style="width: 25px; height: 25px; margin-top: 15px"
               />
-              <q-btn
-                size="12px"
-                flat
-                label="Mentions Légales"
-                text-color="black"
-                to="/mentions-legales"
-              />
-              <q-btn
-                size="12px"
-                flat
-                label="Contactez Nous"
-                text-color="black"
-                to="/contactez-nous"
-              />
-            </div>
-          </div>
-        </div>
+            </a>
 
-        <!-- Column 2 -->
-        <div class="footer-column">
-          <div class="footer-section" style="text-align: center">
-            <div class="footer-column align-items-footer">
-              <!-- Address section -->
-              <p class="footer-title footer-p">CQLD</p>
-              <p class="footer-p">19 Rue Louis David</p>
-              <p class="footer-p">62100 Calais</p>
-              <p class="footer-p">France</p>
-            </div>
-          </div>
-        </div>
+            <a
+              href="https://www.facebook.com/votreprofil"
+              target="_blank"
+              class="q-px-xs"
+            >
+              <img
+                src="~assets/facebook.png"
+                alt="facebook"
+                style="width: 25px; height: 25px; margin-top: 15px"
+              />
+            </a>
 
-        <!-- Column 3 -->
-        <div class="footer-column">
+            <a
+              href="https://www.twitter.com/votreprofil"
+              target="_blank"
+              class="q-px-xs"
+            >
+              <img
+                src="~assets/twitter.png"
+                alt="twitter"
+                style="width: 25px; height: 25px; margin-top: 15px"
+              />
+            </a>
+          </div>
+
+          <div class="footer-section middle-section" style="text-align: center">
+            <router-link to="/" class="router-link"
+              ><span>Accueil |</span></router-link
+            >
+            <router-link to="/legalnotice" class="router-link">
+              <span>Mentions légales |</span>
+            </router-link>
+            <router-link to="/personnaldata" class="router-link"
+              ><span>Données personnelles |</span>
+            </router-link>
+            <router-link to="/contacteznous" class="router-link"
+              ><span>Contactez nous</span>
+            </router-link>
+          </div>
           <div class="footer-section" style="text-align: center">
-            <div class="align-items-footer">
-              <p class="footer-title footer-p">Suivez-nous</p>
-              <div class="column3">
-                <!-- Social media icons -->
-                <q-icon
-                  name="facebook"
-                  class="social-icon"
-                  @click="redirectToSocialMedia('facebook')"
-                />
-                <q-icon
-                  name="instagram"
-                  class="social-icon"
-                  @click="redirectToSocialMedia('instagram')"
-                />
-              </div>
-            </div>
+            <p>CQLD © 2023</p>
           </div>
         </div>
       </div>
@@ -202,37 +197,37 @@ const scrollToTop = () => {
   flex-direction: column;
 }
 
-.footer-title {
+.router-link span {
+  margin-left: 0px;
+  margin-right: 5px;
   font-weight: bold;
-  font-size: 18px; /* Adjust the font size as needed */
-  color: black; /* Set the text color to black */
+  color: #252530;
 }
 
-.footer-p {
+.footer-section p {
+  font-weight: bold;
+  font-size: 10px;
+  color: #42543c;
+  margin-top: 10px;
   margin-bottom: 0px;
-  color: black; /* Set the text color to black */
-}
-
-.social-icon {
-  font-size: 25px;
-  color: black; /* Set the icon color to black */
-  margin-right: 10px;
-}
-
-.q-btn {
-  text-transform: initial;
-  font-size: 14px; /* Adjust the font size for the buttons */
-}
-
-.align-items-footer {
+  align-items: center;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 200px;
-  margin: auto;
+  justify-content: center;
 }
 
-.column3 {
-  flex-direction: row;
+.router-link {
+  text-decoration: none;
+  font-size: 12px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #54546c;
+  }
+}
+
+.middle-section {
+  margin-top: 12px;
 }
 </style>
