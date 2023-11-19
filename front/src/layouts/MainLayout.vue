@@ -49,35 +49,8 @@
       </q-toolbar>
 
       <connexion-button />
-
-      <!-- <q-btn-dropdown
-        v-if="false"
-        flat
-        class="q-mr-md"
-        icon="account_circle"
-        :label="user.name"
-      >
-        <q-list>
-          <q-item clickable v-close-popup>
-            <q-item-section>
-              <q-item-label>Paul</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-item clickable v-close-popup>
-            <q-item-section>
-              <q-item-label>Chiens</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-item clickable v-close-popup>
-            <q-item-section>
-              <q-item-label>Marine</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-btn-dropdown> -->
     </q-header>
+
     <q-footer elevated class="row bg-secondary">
       <div class="footer-content">
         <div class="footer-column">

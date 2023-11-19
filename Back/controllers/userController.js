@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const{ decryptField} = require('../controllers/functionNeeded');
 const jwt = require('jsonwebtoken');
 const { stringify } = require('querystring');
+const nodemailer = require('nodemailer');
 
 // Register a new user
 
@@ -158,4 +159,37 @@ exports.addManyUsers = async (req, res) => {
   }
 };
 
+exports.sendMail = async (req, res) => {
+  try {
+    const { username, email, text } = req.body;
 
+ 
+    // Configurer le transporteur Nodemailer
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'cqld.iut@gmail.com',
+        pass: 'nvvf oprc gtly zftp',
+      },
+    });
+
+    // Définir le contenu de l'e-mail
+    const mailOptions = {
+      from: email,
+      to: 'cqld.iut@gmail.com',
+      subject: 'Nouveau message de contact',
+      text: `Un utilisateur a rempli le formulaire de contact.\n\nNom d'utilisateur: ${username}\nAdresse e-mail: ${email}\nMessage: ${text}`,
+
+    };
+
+    // Envoyer l'e-mail
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return res.status(500).send(error.toString());
+      }
+      res.status(200).send('E-mail envoyé : ' + info.response);
+    });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
