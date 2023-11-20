@@ -70,7 +70,7 @@ exports.getConnectionByApproved = async (req, res) => {
 
 exports.getConnectionByIdInt = async (req, res) => {
   try {
-    const connection = await Connection.find({id: req.params.id}).populate(['word1', 'word2']);
+    const connection = await Connection.findOne({id: req.params.id}).populate(['word1', 'word2']);
     if (!connection) {
       return res.status(404).send('Connection not found');
     }
