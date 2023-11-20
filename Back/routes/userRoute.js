@@ -28,4 +28,8 @@ router.delete('/profile', userController.deleteUser);
 // This should be protected by some admin-check middleware to ensure the requester has admin rights
 router.get('/all', userController.listUsers);
 
+router.post('/sendMail', userController.sendMail);
+
+
+
 module.exports = router;

@@ -4,6 +4,8 @@ const User = require('./models/userModel');
 const Theme = require('./models/themeModel');
 const Word = require('./models/wordModel');
 const Connection = require('./models/connectionModel');
+const{ decryptField} = require('./controllers/functionNeeded');
+const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
 
 const userController = require('./controllers/userController');
 const connectionController = require('./controllers/connectionController');  
@@ -36,10 +38,10 @@ async function createUsers() {
   }));
 
   for(let user of users){
-    console.log(user.username + " : " + user.password);
+    //console.log(user.username + " : " + user.password);
     await userController.createUser(user);
   }
-  console.log(users.length);
+  //console.log(users.length);
 
   console.log('Users populated');
 }
@@ -52,40 +54,46 @@ async function createThemes() {
   for(let theme of themes){
     await themeController.makeTheme(theme);
   }
-  console.log(themes.length);
+  //console.log(themes.length);
   console.log('Themes populated');
 }
 
 async function createWords() {
+
   const themes = await Theme.find();
-  console.log(themes.length);
+  //console.log(themes);
   const users = await User.find();
-  console.log(users.length);
+  //console.log(users);
 
   const words = Array.from({ length: NUM_WORDS }).map(() => ({
     word: faker.lorem.word(),
     theme: faker.random.arrayElement(themes).theme_name,
     added_by: faker.random.arrayElement(users)._id,
+    theme: faker.random.arrayElement(themes)._id,
+    added_by: decryptField(faker.random.arrayElement(users).name,secretKey),
     approved: faker.datatype.boolean(),
     created_at: faker.date.past()
   }));
-
+  //console.log(words);
   for(let word of words){
     await wordController.makeWord(word);
   }
+  const the_words = await Word.find();
+  console.log(the_words);
+  
   console.log('Words populated');
 }
 
 async function createConnections() {
   const words = await Word.find();
   const users = await User.find();
-
+  console.log(words);
   const connections = Array.from({ length: NUM_CONNECTIONS }).map(() => ({
-    word1: faker.random.arrayElement(words)._id,
-    word2: faker.random.arrayElement(words)._id,
-    proposed_by: faker.random.arrayElement(users)._id,
+    word1: faker.random.arrayElement(words).word,
+    word2: faker.random.arrayElement(words).word,
+    proposed_by: decryptField(faker.random.arrayElement(users).name,secretKey),
     approved: faker.datatype.boolean(),
-    approved_by: faker.random.arrayElement(users)._id,
+    approved_by: decryptField(faker.random.arrayElement(users).name,secretKey),
     created_at: faker.date.past()
   }));
 

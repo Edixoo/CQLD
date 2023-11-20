@@ -10,11 +10,15 @@
           />
         </a>
 
-        <q-btn-dropdown label="Catégories" flat class="q-mr-md">
+        <q-btn-dropdown label="CATÉGORIES" flat class="q-mr-md">
           <q-list v-for="theme in themes" :key="theme._id">
-            <q-item clickable v-close-popup @click="$router.push(`/categories/` +theme.theme_name)">
+            <q-item
+              clickable
+              v-close-popup
+              @click="$router.push(`/categories/` + theme.theme_name)"
+            >
               <q-item-section>
-                <q-item-label>{{theme.theme_name}}</q-item-label>
+                <q-item-label>{{ theme.theme_name }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -23,7 +27,7 @@
         <q-btn
           flat
           color="primary"
-          label="Qui sommes nous ?"
+          label="QUI SOMMES NOUS ?"
           text-color="white"
           to="/contact"
         />
@@ -45,57 +49,75 @@
       </q-toolbar>
 
       <connexion-button />
-
-      <q-btn-dropdown
-        v-if="false"
-        flat
-        class="q-mr-md"
-        icon="account_circle"
-        :label="user.name"
-      >
-        <q-list>
-          <q-item clickable v-close-popup>
-            <q-item-section>
-              <q-item-label>Paul</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-item clickable v-close-popup>
-            <q-item-section>
-              <q-item-label>Chiens</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-item clickable v-close-popup>
-            <q-item-section>
-              <q-item-label>Marine</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-btn-dropdown>
-
-      <!-- <q-img
-        alt="login"
-        src="~assets/login.svg"
-        style="width: 50px; height: 50px"
-        class="q-mr-md q-ml-md"
-      /> -->
     </q-header>
 
     <q-footer elevated class="row bg-secondary">
-      <q-toolbar>
-        <q-toolbar-title class="text-h6 q-ml-md footer_title">
-          © CQLD 2023
-        </q-toolbar-title>
+      <div class="footer-content">
+        <div class="footer-column">
+          <div class="footer-section" style="text-align: center">
+            <a
+              href="https://www.instagram.com/votreprofil"
+              target="_blank"
+              class="q-px-xs"
+            >
+              <img
+                src="~assets/instagram.png"
+                alt="Instagram"
+                style="width: 25px; height: 25px; margin-top: 15px"
+              />
+            </a>
 
-        <q-btn
-          flat
-          label="Contactez nous"
-          text-color="black"
-          size="md"
-          to="/contacteznous"
-        />
-      </q-toolbar>
+            <a
+              href="https://www.facebook.com/votreprofil"
+              target="_blank"
+              class="q-px-xs"
+            >
+              <img
+                src="~assets/facebook.png"
+                alt="facebook"
+                style="width: 25px; height: 25px; margin-top: 15px"
+              />
+            </a>
+
+            <a
+              href="https://www.twitter.com/votreprofil"
+              target="_blank"
+              class="q-px-xs"
+            >
+              <img
+                src="~assets/twitter.png"
+                alt="twitter"
+                style="width: 25px; height: 25px; margin-top: 15px"
+              />
+            </a>
+          </div>
+
+          <div class="footer-section middle-section" style="text-align: center">
+            <router-link to="/" class="router-link"
+              ><span>Accueil |</span></router-link
+            >
+            <router-link to="/legalnotice" class="router-link">
+              <span>Mentions légales |</span>
+            </router-link>
+            <router-link to="/personnaldata" class="router-link"
+              ><span>Données personnelles |</span>
+            </router-link>
+            <router-link to="/contacteznous" class="router-link"
+              ><span>Contactez nous</span>
+            </router-link>
+          </div>
+          <div class="footer-section" style="text-align: center">
+            <p>CQLD © 2023</p>
+          </div>
+        </div>
+      </div>
+
+      <q-page-sticky
+        position="bottom-right"
+        style="margin-right: 16px; margin-bottom: 10px"
+      >
+        <q-btn round icon="arrow_upward" color="primary" @click="scrollToTop" />
+      </q-page-sticky>
     </q-footer>
 
     <q-page-container>
@@ -103,27 +125,30 @@
     </q-page-container>
   </q-layout>
 </template>
-
 <script setup>
 import { onMounted, ref } from "vue";
 import ConnexionButton from "src/components/ConnexionButton.vue";
 import CreateLink from "src/components/CreateLink.vue";
 import themesServices from "src/services/ThemeServices";
 
-
-
 const textInput = ref("");
-const themes=ref([]);
+const themes = ref([]);
 
 onMounted(async () => {
   themes.value = await themesServices.listThemes();
 });
 
-
 const user = ref({
   name: "Paul",
   email: "",
 });
+
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
 </script>
 
 <style lang="scss">
@@ -132,7 +157,50 @@ const user = ref({
   height: 30px;
 }
 
-.footer_title {
-  color: black;
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  width: 100%;
+}
+
+.footer-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.router-link span {
+  margin-left: 0px;
+  margin-right: 5px;
+  font-weight: bold;
+  color: #252530;
+}
+
+.footer-section p {
+  font-weight: bold;
+  font-size: 10px;
+  color: #42543c;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.router-link {
+  text-decoration: none;
+  font-size: 12px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #54546c;
+  }
+}
+
+.middle-section {
+  margin-top: 12px;
 }
 </style>

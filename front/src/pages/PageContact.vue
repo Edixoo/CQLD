@@ -115,17 +115,27 @@
   </q-page>
 </template>
 
-
-
 <script setup>
 import { ref } from "vue";
+import UserServices from "../services/UserServices.js";
 
 const username = ref("");
 const email = ref("");
+const text = ref("");
 
-const contact = () => {
+const contact = async () => {
   if (username.value && email.value) {
-    console.log("Envoi email");
+    const result = await UserServices.sendMail({
+      username: username.value,
+      email: email.value,
+      text: text.value,
+    });
+
+    if (result) {
+      username.value = "";
+      email.value = "";
+      text.value = "";
+    }
   } else {
     // Champs vides
     this.$q.notify({

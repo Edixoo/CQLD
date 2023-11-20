@@ -112,21 +112,27 @@ const createWord = async () => {
   if (mot1.value && mot2.value && selectedCategory.value) {
     WordServices.createWord({
       word: mot1.value,
-      theme: selectedCategory.value,
+      theme: themeId,
       added_by: "eee",
       approved: true,
     });
 
     WordServices.createWord({
       word: mot2.value,
-      theme: selectedCategory.value,
+      theme: themeId,
       added_by: "eee",
       approved: true,
     });
 
+    const id_word1 = await WordServices.getWordByName(mot1.value);
+    const id1 = id_word1._id;
+
+    const id_word2 = await WordServices.getWordByName(mot2.value);
+    const id2 = id_word2._id;
+
     ConnexionServices.createConnection({
-      word1: "65563f5e753238ddaec51051",
-      word2: "65563f5e753238ddaec51053",
+      word1: id1,
+      word2: id2,
       theme: themeId,
       description: description.value,
       proposed_by: "moi",

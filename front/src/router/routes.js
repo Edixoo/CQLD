@@ -30,6 +30,16 @@ const routes = [
     children: [{ path: "", component: () => import("pages/PageContact.vue") }],
   },
   {
+    path: "/personnaldata",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/PagePersonnalData.vue") }],
+  },
+  {
+    path: "/legalnotice",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/PageLegalNotice.vue") }],
+  },
+  {
     path: "/categories/:name",
     component: () => import("layouts/MainLayout.vue"),
     children: [

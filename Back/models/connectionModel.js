@@ -12,17 +12,17 @@ const ConnectionSchema = new mongoose.Schema({
     unique: true,
   },
   word1: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'Word',
     required: true
   },
   word2: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'Word',
     required: true
   },
   theme: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'Theme',
     required: true
   },

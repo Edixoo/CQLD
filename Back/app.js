@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
+
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoute');
 const themeRoutes = require('./routes/themeRoute');
