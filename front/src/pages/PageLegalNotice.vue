@@ -2,35 +2,40 @@
   <q-page>
     <div class="q-pa-md" style="padding: 0%; margin: 0%">
       <div class="legal-content">
-        <section>
-          <h3>Informations légales</h3>
-          <p>Raison sociale : CQLD</p>
+        <div class="width">
+          <h4 class="h4">Mentions légales</h4>
+        </div>
+        <q-separator />
+
+        <section class="width">
+          <h6 class="h6">Informations légales</h6>
+          <p>Nom du site web : CQLD</p>
           <p>Adresse : 19 Rue Louis David, 62100 Calais, France</p>
           <p>
-            Numéro d'immatriculation : [Numéro d'immatriculation au registre du
-            commerce]
+            Identification des collaborateurs : Langrez Marine, Bacquet Antoine,
+            Amzil Marwane, Pruvost Paul
           </p>
         </section>
 
-        <section>
-          <h3>Contact</h3>
-          <p>Adresse e-mail : [Adresse e-mail de contact]</p>
+        <section class="width">
+          <h6 class="h6">Contact</h6>
+          <p>Adresse e-mail : cqld-iut@gmail.com</p>
           <p>Téléphone : [Numéro de téléphone]</p>
         </section>
 
-        <section>
-          <h3>Directeur de la publication</h3>
-          <p>Nom : [Nom du directeur de la publication]</p>
+        <section class="width">
+          <h6 class="h6">Directeur de la publication</h6>
+          <p>Nom : Bacquet Antoine (chef de projet) ainsi que ses équipiers</p>
         </section>
 
-        <section>
-          <h3>Hébergement</h3>
+        <section class="width">
+          <h6 class="h6">Hébergement</h6>
           <p>Nom de l'hébergeur : [Nom de l'hébergeur]</p>
           <p>Adresse : [Adresse de l'hébergeur]</p>
         </section>
 
-        <section>
-          <h3>Propriété Intellectuelle</h3>
+        <section class="width">
+          <h6 class="h6">Propriété Intellectuelle</h6>
           <p>
             L'ensemble des contenus de ce site (textes, images, vidéos, etc.)
             est la propriété exclusive de CQLD et est protégé par les lois
@@ -46,8 +51,8 @@
           </p>
         </section>
 
-        <section>
-          <h3>Liens hypertextes</h3>
+        <section class="width">
+          <h6 class="h6">Liens hypertextes</h6>
           <p>
             La création de liens hypertextes vers le site de CQLD est soumise à
             son autorisation préalable. Les liens hypertextes établis en
@@ -56,8 +61,8 @@
           </p>
         </section>
 
-        <section>
-          <h3>Données Personnelles</h3>
+        <section class="width">
+          <h6 class="h6">Données Personnelles</h6>
           <p>
             Les données personnelles collectées sur ce site sont uniquement
             destinées à CQLD et ne seront en aucun cas cédées à des tiers.
@@ -67,8 +72,8 @@
           </p>
         </section>
 
-        <section>
-          <h3>Modification des Mentions Légales</h3>
+        <section class="width">
+          <h6 class="h6">Modification des Mentions Légales</h6>
           <p class="last-paragraph">
             CQLD se réserve le droit de modifier, à tout moment et sans préavis,
             les présentes mentions légales afin de les adapter aux évolutions du
@@ -93,16 +98,24 @@ export default {
 </script>
 
 <style lang="scss">
-h3 {
+.h6 {
+  margin-top: 50px;
+  margin-bottom: 10px;
   font-weight: 500;
-  //   text-align: center;
-  font-size: 30px;
   color: $third;
+  width: 80%;
+}
+
+.h4 {
+  font-weight: 500;
+  color: $third;
+  width: 80%;
 }
 
 p {
   font-weight: 400;
-  font-size: 18px;
+  line-height: 28px;
+  font-size: 15px;
   letter-spacing: 0.5px;
   text-align: justify;
   color: $third;
@@ -110,11 +123,12 @@ p {
   width: 80%;
 }
 
-.first-paragraph {
-  margin-top: 60px;
+.width {
+  display: grid;
+  justify-items: center;
 }
 
-.last-paragraph {
-  margin-bottom: 50px;
+.width:last-child {
+  margin-bottom: 80px;
 }
 </style>
