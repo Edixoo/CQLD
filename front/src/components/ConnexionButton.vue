@@ -5,18 +5,67 @@
         class="q-mr-xl"
         flat
         label="S'INSCRIRE"
-        text-color="white"
+        :color="getButtonColor('register')"
+        :text-color="getTextColor('register')"
         size="md"
-        @click="$router.push('/register')"
+        :class="{ 'active-button': isRegisterActive }"
+        @click="handleButtonClick('register')"
       />
     </div>
     <div class="q-ma-sm">
       <q-btn
+        flat
         label="SE CONNECTER"
-        color="white"
-        text-color="primary"
-        @click="$router.push('/login')"
+        :color="getButtonColor('login')"
+        :text-color="getTextColor('login')"
+        :class="{ 'active-button': isLoginActive }"
+        @click="handleButtonClick('login')"
       />
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref, getCurrentInstance } from "vue";
+const { proxy } = getCurrentInstance();
+
+const isRegisterActive = ref(false);
+const isLoginActive = ref(true);
+const activeTextColor = ref("primary");
+const inactiveTextColor = ref("white");
+
+const handleButtonClick = (buttonType) => {
+  if (buttonType === "register") {
+    isRegisterActive.value = true;
+    isLoginActive.value = false;
+    proxy.$router.push("/register");
+  } else if (buttonType === "login") {
+    isRegisterActive.value = false;
+    isLoginActive.value = true;
+    proxy.$router.push("/login");
+  }
+};
+
+const getButtonColor = (buttonType) => {
+  return isButtonActive(buttonType) ? "white" : "primary";
+};
+
+const getTextColor = (buttonType) => {
+  return isButtonActive(buttonType)
+    ? activeTextColor.value
+    : inactiveTextColor.value;
+};
+
+const isButtonActive = (buttonType) => {
+  return buttonType === "register"
+    ? isRegisterActive.value
+    : isLoginActive.value;
+};
+</script>
+
+<style>
+.active-button {
+  background-color: white;
+  /* Ajoutez d'autres styles selon vos besoins */
+}
+</style>

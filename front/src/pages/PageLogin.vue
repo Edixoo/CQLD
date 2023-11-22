@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <q-page-container>
-      <q-card style="max-width: 450px" class="q-mx-auto q-pa-md">
+      <q-card style="max-width: 400px" class="q-mx-auto q-pa-md">
         <q-card-section>
           <div class="q-gutter-md">
             <q-form @submit="login">
@@ -16,6 +16,7 @@
                     (val && val.length > 0) ||
                     'Veuillez entrer votre nom d\'utilisateur',
                 ]"
+                class="q-mb-md q-mt-xl"
               />
 
               <q-input
@@ -29,6 +30,7 @@
                     (val && val.length > 0) ||
                     'Veuillez entrer votre mot de passe',
                 ]"
+                class="q-mb-md"
               />
 
               <div>
@@ -81,3 +83,5 @@ const login = () => {
   }
 };
 </script>
+
+<style></style>

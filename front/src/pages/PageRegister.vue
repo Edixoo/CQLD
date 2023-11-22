@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <q-page-container>
-      <q-card style="max-width: 450px" class="q-mx-auto q-pa-md">
+      <q-card style="max-width: 550px" class="q-mx-auto q-pa-md">
         <q-card-section>
           <div class="q-gutter-md">
             <q-form @submit="register">
@@ -62,30 +62,46 @@
               />
 
               <q-input
-                filled
                 v-model="password"
+                filled
                 label="Mot de passe"
                 lazy-rules
-                type="password"
+                :type="isPwd ? 'password' : 'text'"
                 :rules="[
                   (val) =>
                     (val && val.length > 0) ||
                     'Veuillez entrer un mot de passe',
                 ]"
-              />
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd = !isPwd"
+                  />
+                </template>
+              </q-input>
 
               <q-input
-                filled
                 v-model="confirmPassword"
+                filled
                 label="Confirmer le mot de passe"
                 lazy-rules
-                type="password"
+                :type="isPwd ? 'password' : 'text'"
                 :rules="[
                   (val) =>
                     val === this.password ||
                     'Les mots de passe ne correspondent pas',
                 ]"
-              />
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd = !isPwd"
+                  />
+                </template>
+              </q-input>
 
               <div class="q-mt-lg" style="display: flex">
                 <p class="q-mr-sm" style="font-weight: 500">Déjà un compte ?</p>
@@ -125,6 +141,7 @@ const lastName = ref("");
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
+const isPwd = ref(true);
 
 const register = () => {
   if (
