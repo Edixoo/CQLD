@@ -14,7 +14,7 @@
           style="width: 200px"
         />
         <CreateLink
-          v-if="connexion ? (chemin = '/create') : (chemin = '/login')"
+          v-if="connexion ? (chemin = '/create') : (chemin = '/create')"
           :to="chemin"
           class="q-ma-xl q-pa-sm"
           size="lg"
@@ -73,7 +73,7 @@ import { ref } from "vue";
 
 const alea = ref(0);
 const chemin = ref("connect");
-const connexion = ref(false);
+const connexion = ref(true);
 const maxDiff = 10;
 
 const DefineAleatoire = () => 

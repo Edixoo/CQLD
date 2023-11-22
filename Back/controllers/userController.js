@@ -55,7 +55,7 @@ exports.login = async (req, res) => {
 
     // Check if the password is correct
     const isMatch = await bcrypt.compare(req.body.password, user.password);
-    console.log(isMatch)  
+    //console.log(isMatch)  
     if (!isMatch) {
       return res.status(401).json({ message: 'Login failed: Incorrect password.' });
     }

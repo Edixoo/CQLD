@@ -18,6 +18,7 @@ const routes = [
     path: "/admin",
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/PageAdmin.vue") }],
+    meta: { requiresAuth: true, role: 'admin' }
   },
   {
     path: "/contact",
@@ -28,6 +29,7 @@ const routes = [
     path: "/contacteznous",
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/PageContact.vue") }],
+    meta: { requiresAuth: true, role: 'admin' }
   },
   {
     path: "/personnaldata",
@@ -57,6 +59,7 @@ const routes = [
     path: "/create",
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/PageCreate.vue") }],
+    meta: { requiresAuth: true, role: 'user' }
   },
   // Always leave this as last one,
   // but you can also remove it

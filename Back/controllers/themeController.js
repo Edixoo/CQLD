@@ -2,12 +2,13 @@ const Theme = require('../models/themeModel');  // Adjust the path as needed
 const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
 const{ decryptField, encryptField} = require('../controllers/functionNeeded');
+const { stringify } = require('querystring');
 
 
 exports.listThemes = async (req, res) => {
   try {
     const themes = await Theme.find();
-    
+    console.log("header" + stringify(req.headers));
     res.status(200).send(themes);
 
   } catch (error) {

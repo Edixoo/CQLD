@@ -38,7 +38,7 @@ async function createUsers() {
   }));
 
   for(let user of users){
-    //console.log(user.username + " : " + user.password);
+    console.log(user.username + " : " + user.password);
     await userController.createUser(user);
   }
   //console.log(users.length);
@@ -79,7 +79,6 @@ async function createWords() {
     await wordController.makeWord(word);
   }
   const the_words = await Word.find();
-  console.log(the_words);
   
   console.log('Words populated');
 }
