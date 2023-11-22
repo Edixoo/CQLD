@@ -25,10 +25,13 @@
     </div>
 
     <div id="app">
-      <h1>Qui sommes-nous ?</h1>
+      <div class="width">
+        <h4 class="h4">Qui sommes-nous ?</h4>
+      </div>
+      <q-separator />
 
-      <section>
-        <h3 class="h3">Notre Projet</h3>
+      <section class="width">
+        <h6 class="h6">Notre Projet</h6>
         <p>
           Au cœur de notre projet se trouve une vision audacieuse : explorer et
           partager la richesse infinie de la langue. Nous sommes fiers de
@@ -40,8 +43,8 @@
         </p>
       </section>
 
-      <section>
-        <h3 class="h3">Notre Équipe</h3>
+      <section class="width">
+        <h6 class="h6">Notre Équipe</h6>
         <p>
           Notre équipe de développeurs est composée d'étudiants passionnés de
           l'Université du Littoral Côte d'Opale. Chacun d'entre nous apporte une
@@ -52,8 +55,8 @@
         </p>
       </section>
 
-      <section>
-        <h3 class="h3">Pourquoi Nous ?</h3>
+      <section class="width">
+        <h6 class="h6">Pourquoi Nous ?</h6>
         <p class="last-paragraph">
           Nous sommes motivés par la conviction profonde que l'apprentissage
           peut être une aventure divertissante. La découverte des subtilités
@@ -81,26 +84,24 @@ export default {
 </script>
 
 <style lang="scss">
-.h3 {
+.h6 {
+  margin-top: 50px;
+  margin-bottom: 10px;
   font-weight: 500;
-  line-height: 56px;
-  letter-spacing: 0.15px;
-  text-align: center;
   color: $third;
+  width: 80%;
 }
 
-h1 {
+.h4 {
   font-weight: 500;
-  line-height: 106px;
-  font-size: 72px;
-  letter-spacing: 0.15px;
-  text-align: center;
   color: $third;
+  width: 80%;
 }
+
 p {
   font-weight: 400;
   line-height: 28px;
-  font-size: 18px;
+  font-size: 15px;
   letter-spacing: 0.5px;
   text-align: justify;
   color: $third;
@@ -110,5 +111,14 @@ p {
 
 .last-paragraph {
   margin-bottom: 50px;
+}
+
+.width {
+  display: grid;
+  justify-items: center;
+}
+
+.width:last-child {
+  margin-bottom: 80px;
 }
 </style>
