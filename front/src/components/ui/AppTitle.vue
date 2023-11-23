@@ -1,7 +1,6 @@
 <template>
     <div>
         <h1 class="carterOne">{{title}}</h1>
-        <q-separator />
     </div>
 </template>
 
@@ -18,7 +17,7 @@ defineProps({
 <style lang="scss">
 h1{
     color: $third;
-    font-size: 75px;
+
     margin-left: 100px;
     text-align: left;
 }
