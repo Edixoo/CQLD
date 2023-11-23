@@ -90,7 +90,7 @@
                 :type="isPwd ? 'password' : 'text'"
                 :rules="[
                   (val) =>
-                    val === this.password ||
+                    val === password ||
                     'Les mots de passe ne correspondent pas',
                 ]"
               >
@@ -154,11 +154,11 @@ const register = () => {
   ) {
     UserServices.register({
       username: username.value,
-      firstName: firstName.value,
-      lastName: lastName.value,
+      name: firstName.value,
+      surname: lastName.value,
       email: email.value,
       password: password.value,
-      confirmPassword: confirmPassword.value,
+      role: "user",
     });
   } else {
     // Champs vides

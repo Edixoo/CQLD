@@ -48,7 +48,14 @@
         </q-input>
       </q-toolbar>
 
-      <connexion-button />
+      <connexion-button v-if="!connexion"/>
+
+      <q-btn-dropdown
+        v-if="connexion"
+        label="MON COMPTE"
+        flat
+        class="q-mr-md"
+        />
     </q-header>
 
     <q-footer elevated class="row bg-secondary">
@@ -126,22 +133,31 @@
   </q-layout>
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUpdated, ref } from "vue";
 import ConnexionButton from "src/components/ConnexionButton.vue";
 import CreateLink from "src/components/CreateLink.vue";
 import themesServices from "src/services/ThemeServices";
+import { jwtDecode } from "jwt-decode";
+import UserServices from "src/services/UserServices";
 
 const textInput = ref("");
 const themes = ref([]);
+const connexion = ref(false);
 
 onMounted(async () => {
   themes.value = await themesServices.listThemes();
+  if(localStorage.getItem("userToken")){
+    const decoded = jwtDecode(localStorage.getItem("userToken"));
+    UserServices.getUserById(decoded.id).then((res) => {
+      connexion.value = true;
+      user.value = res;
+    });
+    connexion.value = true;
+  }
 });
 
-const user = ref({
-  name: "Paul",
-  email: "",
-});
+
+const user = ref(null);
 
 const scrollToTop = () => {
   window.scrollTo({
@@ -149,6 +165,7 @@ const scrollToTop = () => {
     behavior: "smooth",
   });
 };
+
 </script>
 
 <style lang="scss">
