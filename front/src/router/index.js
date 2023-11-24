@@ -49,11 +49,14 @@ export default route(function (/* { store, ssrContext } */) {
         console.log(2);
         next({ path: '/' });
       } else {
+    
         console.log(3);
+        
         next();
       }
     } else {
       console.log(4);
+     
       next();
     }
   });

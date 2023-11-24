@@ -38,11 +38,16 @@ const deleteTheme = (id) => {
   return apiClient.delete(`/api/themes/${id}`);
 };
 
+const getlistThemeContain = async (word) => {
+  return await apiClient.get(`/api/themes/list/${word}`).then((response) => { return response.data });
+};
+
 export default {
   listThemes,
   createTheme,
   getThemeById,
   updateTheme,
   deleteTheme,
-  getThemeByName
+  getThemeByName, 
+  getlistThemeContain
 };
