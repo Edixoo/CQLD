@@ -148,10 +148,6 @@ onMounted(async () => {
   themes.value = await themesServices.listThemes();
   if(localStorage.getItem("userToken")){
     const decoded = jwtDecode(localStorage.getItem("userToken"));
-    UserServices.getUserById(decoded.id).then((res) => {
-      connexion.value = true;
-      user.value = res;
-    });
     connexion.value = true;
   }
 });
