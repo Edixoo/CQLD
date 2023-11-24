@@ -11,6 +11,11 @@ router.get('/protected-endpoint', authenticateToken, (req, res) => {
 });
 router.post('/', themeController.createTheme);
 router.get('/:id', themeController.getThemeById);
+router.get('/:id', themeController.getThemeById);
+
+router.get('/list/:word', themeController.getlistThemeContain);
+
+
 router.get('/name/:name', themeController.getThemeByName);
 router.put('/:id', themeController.updateTheme);
 router.delete('/:id', themeController.deleteTheme);

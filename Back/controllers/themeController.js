@@ -49,6 +49,25 @@ exports.getThemeById = async (req, res) => {
   }
 };
 
+exports.getlistThemeContain = async (req, res) => {
+  try {
+    // const theme = await Theme.findById(req.params.word);
+
+    const listTheme = await Theme.find({ theme_name: { $regex: new RegExp(req.params.word, 'i') } });
+    if (!listTheme) {
+      return res.status(404).send('Theme not found');
+    }
+
+    res.status(200).send(listTheme);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+
+
+
+
 exports.getThemeByName = async (req, res) => {
   try {
     const theme = await Theme.findOne({ theme_name: req.params.name });

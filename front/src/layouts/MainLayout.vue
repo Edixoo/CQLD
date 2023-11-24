@@ -1,6 +1,12 @@
 <template>
   <q-layout>
-    <q-header elevated style="height: 70px; align-items: center; display: flex">
+    <q-header
+      :style="{
+        height: '70px',
+        alignItems: 'center',
+        display: 'flex',
+      }"
+    >
       <q-toolbar>
         <a href="/" class="q-mr-xl">
           <q-img
@@ -34,18 +40,45 @@
         <q-space />
         <q-input
           dark
-          bordeless
+          borderless
           v-model="textInput"
           dense
           filled
           clearable
           placeholder="Rechercher"
           style="background: #ffffff0d; width: 300px"
+          @update:model-value="searchItems"
         >
           <template v-slot:append>
             <q-icon name="search" />
           </template>
         </q-input>
+        <q-btn-dropdown label="resultat_recherche" flat class="q-mr-md">
+          <q-list v-for="theme in filteredThemes" :key="theme.value">
+            <q-item
+              clickable
+              v-close-popup
+              @click="$router.push(`/categories/` + theme.theme_name)"
+            >
+              <q-item-section>
+                <q-item-label>{{ theme }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+
+        <connexion-button />
+        <!-- </q-toolbar>
+      <q-toolbar inset v-if="filteredThemes.length > 0">
+        <q-toolbar-title>
+          <q-list bordered style="display: flex">
+            <q-item v-for="theme in filteredThemes" :key="theme.value">
+              <q-item-section>
+                <q-item-label>{{ theme }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-toolbar-title> -->
       </q-toolbar>
 
       <connexion-button v-if="!connexion"/>
@@ -211,6 +244,10 @@ const scrollToTop = () => {
   &:hover {
     color: #54546c;
   }
+}
+.q-header {
+  display: flex;
+  flex-direction: column;
 }
 
 .middle-section {
