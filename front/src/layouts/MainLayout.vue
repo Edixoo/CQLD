@@ -238,14 +238,6 @@ const connexion = ref(false);
 const isExpanded = ref(true);
 
 const filteredThemes = ref([]);
-
-onMounted(async () => {
-  themes.value = await themesServices.listThemes();
-  if (localStorage.getItem("userToken")) {
-    const decoded = jwtDecode(localStorage.getItem("userToken"));
-    connexion.value = true;
-  }
-});
 const openSearchBar = ref(false);
 
 const openSearchBarFunction = () => {
@@ -257,6 +249,14 @@ const getUserAuth = () => {
   const user = token_decoded.username;
   return user;
 };
+
+onMounted(async () => {
+  themes.value = await themesServices.listThemes();
+  if (localStorage.getItem("userToken")) {
+    const decoded = jwtDecode(localStorage.getItem("userToken"));
+    connexion.value = true;
+  }
+});
 
 const searchItems = async () => {
   try {
@@ -276,6 +276,16 @@ const deconnexion = () => {
   // Exemple : Redirection vers la page de déconnexion
   // router.push('/logout');
 };
+
+onMounted(async () => {
+  themes.value = await themesServices.listThemes();
+  if (localStorage.getItem("userToken")) {
+    const decoded = jwtDecode(localStorage.getItem("userToken"));
+    connexion.value = true;
+  }
+});
+
+const user = ref(null);
 
 const scrollToTop = () => {
   window.scrollTo({
