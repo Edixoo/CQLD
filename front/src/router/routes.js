@@ -52,13 +52,19 @@ const routes = [
     path: "/liens/:id",
     component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: "", component: () => import("pages/PageCategoriesUnit.vue") },
+      { path: "", component: () => import("pages/PageLien.vue") },
     ],
   },
   {
     path: "/create",
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/PageCreate.vue") }],
+    meta: { requiresAuth: true, role: 'user' }
+  },
+  {
+    path: "/edit/:id",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/PageEdit.vue") }],
     meta: { requiresAuth: true, role: 'user' }
   },
   // Always leave this as last one,
