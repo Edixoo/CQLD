@@ -58,6 +58,56 @@
         />
     </q-header>
 
+    <q-dialog v-model="deleteVerif">
+      <q-card class="q-pa-sm" style="width: 500px;">
+        <q-card-section class="row justify-center">
+            <q-input
+            v-model="textInput"
+            filled
+            borderless
+            clearable
+            placeholder="Rechercher"
+            style="width: 500px;"
+          >
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-section class="row justify-center">
+          <q-list bordered class="rounded-borders" style="width: 500px;">
+            <q-expansion-item label="Categories">
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Categorie1</q-item-label>
+                </q-item-section>
+                </q-item>
+                <q-item>
+                <q-item-section>
+                  <q-item-label>Categorie2</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-expansion-item>
+            <q-expansion-item label="Liens">
+              <q-item clickable>
+                <q-item-section>
+                  <q-item-label>Liens1</q-item-label>
+                </q-item-section>
+                </q-item>
+                <q-item>
+                <q-item-section>
+                  <q-item-label>Liens2</q-item-label>
+                </q-item-section>
+              </q-item>
+              </q-expansion-item>
+          </q-list>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
     <q-footer elevated class="row bg-secondary">
       <div class="footer-content">
         <div class="footer-column">
@@ -152,6 +202,7 @@ onMounted(async () => {
   }
 });
 
+const deleteVerif = ref(true);
 
 const user = ref(null);
 
