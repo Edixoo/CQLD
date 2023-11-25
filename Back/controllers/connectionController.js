@@ -29,6 +29,7 @@ exports.makeConnection = async (test) => {
     const connection = new Connection(test);
     await connection.save();
   } catch (error) {
+    res.status(400).send(error.message);
   }
 };
 

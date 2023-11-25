@@ -18,7 +18,6 @@ exports.listWords = async (req, res) => {
 
 exports.createWord = async (req, res) => {
   try {
-    console.log(req.body)
     const word = new Word(req.body);
     await word.save();
     res.status(201).send(word);
@@ -59,9 +58,7 @@ exports.getWordById = async (req, res) => {
 // In your wordController.js
 
 exports.getWordByName = async (req, res) => {
-  try { 
-    console.log("toto");
-    console.log(req.params.name);
+  try {
     const word = await Word.findOne({ word: req.params.name });
 
     if (!word) {
@@ -78,7 +75,6 @@ exports.getWordsByTheme = async (req, res) => {
   try {
     const themeName = req.body.theme; // Get theme ID from request body
     const theme_id = (await Theme.findOne({theme_name: themeName}))._id;
-    console.log(theme_id);
 
     if (!Word.find({ theme: theme_id })) {
       return res.status(400).send('Invalid theme ID');

@@ -21,7 +21,6 @@ exports.register = async (req, res) => {
     res.status(201).send({ message: "User registered successfully!", user_id: user._id });
   } catch (error) {
     res.status(400).send(error.message);
-    console.log("toto");
   }
 };
 

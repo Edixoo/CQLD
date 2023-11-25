@@ -2,7 +2,7 @@
   <q-page>
     <div>
       <app-title v-if="categorie" :title="categorie.theme_name" class="q-mb-xl"/>
-  
+
     <div v-if="connexions">
       <div v-for="connexion in connexions" :key="connexion._id">
         <AppCardVS class="q-ma-md" v-if="connexion" :connexion="connexion"/>
@@ -28,16 +28,14 @@ const connexions=ref(null)
 onMounted(async () => {
   let categorieName=route.params.name;
   categorie.value=await ThemeServices.getThemeByName(categorieName);
-  console.log(categorie.value)
   connexions.value=await ConnectionsServices.getConnectionByTheme(categorie.value._id);
-  console.log(connexions.value)
+
 });
 
 onUpdated(async () => {
   let categorieName=route.params.name;
   categorie.value=await ThemeServices.getThemeByName(categorieName);
   connexions.value=await ConnectionsServices.getConnectionByTheme(categorie.value._id);
-  console.log(connexions.value)
 });
 
 //findOne dans les catégories avec l'id en paramètres
