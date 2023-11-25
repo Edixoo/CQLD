@@ -6,8 +6,8 @@
       <div class="row flex-center q-mb-xl">
         <q-btn
           color="primary"
-          label="Mots Aléatoires"
-          :to="'/categories/' + alea"
+          label="Lien Aléatoire"
+          :to="'/liens/' + alea"
           @click="DefineAleatoire()"
           class="q-pa-sm q-ma-xl"
           size="lg"
@@ -61,7 +61,7 @@
             le temps de se creuser la tête sur toutes ces nuances? Nous l'avons
             fait pour vous."
           </p>
-        
+
       </q-card>
     </div>
   </q-page>
@@ -69,20 +69,24 @@
 
 <script setup>
 import CreateLink from "src/components/CreateLink.vue";
-import { ref } from "vue";
-
+import { onMounted, ref } from "vue";
+import ConnexionServices from "src/services/ConnexionServices";
 const alea = ref(0);
 const chemin = ref("connect");
 const connexion = ref(true);
-const maxDiff = 10;
 
-const DefineAleatoire = () => 
-  (alea.value = Math.floor(Math.random() * maxDiff));
+const DefineAleatoire = async () =>{
+  const maxDiff = (await ConnexionServices.listConnections()).length;
+  alea.value = Math.floor(Math.random() * maxDiff);
+}
+
+onMounted(DefineAleatoire);
+
 </script>
 
 <style lang="scss">
 h2 {
-  
+
   line-height: 56px;
   letter-spacing: 0.15px;
 
