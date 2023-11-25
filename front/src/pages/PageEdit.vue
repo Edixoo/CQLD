@@ -83,15 +83,18 @@ import WordServices from "../services/WordServices.js";
 import ThemeServices from "../services/ThemeServices.js";
 import ConnexionServices from "../services/ConnexionServices.js";
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useQuasar } from "quasar";
+import { jwtDecode } from "jwt-decode";
 
 const $q = useQuasar();
+const router = useRouter();
 
 const mot1 = ref("");
 const mot2 = ref("");
 const description = ref("");
 const selectedCategory = ref("");
+const userId=ref(null);
 const categories = ref([]);
 const route= useRoute();
 const connexion=ref(null);
@@ -107,6 +110,9 @@ const fetchThemes = async () => {
   mot2.value = connexion.value.word2.word;
   description.value = connexion.value.description;
   selectedCategory.value = (await ThemeServices.getThemeById(connexion.value.theme)).theme_name;
+
+  const token_decoded = jwtDecode(localStorage.getItem("userToken"));
+  userId.value = token_decoded.userId;
 };
 
 onMounted(fetchThemes);
@@ -133,45 +139,44 @@ const updateWord = async () => {
       return;
     }
 
-    const id_word1 = await WordServices.getWordByName(mot1.value);
-    const id1 = id_word1._id;
-
-    const id_word2 = await WordServices.getWordByName(mot2.value);
-    const id2 = id_word2._id;
-
-    connexion.value.word1 = id1;
-    connexion.value.word2 = id2;
     connexion.value.theme = themeId;
     connexion.value.description = description.value;
+    connexion.value.added_by = userId.value;
 
 
 
     await WordServices.getWordByName(mot1.value).then(async (word) => {
-      console.log(word)
-      if (word) {
+      console.log('mot:' + word)
+      if (word !== 'Word not found') {
         connexion.value.word1 = word._id;
       } else {
-        await WordServices.createWord({ word: mot1.value }).then((word) => {
+        console.log('test')
+        await WordServices.createWord({ word: mot1.value, theme: themeId, added_by: userId.value, approved: true }).then((word) => {
           console.log(word)
           connexion.value.word1 = word._id;
         });
       }
+    }).catch((err) => {
+      console.log('toto')
     });
     await WordServices.getWordByName(mot2.value).then(async (word) => {
-      if (word) {
+      if (word !== 'Word not found') {
         connexion.value.word2 = word._id;
       } else {
-        await WordServices.createWord({ word: mot2.value }).then((word) => {
+        await WordServices.createWord({ word: mot2.value, theme: themeId, added_by: userId.value, approved: true}).then((word) => {
           connexion.value.word2 = word._id;
         });
       }
     });
 
-    await ConnexionServices.updateConnection(connexion.value._id, connexion).then(() => {
+    console.log(connexion.value)
+    await ConnexionServices.updateConnection(connexion.value._id, connexion.value).then((result) => {
+      console.log(result)
       $q.notify({
         type: "positive",
         message: "La connexion a été modifiée avec succès.",
       });
+      router.push("/liens/" + connexion.value.id);
     });
 
     // Reset the form after successful creation

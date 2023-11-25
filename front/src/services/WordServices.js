@@ -23,9 +23,9 @@ const getWordById = async (id) => {
   return await apiClient.get(`/api/words/${id}`).then((response) => { return response.data});
 };
 
-// IDEM VOIR ICI 
+// IDEM VOIR ICI
 const getWordByName = async (name) => {
-  return await apiClient.get(`/api/words/name/${name}`).then((response) => { return response.data });
+  return await apiClient.get(`/api/words/name/${name}`).then((response) => { return response.data }).catch((error) => { return error.response.data });
 };
 
 const updateWord = (id, wordData) => {
