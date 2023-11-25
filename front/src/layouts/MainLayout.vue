@@ -56,7 +56,7 @@
         </q-input>
 
         <connexion-button v-if="!connexion" />
-        <!-- 
+        <!--
         <q-btn round color="primary" label="" v-if="connexion" class="q-ml-md">
           <q-avatar size="42px">
             <img src="~assets/profile.svg" />
@@ -77,7 +77,7 @@
           </q-avatar>
 
           <q-menu ref="menu" @hide="resetMenu">
-            <q-list style="min-width: 100px">
+            <q-list style="min-width: 150px">
               <q-item
                 v-close-popup
                 style="text-align: center; font-weight: bold"
@@ -87,7 +87,12 @@
 
               <q-separator inset />
               <q-item clickable v-close-popup @click="deconnexion()">
-                <q-item-section>Se déconnecter</q-item-section>
+                <q-item-section>
+                  <div class="justify-between">
+                    <q-icon name="logout" />
+                    Se déconnecter
+                  </div>
+                </q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -312,6 +317,7 @@ const searchItems = async () => {
 
 const deconnexion = () => {
   UserServices.logout();
+  window.location.reload();
   console.log("Déconnexion");
 };
 
@@ -389,5 +395,13 @@ const scrollToTop = () => {
 
 .flex-container {
   display: flex;
+}
+
+.justify-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    color: $negative;
 }
 </style>

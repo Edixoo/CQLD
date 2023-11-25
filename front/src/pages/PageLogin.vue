@@ -131,7 +131,7 @@
 
 <script setup>
 import UserServices from "../services/UserServices.js";
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 
@@ -187,18 +187,20 @@ const sendForgotPasswordEmail = async () => {
   openEnterForgotPassword();
 };
 
-const login = () => {
+const login =  async () => {
   if (username.value && password.value) {
-    UserServices.login({
+    await UserServices.login({
       username: username.value,
       password: password.value,
-    }).then((res) => {
+    }).then(() => {
       $q.notify({
         type: "positive",
         message: "Vous êtes connecté.",
       });
     });
-    $router.push("/");
+
+    window.location.reload();
+    $router.push('/');
   } else {
     $q.notify({
       type: "negative",
