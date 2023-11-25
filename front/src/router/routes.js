@@ -29,7 +29,7 @@ const routes = [
     path: "/contacteznous",
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/PageContact.vue") }],
-    meta: { requiresAuth: true, role: 'admin' }
+
   },
   {
     path: "/personnaldata",

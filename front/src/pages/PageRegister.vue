@@ -133,6 +133,8 @@
 
 <script setup>
 import UserServices from "../services/UserServices.js";
+import { useQuasar } from "quasar";
+
 import { ref } from "vue";
 
 const username = ref("");
@@ -142,8 +144,9 @@ const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const isPwd = ref(true);
+const $q = useQuasar();
 
-const register = () => {
+const register = async () => {
   if (
     username.value &&
     firstName.value &&
@@ -152,17 +155,40 @@ const register = () => {
     password.value &&
     confirmPassword.value
   ) {
-    UserServices.register({
-      username: username.value,
-      name: firstName.value,
-      surname: lastName.value,
-      email: email.value,
-      password: password.value,
-      role: "user",
-    });
+    try {
+      await UserServices.register({
+        username: username.value,
+        name: firstName.value,
+        surname: lastName.value,
+        email: email.value,
+        password: password.value,
+        role: "user",
+      });
+
+      $q.notify({
+        type: "positive",
+        message: "Inscription réussie. Vous pouvez maintenant vous connecter.",
+      });
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data ===
+          "User with the given username or email already exists."
+      ) {
+        $q.notify({
+          type: "negative",
+          message:
+            "L’utilisateur avec le nom d’utilisateur ou l’email donné existe déjà.",
+        });
+      } else {
+        $q.notify({
+          type: "negative",
+          message: "Une erreur s'est produite lors de l'inscription.",
+        });
+      }
+    }
   } else {
-    // Champs vides
-    this.$q.notify({
+    $q.notify({
       type: "negative",
       message: "Veuillez remplir tous les champs.",
     });

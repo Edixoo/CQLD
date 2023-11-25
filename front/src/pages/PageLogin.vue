@@ -34,7 +34,9 @@
               />
 
               <div>
-                <a href="#" style="text-decoration: none"
+                <a
+                  style="text-decoration: underline"
+                  @click="openForgotPassword()"
                   >Mot de passe oublié ?</a
                 >
               </div>
@@ -45,8 +47,7 @@
                   @click="$router.push('/register')"
                   class="q-mb-xs"
                   style="text-decoration: none"
-                >
-                  Créez en un</a
+                  >Créez en un</a
                 >
               </div>
 
@@ -62,6 +63,69 @@
         </q-card-section>
       </q-card>
     </q-page-container>
+
+    <q-dialog v-model="forgotPasswordDialog">
+      <q-card class="q-pa-md" style="width: 500px">
+        <q-card-section>
+          <div class="text-h5 title-card">Réinitialiser le mot de passe</div>
+          <div class="q-mt-md">
+            Entrez votre nom d’utilisateur ou l’adresse e-mail que vous avez
+            utilisée pour vous inscrire. Nous vous enverrons un e-mail afin de
+            réinitialiser votre mot de passe.
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-input
+            filled
+            v-model="forgotPasswordEmail"
+            label="Email"
+            type="email"
+            placeholder="Entrer votre email"
+          />
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            label="Annuler"
+            color="primary"
+            @click="closeForgotPassword()"
+          />
+          <q-btn
+            label="Envoyer"
+            color="primary"
+            @click="sendForgotPasswordEmail()"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="EnterforgotPasswordDialog">
+      <q-card class="q-pa-md" style="width: 500px">
+        <q-card-section>
+          <div class="text-h5 title-card">Nouveau mot de passe</div>
+          <div class="q-mt-md">Entrez votre nouveau mot de passe</div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-input
+            filled
+            v-model="EnterforgotPasswordEmail"
+            label="Mot de passe"
+            placeholder="Entrer votre nouveau mot de passe"
+          />
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            label="Annuler"
+            color="primary"
+            @click="closEnterForgotPassword()"
+          />
+          <q-btn label="Envoyer" color="primary" @click="changeMotDePasse()" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -77,16 +141,65 @@ const $router = useRouter();
 const username = ref("");
 const password = ref("");
 
+const forgotPasswordDialog = ref(false);
+const forgotPasswordEmail = ref("");
+
+const EnterforgotPasswordDialog = ref(false);
+const EnterforgotPasswordEmail = ref("");
+
+const randomValue = 0;
+
+const openForgotPassword = () => {
+  forgotPasswordDialog.value = true;
+};
+
+const closeForgotPassword = () => {
+  forgotPasswordDialog.value = false;
+};
+
+const openEnterForgotPassword = () => {
+  EnterforgotPasswordDialog.value = true;
+};
+
+const changeMotDePasse = () => {
+  console.log("mot de passe à changer");
+};
+
+const closEnterForgotPassword = () => {
+  EnterforgotPasswordDialog.value = false;
+};
+
+const generateRandomNumber = () => {
+  randomValue = Math.floor(Math.random() * 100000);
+};
+
+const sendForgotPasswordEmail = async () => {
+  const result = await UserServices.sendMailForgotPasseword({
+    email: forgotPasswordEmail.value,
+  });
+
+  $q.notify({
+    type: "info",
+    message: "Email de réinitialisation de mot de passe envoyé.",
+  });
+
+  closeForgotPassword();
+  openEnterForgotPassword();
+};
+
 const login = () => {
   if (username.value && password.value) {
-      UserServices.login({ username: username.value, password: password.value }).then((res) => {
-        $q.notify({
+    UserServices.login({
+      username: username.value,
+      password: password.value,
+    }).then((res) => {
+      $q.notify({
         type: "positive",
-        message: "Vous êtes connecté.",});
+        message: "Vous êtes connecté.",
       });
-      $router.push("/");
+    });
+    $router.push("/");
   } else {
-    // Champs vides
     $q.notify({
       type: "negative",
       message: "Veuillez remplir tous les champs.",
@@ -95,4 +208,8 @@ const login = () => {
 };
 </script>
 
-<style></style>
+<style>
+.title-card {
+  text-align: center;
+}
+</style>

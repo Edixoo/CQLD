@@ -126,21 +126,30 @@
               v-model="isExpanded"
               class="scrollable-expansion-item"
             >
-              <q-item v-for="theme in filteredThemes" :key="theme.value">
+              <q-item
+                v-for="theme in filteredThemes"
+                :key="theme.value"
+                clickable
+                @click="$router.push('/categories/' + theme)"
+              >
                 <q-item-section>
                   <q-item-label caption>{{ theme }}</q-item-label>
                 </q-item-section>
               </q-item>
             </q-expansion-item>
-            <q-expansion-item label="Liens" v-model="isExpanded">
-              <q-item clickable>
+            <q-expansion-item
+              label="Liens"
+              v-model="isExpanded"
+              class="scrollable-expansion-item"
+            >
+              <q-item
+                v-for="connexion in listConnexion"
+                :key="connexion.value"
+                clickable
+                @click="$router.push('/liens/' + connexion.id_liaison)"
+              >
                 <q-item-section>
-                  <q-item-label caption>Liens1</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item>
-                <q-item-section>
-                  <q-item-label caption>Liens2</q-item-label>
+                  <q-item-label caption>{{ connexion.liaison }}</q-item-label>
                 </q-item-section>
               </q-item>
             </q-expansion-item>
@@ -229,8 +238,11 @@ import { onMounted, onUpdated, ref } from "vue";
 import ConnexionButton from "src/components/ConnexionButton.vue";
 import CreateLink from "src/components/CreateLink.vue";
 import themesServices from "src/services/ThemeServices";
+import ConnexionServices from "src/services/ConnexionServices";
+
 import { jwtDecode } from "jwt-decode";
 import UserServices from "src/services/UserServices";
+import WordServices from "src/services/WordServices";
 
 const textInput = ref("");
 const themes = ref([]);
@@ -238,10 +250,15 @@ const connexion = ref(false);
 const isExpanded = ref(true);
 
 const filteredThemes = ref([]);
+const listConnexion = ref([]);
+
 const openSearchBar = ref(false);
 
 const openSearchBarFunction = () => {
   openSearchBar.value = true;
+  textInput.value = ""; // Réinitialise la valeur de la barre de recherche
+  filteredThemes.value = []; // Réinitialise les thèmes filtrés
+  listConnexion.value = []; // Réinitialise la liste de connexions
 };
 
 const getUserAuth = () => {
@@ -260,10 +277,34 @@ onMounted(async () => {
 
 const searchItems = async () => {
   try {
-    console.log(textInput.value);
     const result = await themesServices.getlistThemeContain(textInput.value);
     filteredThemes.value = result.map((item) => item.theme_name);
-    console.log(filteredThemes);
+
+    const result_connexion = await ConnexionServices.getConnexionContainWord(
+      textInput.value
+    );
+
+    for (let i = 0; i < result_connexion.length; i++) {
+      const mot1 = await WordServices.getWordById(result_connexion[i].word1);
+      const mot1_value = mot1.word;
+
+      const mot2 = await WordServices.getWordById(result_connexion[i].word2);
+      const mot2_value = mot2.word;
+
+      const connexionStr = {
+        liaison: `${mot1_value} VS ${mot2_value}`,
+        id_liaison: result_connexion[i].id,
+      };
+
+      // Si la connexion est déjà dans la liste : on ne l'ajoute ps
+      if (
+        !listConnexion.value.some(
+          (conn) => conn.id_liaison === connexionStr.id_liaison
+        )
+      ) {
+        listConnexion.value.push(connexionStr);
+      }
+    }
   } catch (error) {
     console.log("Erreur lors de la recherche", error);
   }
@@ -271,19 +312,8 @@ const searchItems = async () => {
 
 const deconnexion = () => {
   UserServices.logout();
-  // Ajoutez votre logique de déconnexion ici
   console.log("Déconnexion");
-  // Exemple : Redirection vers la page de déconnexion
-  // router.push('/logout');
 };
-
-onMounted(async () => {
-  themes.value = await themesServices.listThemes();
-  if (localStorage.getItem("userToken")) {
-    const decoded = jwtDecode(localStorage.getItem("userToken"));
-    connexion.value = true;
-  }
-});
 
 const user = ref(null);
 

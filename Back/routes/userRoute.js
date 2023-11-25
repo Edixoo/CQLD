@@ -30,6 +30,8 @@ router.get('/all', userController.listUsers);
 
 router.post('/sendMail', userController.sendMail);
 
+router.post('/sendMailForgotPasseword', userController.sendMailResetPasseword)
+
 
 
 

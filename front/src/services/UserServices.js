@@ -9,7 +9,6 @@ const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
-    // Any other headers you need to set
   },
 });
 
@@ -35,14 +34,9 @@ const login = (credentials) => {
 
 
 const logout = () => {
-  // Remove the token from local storage
   localStorage.removeItem('userToken');
-
-  // Remove the default Authorization header
   delete axios.defaults.headers.common['Authorization'];
 
-  // Redirect to login page or update the state as logged out
-  // ...
 }
 
 const getProfile = async () => {
@@ -67,6 +61,10 @@ const sendMail = (userData) => {
   return apiClient.post('/api/users/sendMail', userData);
 };
 
+const sendMailForgotPasseword = (userData) => {
+  return apiClient.post('/api/users/sendMailForgotPasseword', userData);
+};
+
 
 export default {
   register,
@@ -76,6 +74,7 @@ export default {
   deleteUser,
   listUsers,
   sendMail, 
-  logout
+  logout, 
+  sendMailForgotPasseword
 };
 
