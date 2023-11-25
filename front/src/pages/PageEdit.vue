@@ -4,9 +4,9 @@
       <q-card style="max-width: 600px" class="q-mx-auto q-pa-md q-py-md">
         <q-card-section>
           <div class="q-gutter-md">
-            <q-form @submit="createWord">
+            <q-form @submit="updateWord">
               <h2 class="text-h4" style="text-align: center">
-                Créer une liaison
+                Modifier une liaison
               </h2>
 
               <div class="row">
@@ -61,7 +61,6 @@
                     :options="categories"
                   />
                 </div>
-                {{ selectedCategory }}
               </div>
 
               <q-btn
@@ -85,6 +84,9 @@ import ThemeServices from "../services/ThemeServices.js";
 import ConnexionServices from "../services/ConnexionServices.js";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useQuasar } from "quasar";
+
+const $q = useQuasar();
 
 const mot1 = ref("");
 const mot2 = ref("");
@@ -97,13 +99,14 @@ const connexion=ref(null);
 const fetchThemes = async () => {
   const result = await ThemeServices.listThemes();
   categories.value = result.map((theme) => theme.theme_name);
+
   const id = route.params.id;
-  console.log(id);
   connexion.value = await ConnexionServices.getConnectionByIdInt(id);
+
   mot1.value = connexion.value.word1.word;
   mot2.value = connexion.value.word2.word;
   description.value = connexion.value.description;
-  selectedCategory.value = connexion.value.theme.theme_name;
+  selectedCategory.value = (await ThemeServices.getThemeById(connexion.value.theme)).theme_name;
 };
 
 onMounted(fetchThemes);
@@ -116,24 +119,19 @@ const resetForm = () => {
   selectedCategory.value = "";
 };
 
-const createWord = async () => {
+const updateWord = async () => {
   const theme = await ThemeServices.getThemeByName(selectedCategory.value);
   const themeId = theme._id;
 
   if (mot1.value && mot2.value && selectedCategory.value) {
-    WordServices.createWord({
-      word: mot1.value,
-      theme: themeId,
-      added_by: "eee",
-      approved: true,
-    });
 
-    WordServices.createWord({
-      word: mot2.value,
-      theme: themeId,
-      added_by: "eee",
-      approved: true,
-    });
+    if(mot1.value === mot2.value){
+      this.$q.notify({
+        type: "negative",
+        message: "Les mots doivent être différents.",
+      });
+      return;
+    }
 
     const id_word1 = await WordServices.getWordByName(mot1.value);
     const id1 = id_word1._id;
@@ -141,19 +139,39 @@ const createWord = async () => {
     const id_word2 = await WordServices.getWordByName(mot2.value);
     const id2 = id_word2._id;
 
-    ConnexionServices.createConnection({
-      word1: id1,
-      word2: id2,
-      theme: themeId,
-      description: description.value,
-      proposed_by: "moi",
-      approved: false,
-      approved_by: "moi",
+    connexion.value.word1 = id1;
+    connexion.value.word2 = id2;
+    connexion.value.theme = themeId;
+    connexion.value.description = description.value;
+
+
+
+    await WordServices.getWordByName(mot1.value).then(async (word) => {
+      console.log(word)
+      if (word) {
+        connexion.value.word1 = word._id;
+      } else {
+        await WordServices.createWord({ word: mot1.value }).then((word) => {
+          console.log(word)
+          connexion.value.word1 = word._id;
+        });
+      }
+    });
+    await WordServices.getWordByName(mot2.value).then(async (word) => {
+      if (word) {
+        connexion.value.word2 = word._id;
+      } else {
+        await WordServices.createWord({ word: mot2.value }).then((word) => {
+          connexion.value.word2 = word._id;
+        });
+      }
     });
 
-    this.$q.notify({
-      type: "positive",
-      message: "La connexion a été créée avec succès.",
+    await ConnexionServices.updateConnection(connexion.value._id, connexion).then(() => {
+      $q.notify({
+        type: "positive",
+        message: "La connexion a été modifiée avec succès.",
+      });
     });
 
     // Reset the form after successful creation
@@ -165,6 +183,7 @@ const createWord = async () => {
     });
   }
 };
+
 </script>
 <style>
 .label-large {

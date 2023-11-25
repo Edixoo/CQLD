@@ -64,7 +64,6 @@ const liensId=route.params.id;
 
 onMounted(async () => {
   connexion.value=await ConnexionServices.getConnectionByIdInt(liensId);
-  console.log(connexion)
 })
 
 const DeleteActions=async ()=>{
