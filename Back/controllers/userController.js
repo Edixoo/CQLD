@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
     res.status(201).send({ message: "User registered successfully!", user_id: user._id });
   } catch (error) {
     res.status(400).send(error.message);
-    console.log("toto");
+
   }
 };
 
@@ -179,6 +179,42 @@ exports.sendMail = async (req, res) => {
       to: 'cqld.iut@gmail.com',
       subject: 'Nouveau message de contact',
       text: `Un utilisateur a rempli le formulaire de contact.\n\nNom d'utilisateur: ${username}\nAdresse e-mail: ${email}\nMessage: ${text}`,
+
+    };
+
+    // Envoyer l'e-mail
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return res.status(500).send(error.toString());
+      }
+      res.status(200).send('E-mail envoyé : ' + info.response);
+    });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+
+exports.sendMailResetPasseword = async (req, res) => {
+  try {
+    const { email, text } = req.body;
+
+ 
+    // Configurer le transporteur Nodemailer
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'cqld.iut@gmail.com',
+        pass: 'nvvf oprc gtly zftp',
+      },
+    });
+
+    // Définir le contenu de l'e-mail
+    const mailOptions = {
+      from: 'cqld.iut@gmail.com',
+      to: email,
+      subject: 'Réinitialisez votre mot de passe',
+      text: `Voici un nouvel email pour réinitialiser votre mot de passe`,
 
     };
 

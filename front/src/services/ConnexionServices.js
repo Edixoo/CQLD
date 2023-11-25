@@ -43,6 +43,11 @@ const deleteConnection = (id) => {
   return apiClient.delete(`/api/connections/${id}`);
 };
 
+
+const getConnexionContainWord = async (word) => {
+  return await apiClient.get(`/api/connections/list/${word}`).then((response) => { return response.data });
+};
+
 export default {
   listConnections,
   createConnection,
@@ -52,4 +57,5 @@ export default {
   getConnectionById,
   updateConnection,
   deleteConnection,
+  getConnexionContainWord
 };

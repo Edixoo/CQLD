@@ -40,19 +40,31 @@ exports.makeWord = async (test) => {
 };
 
 exports.getWordById = async (req, res) => {
-  try {
-    const word = await Word.findById(req.params.id).populate('theme');
+  // try {
+  //   const word = await Word.findById(req.params.id).populate('theme');
+  //   if (!word) {
+  //     return res.status(404).send('Word not found');
+  //   }
+
+  //   const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
+  //   word.word = decryptField(word.word, secretKey);
+  //   word.added_by = decryptField(word.added_by, secretKey);
+
+  //   res.status(200).send(word);
+  // } catch (error) {
+  //   res.status(400).send(error.message);
+  // }
+
+   try { 
+    const word = await Word.findOne({ _id: req.params.id });
+
     if (!word) {
       return res.status(404).send('Word not found');
     }
 
-    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
-    word.word = decryptField(word.word, secretKey);
-    word.added_by = decryptField(word.added_by, secretKey);
-
     res.status(200).send(word);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(error.message);
   }
 };
 
