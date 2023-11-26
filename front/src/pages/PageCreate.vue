@@ -13,7 +13,7 @@
                 <div class="col">
                   <label for="mot1" class="label-large">Mot 1</label>
                   <q-input
-                    label="Ex. Paul"
+                    label="Ex. Heureux"
                     filled
                     v-model="mot1"
                     lazy-rules
@@ -27,7 +27,7 @@
                 <div class="col">
                   <label for="mot2" class="label-large">Mot 2</label>
                   <q-input
-                    label="Ex. Chien"
+                    label="Ex. Content"
                     filled
                     v-model="mot2"
                     lazy-rules
@@ -108,7 +108,6 @@ const fetchThemes = async () => {
 onMounted(fetchThemes);
 
 const resetForm = () => {
-  // Reset form fields and set formSubmitted to false
   mot1.value = "";
   mot2.value = "";
   description.value = "";
@@ -116,8 +115,10 @@ const resetForm = () => {
 };
 
 const createWord = async () => {
-  const theme = await ThemeServices.getThemeByName(selectedCategory.value);
-  const themeId = theme._id;
+  try {
+
+    const theme = await ThemeServices.getThemeByName(selectedCategory.value);
+    const themeId = theme._id;
 
   if (mot1.value && mot2.value && selectedCategory.value) {
     WordServices.createWord({
@@ -134,11 +135,11 @@ const createWord = async () => {
       approved: true,
     });
 
-    const id_word1 = await WordServices.getWordByName(mot1.value);
-    const id1 = id_word1._id;
+      const id_word1 = await WordServices.getWordByName(mot1.value);
+      const id1 = id_word1._id;
 
-    const id_word2 = await WordServices.getWordByName(mot2.value);
-    const id2 = id_word2._id;
+      const id_word2 = await WordServices.getWordByName(mot2.value);
+      const id2 = id_word2._id;
 
     await ConnexionServices.createConnection({
       word1: id1,
@@ -148,18 +149,22 @@ const createWord = async () => {
       proposed_by: getUserAuth()
     });
 
-    $q.notify({
-      type: "positive",
-      message: "La connexion a été créée avec succès.",
-    });
+      $q.notify({
+        type: "positive",
+        message: "Le lien entre ces deux mots a été créé avec succès",
+      });
 
-    // Reset the form after successful creation
-    resetForm();
-
-  } else {
+      resetForm();
+    } else {
+      $q.notify({
+        type: "negative",
+        message: "Veuillez remplir tous les champs",
+      });
+    }
+  } catch (error) {
     $q.notify({
       type: "negative",
-      message: "Veuillez remplir tous les champs.",
+      message: "Une erreur est survenue",
     });
   }
 };

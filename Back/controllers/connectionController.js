@@ -35,7 +35,7 @@ exports.createConnection = async (req, res) => {
 
 exports.makeConnection = async (test) => {
   try {
-        const connection = new Connection(test);
+    const connection = new Connection(test);
     await connection.save();
   } catch (error) {
     res.status(400).send(error.message);

@@ -1,10 +1,11 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
-const{ decryptField} = require('../controllers/functionNeeded');
 const jwt = require('jsonwebtoken');
 const { stringify } = require('querystring');
 const nodemailer = require('nodemailer');
+const{ decryptField, encryptField} = require('../controllers/functionNeeded');
+
 
 // Register a new user
 
@@ -77,25 +78,19 @@ exports.login = async (req, res) => {
 // Get profile of a user
 exports.getProfile = async (req, res) => {
   try {
-    // Assuming user's ID is available in req.userId (middleware might set this)
-    const user = await User.findById(req.userId).select('-password'); // Exclude password
+    // The user's ID should be in req.user if your authentication middleware is set up correctly
+    const userId = req.user.userId;
+
+    // Fetch user details from the database
+    const user = await User.findById(userId).select('-password'); // Exclude password
+
     if (!user) {
-      return res.status(404).send("User not found.");
+      return res.status(404).send('User not found');
     }
-    
-    // Fetch the secret key from the environment variable
-    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
 
-    // Decrypting the fields
-    user.name = decryptField(user.name, secretKey);
-    user.surname = decryptField(user.surname, secretKey);
-    user.username = decryptField(user.username, secretKey);
-    user.email = decryptField(user.email, secretKey);
-    // Add other fields to decrypt as necessary
-
-    res.status(200).send(user);
+    res.json(user);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(error.message);
   }
 };
 
@@ -163,7 +158,6 @@ exports.sendMail = async (req, res) => {
   try {
     const { username, email, text } = req.body;
 
- 
     // Configurer le transporteur Nodemailer
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -195,11 +189,13 @@ exports.sendMail = async (req, res) => {
 };
 
 
-exports.sendMailResetPasseword = async (req, res) => {
+exports.sendMailWithOTP = async (req, res) => {
   try {
-    const { email, text } = req.body;
+    const { email } = req.body;
 
- 
+    const otp = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+
+
     // Configurer le transporteur Nodemailer
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -211,10 +207,10 @@ exports.sendMailResetPasseword = async (req, res) => {
 
     // Définir le contenu de l'e-mail
     const mailOptions = {
-      from: 'cqld.iut@gmail.com',
-      to: email,
-      subject: 'Réinitialisez votre mot de passe',
-      text: `Voici un nouvel email pour réinitialiser votre mot de passe`,
+      from: 'cqld.iut@gmail.com', 
+      to: email ,
+      subject: 'Code OTP pour la réinitialisation du mot de passe',
+      text: `Votre code OTP est : ${otp}`,
 
     };
 
@@ -225,7 +221,57 @@ exports.sendMailResetPasseword = async (req, res) => {
       }
       res.status(200).send('E-mail envoyé : ' + info.response);
     });
+
+    
+    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
+    const mail_encrypt = encryptField(email, secretKey);
+    await User.findOneAndUpdate({ email: mail_encrypt }, { $set: { otp_number: otp } });
+
+
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
+
+
+exports.updatePassword = async (req, res) => {
+  try {
+    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
+    const mail_encrypt = encryptField(req.body.email, secretKey);
+    const user = await User.findOne({email: mail_encrypt}); 
+
+    bcrypt.hash(req.body.new_pwd, 10, async (err, hash) => {
+    if (err) return next(err);
+    const mdp_encrypt = hash;
+    await User.findOneAndUpdate({ email: mail_encrypt }, { $set: { password: mdp_encrypt } });
+    next();
+  });
+
+    if (!user){
+      res.status(200).send('User non trouvé') ; 
+    }    
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+
+exports.getOTP = async (req, res) => {
+
+  try {
+    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
+    const mail_encrypt = encryptField(req.body.email, secretKey);
+    const user = await User.findOne({email: mail_encrypt}); 
+
+    if (!user){
+      res.status(200).send('User non trouvé') ; 
+    }    
+    const otp = user.otp_number
+    res.status(200).send(otp);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+

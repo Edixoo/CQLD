@@ -19,7 +19,15 @@ exports.listWords = async (req, res) => {
 exports.createWord = async (req, res) => {
   try {
     const word = new Word(req.body);
-    await word.save();
+
+    const existingWord = await Word.findOne({ word: req.body.word });
+    if (existingWord) {
+      console.log("Word Existing")
+    }
+    else {
+      await word.save();
+
+    }
     res.status(201).send(word);
   } catch (error) {
     res.status(400).send(error.message);

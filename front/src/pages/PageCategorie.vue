@@ -94,10 +94,10 @@ import ConnectionsServices from '../services/ConnexionServices';
 const route = useRoute();
 const router = useRouter();
 
-const categorie=ref(null)
-const connexions=ref(null)
-const editCategorie=ref(false)
-const categorieNameModel=ref('');
+const categorie = ref(null)
+const connexions = ref(null)
+const editCategorie = ref(false)
+const categorieNameModel = ref('');
 
 const PopUpEdit=(async () => {
   await ThemeServices.updateTheme(categorie.value._id, { theme_name: categorieNameModel.value});

@@ -36,7 +36,7 @@
               <div>
                 <a
                   style="text-decoration: underline"
-                  @click="openForgotPassword()"
+                  @click="openPopUpForgotPwd()"
                   >Mot de passe oublié ?</a
                 >
               </div>
@@ -64,7 +64,7 @@
       </q-card>
     </q-page-container>
 
-    <q-dialog v-model="forgotPasswordDialog">
+    <q-dialog v-model="popUpForgotPwd">
       <q-card class="q-pa-md" style="width: 500px">
         <q-card-section>
           <div class="text-h5 title-card">Réinitialiser le mot de passe</div>
@@ -78,7 +78,7 @@
         <q-card-section>
           <q-input
             filled
-            v-model="forgotPasswordEmail"
+            v-model="popUpForgotPwdValue"
             label="Email"
             type="email"
             placeholder="Entrer votre email"
@@ -89,30 +89,54 @@
           <q-btn
             label="Annuler"
             color="primary"
-            @click="closeForgotPassword()"
+            @click="closePopUpForgotPwd()"
           />
-          <q-btn
-            label="Envoyer"
-            color="primary"
-            @click="sendForgotPasswordEmail()"
-          />
+          <q-btn label="Envoyer" color="primary" @click="sendOTP()" />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="EnterforgotPasswordDialog">
+    <q-dialog v-model="popUpOTP">
       <q-card class="q-pa-md" style="width: 500px">
         <q-card-section>
-          <div class="text-h5 title-card">Nouveau mot de passe</div>
-          <div class="q-mt-md">Entrez votre nouveau mot de passe</div>
+          <div class="text-h5 title-card">Vérification de votre identité</div>
+          <div class="q-mt-md">
+            Un mail a été envoyé à <b>{{ popUpForgotPwdValue }}</b
+            >. Veuillez entre le code que vous avez reçu.
+          </div>
         </q-card-section>
 
         <q-card-section>
           <q-input
             filled
-            v-model="EnterforgotPasswordEmail"
-            label="Mot de passe"
-            placeholder="Entrer votre nouveau mot de passe"
+            v-model="popUpOTPValue"
+            label="Numéro OTP"
+            placeholder="Entrer le code"
+          />
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn label="Annuler" color="primary" @click="closePopUpOTP()" />
+          <q-btn label="Envoyer" color="primary" @click="verifyOTP()" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="PopUpChangePwd">
+      <q-card class="q-pa-md" style="width: 500px">
+        <q-card-section>
+          <div class="text-h5 title-card">Modification du mot de passe</div>
+          <div class="q-mt-md">
+            Veuillez entrer ci-dessous votre nouveau mot de passe
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-input
+            filled
+            v-model="PopUpChangePwdValue"
+            label="Nouveau mot de passe"
+            placeholder="Entrer le nouveau mot de passe"
           />
         </q-card-section>
 
@@ -120,9 +144,9 @@
           <q-btn
             label="Annuler"
             color="primary"
-            @click="closEnterForgotPassword()"
+            @click="closePopUpChangePwd()"
           />
-          <q-btn label="Envoyer" color="primary" @click="changeMotDePasse()" />
+          <q-btn label="Envoyer" color="primary" @click="updatePwd()" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -141,41 +165,58 @@ const $router = useRouter();
 const username = ref("");
 const password = ref("");
 
-const forgotPasswordDialog = ref(false);
-const forgotPasswordEmail = ref("");
+const popUpForgotPwd = ref(false);
+const popUpForgotPwdValue = ref("");
 
-const EnterforgotPasswordDialog = ref(false);
-const EnterforgotPasswordEmail = ref("");
+const popUpOTP = ref(false);
+const popUpOTPValue = ref("");
 
-const randomValue = 0;
+const PopUpChangePwd = ref(false);
+const PopUpChangePwdValue = ref("");
 
-const openForgotPassword = () => {
-  forgotPasswordDialog.value = true;
+const openPopUpForgotPwd = () => {
+  popUpForgotPwd.value = true;
 };
 
-const closeForgotPassword = () => {
-  forgotPasswordDialog.value = false;
+const closePopUpForgotPwd = () => {
+  popUpForgotPwd.value = false;
 };
 
-const openEnterForgotPassword = () => {
-  EnterforgotPasswordDialog.value = true;
+const openPopUpOTP = () => {
+  popUpOTP.value = true;
 };
 
-const changeMotDePasse = () => {
-  console.log("mot de passe à changer");
+const closePopUpOTP = () => {
+  popUpOTP.value = false;
 };
 
-const closEnterForgotPassword = () => {
-  EnterforgotPasswordDialog.value = false;
+const openPopUpChangePwd = () => {
+  PopUpChangePwd.value = true;
 };
 
-const generateRandomNumber = () => {
-  randomValue = Math.floor(Math.random() * 100000);
+const closePopUpChangePwd = () => {
+  PopUpChangePwd.value = false;
 };
 
-const sendForgotPasswordEmail = async () => {
-  const result = await UserServices.sendMailForgotPasseword({
-    email: forgotPasswordEmail.value,
+const verifyOTP = async () => {
+  const otp_bdd = await UserServices.getOTP({
+    email: popUpForgotPwdValue.value,
+  });
+
+  if (otp_bdd === Number(popUpOTPValue.value)) {
+    closePopUpOTP();
+    openPopUpChangePwd();
+  } else {
+    $q.notify({
+      type: "negative",
+      message: "L'OTP est incorrect",
+    });
+  }
+};
+
+const sendOTP = async () => {
+  const result = await UserServices.sendMailWithOTP({
+    email: popUpForgotPwdValue.value,
   });
 
   $q.notify({
@@ -183,11 +224,32 @@ const sendForgotPasswordEmail = async () => {
     message: "Email de réinitialisation de mot de passe envoyé.",
   });
 
-  closeForgotPassword();
-  openEnterForgotPassword();
+  closePopUpForgotPwd();
+  openPopUpOTP();
 };
 
-const login =  async () => {
+const updatePwd = () => {
+  try {
+    const updatePwd = UserServices.updatePassword({
+      email: "marinelangrez@outlook.fr",
+      new_pwd: PopUpChangePwdValue.value,
+    });
+
+    $q.notify({
+      type: "positive",
+      message: "Le mot de passe a été modifié",
+    });
+
+    closePopUpChangePwd();
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "Une erreur est survenue",
+    });
+  }
+};
+
+const login = async () => {
   if (username.value && password.value) {
     await UserServices.login({
       username: username.value,
@@ -200,7 +262,7 @@ const login =  async () => {
     });
 
     window.location.reload();
-    $router.push('/');
+    $router.push("/");
   } else {
     $q.notify({
       type: "negative",
