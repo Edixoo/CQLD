@@ -78,25 +78,19 @@ exports.login = async (req, res) => {
 // Get profile of a user
 exports.getProfile = async (req, res) => {
   try {
-    // Assuming user's ID is available in req.userId (middleware might set this)
-    const user = await User.findById(req.userId).select('-password'); // Exclude password
+    // The user's ID should be in req.user if your authentication middleware is set up correctly
+    const userId = req.user.userId;
+
+    // Fetch user details from the database
+    const user = await User.findById(userId).select('-password'); // Exclude password
+
     if (!user) {
-      return res.status(404).send("User not found.");
+      return res.status(404).send('User not found');
     }
-    
-    // Fetch the secret key from the environment variable
-    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
 
-    // Decrypting the fields
-    user.name = decryptField(user.name, secretKey);
-    user.surname = decryptField(user.surname, secretKey);
-    user.username = decryptField(user.username, secretKey);
-    user.email = decryptField(user.email, secretKey);
-    // Add other fields to decrypt as necessary
-
-    res.status(200).send(user);
+    res.json(user);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(error.message);
   }
 };
 
