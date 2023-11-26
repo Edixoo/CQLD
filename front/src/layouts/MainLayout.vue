@@ -43,12 +43,12 @@
 
         <q-input
           dark
+          v-model="SearchBarValue"
           borderless
           dense
           filled
           placeholder="Rechercher"
           style="background: #ffffff0d; width: 300px"
-          @click="openSearchBarFunction()"
         >
           <template v-slot:append>
             <q-icon name="search" />
@@ -56,12 +56,6 @@
         </q-input>
 
         <connexion-button v-if="!connexion" />
-        <!--
-        <q-btn round color="primary" label="" v-if="connexion" class="q-ml-md">
-          <q-avatar size="42px">
-            <img src="~assets/profile.svg" />
-          </q-avatar>
-        </q-btn> -->
 
         <q-btn
           round
@@ -100,17 +94,25 @@
       </q-toolbar>
     </q-header>
 
-    <q-dialog v-model="openSearchBar">
+    <q-dialog v-model="openSearchBar" persistent>
       <q-card class="q-pa-sm" style="width: 500px">
+        <div class="text-h6 q-ml-md q-mt-md">Rechercher</div>
+        <q-btn
+          flat
+          icon="close"
+          @click="closeSearchBarFunction()"
+          class="icon-close"
+          style="font-size: 14px"
+        />
+
         <q-card-section class="row justify-center">
           <q-input
-            v-model="textInput"
+            v-model="SearchBarValue"
             filled
             borderless
             clearable
             placeholder="Rechercher"
             style="width: 500px"
-            @update:model-value="searchItems"
           >
             <template v-slot:append>
               <q-icon name="search" />
@@ -238,7 +240,7 @@
   </q-layout>
 </template>
 <script setup>
-import { onMounted, onUpdated, ref } from "vue";
+import { onMounted, onUpdated, ref, watch } from "vue";
 
 import ConnexionButton from "src/components/ConnexionButton.vue";
 import CreateLink from "src/components/CreateLink.vue";
@@ -249,7 +251,8 @@ import { jwtDecode } from "jwt-decode";
 import UserServices from "src/services/UserServices";
 import WordServices from "src/services/WordServices";
 
-const textInput = ref("");
+const SearchBarValue = ref("");
+
 const themes = ref([]);
 const connexion = ref(false);
 const isExpanded = ref(true);
@@ -261,7 +264,11 @@ const openSearchBar = ref(false);
 
 const openSearchBarFunction = () => {
   openSearchBar.value = true;
-  textInput.value = ""; // Réinitialise la valeur de la barre de recherche
+};
+
+const closeSearchBarFunction = () => {
+  openSearchBar.value = false;
+  SearchBarValue.value = ""; // Réinitialise la valeur de la barre de recherche
   filteredThemes.value = []; // Réinitialise les thèmes filtrés
   listConnexion.value = []; // Réinitialise la liste de connexions
 };
@@ -280,28 +287,41 @@ onMounted(async () => {
   }
 });
 
+watch(SearchBarValue, async (newQuestion, oldQuestion) => {
+  if (SearchBarValue.value.length > 0) {
+    openSearchBarFunction();
+  }
+  searchItems();
+});
+
 const searchItems = async () => {
   try {
-    const result = await themesServices.getlistThemeContain(textInput.value);
-    filteredThemes.value = result.map((item) => item.theme_name);
+    const searchValue = SearchBarValue.value;
 
-    const result_connexion = await ConnexionServices.getConnexionContainWord(
-      textInput.value
+    // Search for themes
+    const themeResult = await themesServices.getlistThemeContain(searchValue);
+    filteredThemes.value = themeResult.map((item) => item.theme_name);
+
+    // Search for connections
+    const connectionResult = await ConnexionServices.getConnexionContainWord(
+      searchValue
     );
 
-    for (let i = 0; i < result_connexion.length; i++) {
-      const mot1 = await WordServices.getWordById(result_connexion[i].word1);
-      const mot1_value = mot1.word;
+    for (const connection of connectionResult) {
+      const [mot1, mot2] = await Promise.all([
+        WordServices.getWordById(connection.word1),
+        WordServices.getWordById(connection.word2),
+      ]);
 
-      const mot2 = await WordServices.getWordById(result_connexion[i].word2);
+      const mot1_value = mot1.word;
       const mot2_value = mot2.word;
 
       const connexionStr = {
         liaison: `${mot1_value} VS ${mot2_value}`,
-        id_liaison: result_connexion[i].id,
+        id_liaison: connection.id,
       };
 
-      // Si la connexion est déjà dans la liste : on ne l'ajoute ps
+      // Check if the connection is already in the list
       if (
         !listConnexion.value.some(
           (conn) => conn.id_liaison === connexionStr.id_liaison
@@ -311,9 +331,46 @@ const searchItems = async () => {
       }
     }
   } catch (error) {
-    console.log("Erreur lors de la recherche", error);
+    console.error("Erreur lors de la recherche", error);
   }
 };
+
+// const searchItems = async () => {
+//   try {
+//     const result = await themesServices.getlistThemeContain(
+//       SearchBarValue.value
+//     );
+//     filteredThemes.value = result.map((item) => item.theme_name);
+
+//     const result_connexion = await ConnexionServices.getConnexionContainWord(
+//       SearchBarValue.value
+//     );
+
+//     for (let i = 0; i < result_connexion.length; i++) {
+//       const mot1 = await WordServices.getWordById(result_connexion[i].word1);
+//       const mot1_value = mot1.word;
+
+//       const mot2 = await WordServices.getWordById(result_connexion[i].word2);
+//       const mot2_value = mot2.word;
+
+//       const connexionStr = {
+//         liaison: `${mot1_value} VS ${mot2_value}`,
+//         id_liaison: result_connexion[i].id,
+//       };
+
+//       // Si la connexion est déjà dans la liste : on ne l'ajoute ps
+//       if (
+//         !listConnexion.value.some(
+//           (conn) => conn.id_liaison === connexionStr.id_liaison
+//         )
+//       ) {
+//         listConnexion.value.push(connexionStr);
+//       }
+//     }
+//   } catch (error) {
+//     console.log("Erreur lors de la recherche", error);
+//   }
+// };
 
 const deconnexion = () => {
   UserServices.logout();
@@ -398,10 +455,16 @@ const scrollToTop = () => {
 }
 
 .justify-between {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    color: $negative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  color: $negative;
+}
+
+.icon-close {
+  position: absolute;
+  right: 0px;
+  top: 0px;
 }
 </style>

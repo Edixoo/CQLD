@@ -13,7 +13,7 @@
                 <div class="col">
                   <label for="mot1" class="label-large">Mot 1</label>
                   <q-input
-                    label="Ex. Paul"
+                    label="Ex. Heureux"
                     filled
                     v-model="mot1"
                     lazy-rules
@@ -27,7 +27,7 @@
                 <div class="col">
                   <label for="mot2" class="label-large">Mot 2</label>
                   <q-input
-                    label="Ex. Chien"
+                    label="Ex. Content"
                     filled
                     v-model="mot2"
                     lazy-rules
@@ -83,6 +83,9 @@ import WordServices from "../services/WordServices.js";
 import ThemeServices from "../services/ThemeServices.js";
 import ConnexionServices from "../services/ConnexionServices.js";
 import { ref, onMounted } from "vue";
+import { useQuasar } from "quasar";
+
+const $q = useQuasar();
 
 const mot1 = ref("");
 const mot2 = ref("");
@@ -98,7 +101,6 @@ const fetchThemes = async () => {
 onMounted(fetchThemes);
 
 const resetForm = () => {
-  // Reset form fields and set formSubmitted to false
   mot1.value = "";
   mot2.value = "";
   description.value = "";
@@ -106,51 +108,67 @@ const resetForm = () => {
 };
 
 const createWord = async () => {
-  const theme = await ThemeServices.getThemeByName(selectedCategory.value);
-  const themeId = theme._id;
+  try {
+    console.log("teset");
+    // const token_decoded = jwtDecode(localStorage.getItem("userToken"));
+    // console.log("token_decoded", token_decoded);
 
-  if (mot1.value && mot2.value && selectedCategory.value) {
-    WordServices.createWord({
-      word: mot1.value,
-      theme: themeId,
-      added_by: "eee",
-      approved: true,
-    });
+    const theme = await ThemeServices.getThemeByName(selectedCategory.value);
+    const themeId = theme._id;
 
-    WordServices.createWord({
-      word: mot2.value,
-      theme: themeId,
-      added_by: "eee",
-      approved: true,
-    });
+    console.log("themeId,", themeId);
 
-    const id_word1 = await WordServices.getWordByName(mot1.value);
-    const id1 = id_word1._id;
+    if (mot1.value && mot2.value && selectedCategory.value) {
+      // RRajouter condition avant de créer un mot ; si il existe
 
-    const id_word2 = await WordServices.getWordByName(mot2.value);
-    const id2 = id_word2._id;
+      WordServices.createWord({
+        word: mot1.value,
+        theme: themeId,
+        added_by: "eee",
+        approved: true,
+      });
 
-    ConnexionServices.createConnection({
-      word1: id1,
-      word2: id2,
-      theme: themeId,
-      description: description.value,
-      proposed_by: "moi",
-      approved: false,
-      approved_by: "moi",
-    });
+      WordServices.createWord({
+        word: mot2.value,
+        theme: themeId,
+        added_by: "eee",
+        approved: true,
+      });
 
-    this.$q.notify({
-      type: "positive",
-      message: "La connexion a été créée avec succès.",
-    });
+      const id_word1 = await WordServices.getWordByName(mot1.value);
+      const id1 = id_word1._id;
 
-    // Reset the form after successful creation
-    resetForm();
-  } else {
-    this.$q.notify({
+      const id_word2 = await WordServices.getWordByName(mot2.value);
+      const id2 = id_word2._id;
+
+      console.log(id2);
+
+      ConnexionServices.createConnection({
+        word1: id1,
+        word2: id2,
+        theme: themeId,
+        description: description.value,
+        proposed_by: "moi",
+        approved: false,
+        approved_by: "moi",
+      });
+
+      $q.notify({
+        type: "positive",
+        message: "La connexion entre ces deux mots a été créée avec succès",
+      });
+
+      resetForm();
+    } else {
+      $q.notify({
+        type: "negative",
+        message: "Veuillez remplir tous les champs",
+      });
+    }
+  } catch (error) {
+    $q.notify({
       type: "negative",
-      message: "Veuillez remplir tous les champs.",
+      message: "Une erreur est survenue",
     });
   }
 };
