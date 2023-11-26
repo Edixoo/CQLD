@@ -1,25 +1,22 @@
 <template>
   <q-page>
-    <div class="q-pa-md" style="padding: 0%; margin: 0%">
-      <!-- <div class="q-gutter-md row items-start">
-        <q-img
-          src="~assets/photo.jpg"
-          style="width: 100%; height: 350px; object-fit: cover"
-        />
-      </div> -->
+    <div class="q-pa-md pageWho">
       <q-carousel animated v-model="slide" arrows navigation infinite>
-        <q-carousel-slide :name="1" img-src="../assets/informatique.jpg" />
+        <q-carousel-slide
+          :name="1"
+          img-src="../assets/PictureCarousel/PictureCarouselCodage.jpg"
+        />
         <q-carousel-slide
           :name="2"
-          img-src="https://cdn.quasar.dev/img/parallax1.jpg"
+          img-src="../assets/PictureCarousel/PictureCarouselNumeric.jpg"
         />
         <q-carousel-slide
           :name="3"
-          img-src="https://cdn.quasar.dev/img/parallax2.jpg"
+          img-src="../assets/PictureCarousel/PictureCarouselBinary.jpg"
         />
         <q-carousel-slide
           :name="4"
-          img-src="https://cdn.quasar.dev/img/quasar.jpg"
+          img-src="../assets/PictureCarousel/PictureCarouselNetwork.jpg"
         />
       </q-carousel>
     </div>
@@ -84,6 +81,11 @@ export default {
 </script>
 
 <style lang="scss">
+.pageWho {
+  padding: 0%;
+  margin: 0%;
+}
+
 .h6 {
   margin-top: 50px;
   margin-bottom: 10px;

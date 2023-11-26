@@ -175,7 +175,7 @@
               class="q-px-xs"
             >
               <img
-                src="~assets/instagram.png"
+                src="~assets/social-icons/instagram.png"
                 alt="Instagram"
                 style="width: 25px; height: 25px; margin-top: 15px"
               />
@@ -187,7 +187,7 @@
               class="q-px-xs"
             >
               <img
-                src="~assets/facebook.png"
+                src="~assets/social-icons/facebook.png"
                 alt="facebook"
                 style="width: 25px; height: 25px; margin-top: 15px"
               />
@@ -199,7 +199,7 @@
               class="q-px-xs"
             >
               <img
-                src="~assets/twitter.png"
+                src="~assets/social-icons/twitter.png"
                 alt="twitter"
                 style="width: 25px; height: 25px; margin-top: 15px"
               />
@@ -334,43 +334,6 @@ const searchItems = async () => {
     console.error("Erreur lors de la recherche", error);
   }
 };
-
-// const searchItems = async () => {
-//   try {
-//     const result = await themesServices.getlistThemeContain(
-//       SearchBarValue.value
-//     );
-//     filteredThemes.value = result.map((item) => item.theme_name);
-
-//     const result_connexion = await ConnexionServices.getConnexionContainWord(
-//       SearchBarValue.value
-//     );
-
-//     for (let i = 0; i < result_connexion.length; i++) {
-//       const mot1 = await WordServices.getWordById(result_connexion[i].word1);
-//       const mot1_value = mot1.word;
-
-//       const mot2 = await WordServices.getWordById(result_connexion[i].word2);
-//       const mot2_value = mot2.word;
-
-//       const connexionStr = {
-//         liaison: `${mot1_value} VS ${mot2_value}`,
-//         id_liaison: result_connexion[i].id,
-//       };
-
-//       // Si la connexion est déjà dans la liste : on ne l'ajoute ps
-//       if (
-//         !listConnexion.value.some(
-//           (conn) => conn.id_liaison === connexionStr.id_liaison
-//         )
-//       ) {
-//         listConnexion.value.push(connexionStr);
-//       }
-//     }
-//   } catch (error) {
-//     console.log("Erreur lors de la recherche", error);
-//   }
-// };
 
 const deconnexion = () => {
   UserServices.logout();

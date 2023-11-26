@@ -23,7 +23,7 @@
                       class="q-px-xs"
                     >
                       <img
-                        src="~assets/instagram.png"
+                        src="~assets/social-icons/instagram.png"
                         alt="Instagram"
                         style="width: 32px; height: 32px"
                       />
@@ -35,7 +35,7 @@
                       class="q-px-xs"
                     >
                       <img
-                        src="~assets/facebook.png"
+                        src="~assets/social-icons/facebook.png"
                         alt="facebook"
                         style="width: 32px; height: 32px"
                       />
@@ -47,7 +47,7 @@
                       class="q-px-xs"
                     >
                       <img
-                        src="~assets/twitter.png"
+                        src="~assets/social-icons/twitter.png"
                         alt="twitter"
                         style="width: 32px; height: 32px"
                       />
