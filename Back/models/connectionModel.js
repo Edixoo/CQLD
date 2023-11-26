@@ -47,13 +47,4 @@ const ConnectionSchema = new mongoose.Schema({
   }
 });
 
-ConnectionSchema.pre('save', async function (next) {
-  if (!this.id) {
-    // Si l'id n'est pas déjà défini
-    const count = await mongoose.model('Connection').countDocuments();
-    this.id = count; // Attribue la position comme id
-  }
-  next();
-});
-
 module.exports = mongoose.model('Connection', ConnectionSchema);

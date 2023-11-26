@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="carterOne">{{title}}</h1>
+        <h1 class="carterOne q-mb-md">{{title}}</h1>
     </div>
 </template>
 
@@ -17,7 +17,6 @@ defineProps({
 <style lang="scss">
 h1{
     color: $third;
-
     margin-left: 100px;
     text-align: left;
 }

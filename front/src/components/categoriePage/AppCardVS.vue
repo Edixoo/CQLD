@@ -1,14 +1,17 @@
 <template>
-    <q-card clickable @click="() => $router.push('/liens/' + connexion.id)" class="cardstyle">
+    <q-card clickable @click="() => $router.push('/liens/' + connexion.id)" class="cardstyle text-container">
+        <q-tooltip>
+            Cliquez pour voir + d'infos
+        </q-tooltip>
         <q-card-section class="cardsection-title text-h5">
-            <div class="row">
-                {{ connexion.word1.word }} 
-            </div>
-            <div class="row">
-                VS 
-            </div>
-            <div class="row">
+            <div>
                 {{ connexion.word1.word }}
+            </div>
+            <div>
+                vs
+            </div>
+            <div>
+                {{ connexion.word2.word }}
             </div>
         </q-card-section>
         <q-separator />
@@ -17,6 +20,7 @@
                 {{ connexion.description }}
             </div>
         </q-card-section>
+
     </q-card>
 </template>
 
@@ -44,19 +48,20 @@ defineProps({
     }
     .cardsection-title{
         color: white;
-        font-weight: 1000;
-        height: 100px;
-        text-align: center;
+        font-weight: 500;
+        height: 125px;
         background-color: $primary;
-        
         div {
             text-align: center;
         }
     }
     .description{
-        height: 200px;
+        max-height: 100px;
         text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
+
 
 </style>

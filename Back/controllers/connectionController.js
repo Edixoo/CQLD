@@ -19,6 +19,13 @@ exports.listConnections = async (req, res) => {
 exports.createConnection = async (req, res) => {
   try {
     const connection = new Connection(req.body);
+    
+    const highestIdConnexion = await Connection.findOne().sort({ id: -1 });
+
+    const newId = highestIdConnexion ? highestIdConnexion.id + 1 : 1;
+
+    connection.id = newId;
+    
     await connection.save();
     res.status(201).send(connection);
   } catch (error) {
@@ -28,7 +35,7 @@ exports.createConnection = async (req, res) => {
 
 exports.makeConnection = async (test) => {
   try {
-    const connection = new Connection(test);
+        const connection = new Connection(test);
     await connection.save();
   } catch (error) {
     res.status(400).send(error.message);

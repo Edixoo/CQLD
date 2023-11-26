@@ -83,12 +83,22 @@ import WordServices from "../services/WordServices.js";
 import ThemeServices from "../services/ThemeServices.js";
 import ConnexionServices from "../services/ConnexionServices.js";
 import { ref, onMounted } from "vue";
+import { useQuasar } from "quasar";
+import { jwtDecode } from "jwt-decode";
 
+
+const $q = useQuasar();
 const mot1 = ref("");
 const mot2 = ref("");
 const description = ref("");
 const selectedCategory = ref("");
 const categories = ref([]);
+
+const getUserAuth = () => {
+  const token_decoded = jwtDecode(localStorage.getItem("userToken"));
+  const userid = token_decoded.userId;
+  return userid;
+};
 
 const fetchThemes = async () => {
   const result = await ThemeServices.listThemes();
@@ -113,14 +123,14 @@ const createWord = async () => {
     WordServices.createWord({
       word: mot1.value,
       theme: themeId,
-      added_by: "eee",
+      added_by: getUserAuth(),
       approved: true,
     });
 
     WordServices.createWord({
       word: mot2.value,
       theme: themeId,
-      added_by: "eee",
+      added_by: getUserAuth(),
       approved: true,
     });
 
@@ -130,25 +140,24 @@ const createWord = async () => {
     const id_word2 = await WordServices.getWordByName(mot2.value);
     const id2 = id_word2._id;
 
-    ConnexionServices.createConnection({
+    await ConnexionServices.createConnection({
       word1: id1,
       word2: id2,
       theme: themeId,
       description: description.value,
-      proposed_by: "moi",
-      approved: false,
-      approved_by: "moi",
+      proposed_by: getUserAuth()
     });
 
-    this.$q.notify({
+    $q.notify({
       type: "positive",
       message: "La connexion a été créée avec succès.",
     });
 
     // Reset the form after successful creation
     resetForm();
+
   } else {
-    this.$q.notify({
+    $q.notify({
       type: "negative",
       message: "Veuillez remplir tous les champs.",
     });
