@@ -55,15 +55,23 @@ const listUsers = async () => {
   return await apiClient.get('/api/users/all').then((response) => {return response.data});
 };
 
-
-
 const sendMail = (userData) => {
   return apiClient.post('/api/users/sendMail', userData);
 };
 
-const sendMailForgotPasseword = (userData) => {
-  return apiClient.post('/api/users/sendMailForgotPasseword', userData);
+const sendMailWithOTP = (userData) => {
+  return apiClient.post('/api/users/sendMailWithOTP', userData);
 };
+
+const updatePassword = (userData) => {
+  return apiClient.post('/api/users/updatePassword', userData);
+};
+
+const getOTP = async (userData) => {
+  return await apiClient.post('/api/users/getOTP', userData).then((response) => { return response.data});
+};
+
+
 
 
 export default {
@@ -75,6 +83,10 @@ export default {
   listUsers,
   sendMail, 
   logout, 
-  sendMailForgotPasseword
+  sendMailWithOTP, 
+
+  updatePassword, 
+  getOTP
+  
 };
 

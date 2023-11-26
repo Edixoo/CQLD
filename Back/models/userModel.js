@@ -53,7 +53,12 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     required: true,
     default: Date.now,
-  }
+  }, 
+  otp_number :{
+    type: String,
+    required: false,
+    default: '0',
+  },
 });
 
 UserSchema.pre('save', function(next) {

@@ -29,10 +29,10 @@ router.delete('/profile', userController.deleteUser);
 router.get('/all', userController.listUsers);
 
 router.post('/sendMail', userController.sendMail);
+router.post('/sendMailWithOTP', userController.sendMailWithOTP);
 
-router.post('/sendMailForgotPasseword', userController.sendMailResetPasseword)
-
-
+router.post('/updatePassword', userController.updatePassword)
+router.post('/getOTP', userController.getOTP);
 
 
 module.exports = router;

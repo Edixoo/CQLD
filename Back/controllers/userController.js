@@ -1,10 +1,11 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
-const{ decryptField} = require('../controllers/functionNeeded');
 const jwt = require('jsonwebtoken');
 const { stringify } = require('querystring');
 const nodemailer = require('nodemailer');
+const{ decryptField, encryptField} = require('../controllers/functionNeeded');
+
 
 // Register a new user
 
@@ -163,7 +164,6 @@ exports.sendMail = async (req, res) => {
   try {
     const { username, email, text } = req.body;
 
- 
     // Configurer le transporteur Nodemailer
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -195,11 +195,13 @@ exports.sendMail = async (req, res) => {
 };
 
 
-exports.sendMailResetPasseword = async (req, res) => {
+exports.sendMailWithOTP = async (req, res) => {
   try {
-    const { email, text } = req.body;
+    const { email } = req.body;
 
- 
+    const otp = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+
+
     // Configurer le transporteur Nodemailer
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -211,10 +213,10 @@ exports.sendMailResetPasseword = async (req, res) => {
 
     // Définir le contenu de l'e-mail
     const mailOptions = {
-      from: 'cqld.iut@gmail.com',
-      to: email,
-      subject: 'Réinitialisez votre mot de passe',
-      text: `Voici un nouvel email pour réinitialiser votre mot de passe`,
+      from: 'cqld.iut@gmail.com', 
+      to: email ,
+      subject: 'Code OTP pour la réinitialisation du mot de passe',
+      text: `Votre code OTP est : ${otp}`,
 
     };
 
@@ -225,7 +227,57 @@ exports.sendMailResetPasseword = async (req, res) => {
       }
       res.status(200).send('E-mail envoyé : ' + info.response);
     });
+
+    
+    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
+    const mail_encrypt = encryptField(email, secretKey);
+    await User.findOneAndUpdate({ email: mail_encrypt }, { $set: { otp_number: otp } });
+
+
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
+
+
+exports.updatePassword = async (req, res) => {
+  try {
+    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
+    const mail_encrypt = encryptField(req.body.email, secretKey);
+    const user = await User.findOne({email: mail_encrypt}); 
+
+    bcrypt.hash(req.body.new_pwd, 10, async (err, hash) => {
+    if (err) return next(err);
+    const mdp_encrypt = hash;
+    await User.findOneAndUpdate({ email: mail_encrypt }, { $set: { password: mdp_encrypt } });
+    next();
+  });
+
+    if (!user){
+      res.status(200).send('User non trouvé') ; 
+    }    
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+
+exports.getOTP = async (req, res) => {
+
+  try {
+    const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
+    const mail_encrypt = encryptField(req.body.email, secretKey);
+    const user = await User.findOne({email: mail_encrypt}); 
+
+    if (!user){
+      res.status(200).send('User non trouvé') ; 
+    }    
+    const otp = user.otp_number
+    res.status(200).send(otp);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+
