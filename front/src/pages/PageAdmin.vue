@@ -13,13 +13,13 @@
       </thead>
       <tbody>
         <tr v-for="(connexion, index) in mots" :key="index">
-          <td class="text-left">{{ connexion.mot1 }}</td>
-          <td class="text-right">{{ connexion.mot2 }}</td>
+          <td class="text-left">{{ connexion.word1.word }}</td>
+          <td class="text-right">{{ connexion.word2.word }}</td>
           <td class="text-right">{{ connexion.theme }}</td>
           <td class="text-right">{{ connexion.description }}</td>
           <td class="text-right">
             <q-btn
-              @click="inspectWord(index)"
+              @click="inspectWord(connexion._id)"
               size="12px"
               flat
               dense
@@ -29,7 +29,7 @@
           </td>
           <td class="text-right">
             <q-btn
-              @click="approuverMot(index)"
+              @click="approuverMot(connexion)"
               v-if="!connexion.approved"
               size="12px"
               flat
@@ -48,39 +48,37 @@
 import { onMounted, ref } from "vue";
 import ConnexionServices from "../services/ConnexionServices";
 import { useQuasar } from "quasar";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 
 const $q = useQuasar();
 const $router = useRouter();
-const route = useRoute(); 
 const mots = ref([]);
-const connexion = ref(null);
-
-const liensId = route.params.id;
 
 onMounted(async () => {
   try {
-    
     mots.value = await ConnexionServices.getConnectionsByApproved();
   } catch (error) {
     console.error("Erreur lors de la récupération des connexions non approuvées:", error);
   }
 });
 
-const inspectWord = (index) => {
-  const selectedMotId = mots.value[index]._id;
-  $router.push({ name: "PageInspect", params: { id: selectedMotId } });
+const inspectWord = (selectedMotId) => {
+  $router.push({ name: "inspect", params: { _id: selectedMotId } });
 };
 
-const approuverMot = async (index) => {
+const approuverMot = async (connexion) => {
   try {
-    await ConnexionServices.updateConnection(connexion.value._id, { approved: true });
-    $q.notify({
-      color: "positive",
-      message: "Le mot a bien été approuvé",
-      icon: "done",
-    });
-    $router.push('/');
+    if (connexion && connexion._id) {
+      await ConnexionServices.updateConnection(connexion._id, { approved: true });
+      $q.notify({
+        color: "positive",
+        message: "Le mot a bien été approuvé",
+        icon: "done",
+      });
+      $router.push('/');
+    } else {
+      console.error("Erreur lors de l'approbation du mot : ID non défini ou introuvable.");
+    }
   } catch (error) {
     console.error("Erreur lors de l'approbation du mot:", error);
   }
@@ -88,20 +86,25 @@ const approuverMot = async (index) => {
 </script>
 
 <style>
-.table{
+/* ... */
+</style>
+
+
+<style>
+.table {
   overflow-y: auto; 
   max-height: 500px;
 }
 
-.header{
+.header {
   background-color: #54546C;
   color: white;
 }
 
-.button{
+.button {
   background-color: #54546C;
   color: white;
-  font-size:x-small;
+  font-size: x-small;
   padding: 6px;
 }
 </style>

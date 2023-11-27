@@ -75,10 +75,9 @@ const routes = [
   },
 
   {
-    path: '/inspect/:id',
-    name: 'InspectPage',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/PageInspect.vue') }],
+    path: '/inspect/:_id', 
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/PageInspect.vue") }],
     meta: { requiresAuth: true, role: 'admin' } 
   },
 ];
