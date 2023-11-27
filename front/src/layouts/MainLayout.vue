@@ -105,15 +105,28 @@
     </q-header>
 
     <q-dialog v-model="openSearchBar">
-      <q-card class="q-pa-sm" style="width: 500px">
-        <q-card-section class="row justify-center">
+      <q-card class="q-pa-sm width-searchbar">
+        <div>
+          <h5 class="h5">Barre de recherche</h5>
+          <q-btn
+            class="icon-close"
+            flat
+            round
+            dense
+            @click="closeSearchBarFunction"
+          >
+            <q-icon name="close" />
+          </q-btn>
+        </div>
+
+        <q-card-section class="row justify-center q-card-section">
           <q-input
             v-model="SearchBarValue"
             filled
             borderless
             clearable
             placeholder="Rechercher"
-            style="width: 500px"
+            class="width-searchbar"
             @update:model-value="searchItems"
           >
             <template v-slot:append>
@@ -125,11 +138,7 @@
         <q-separator />
 
         <q-card-section class="row justify-center">
-          <q-list
-            bordered
-            class="rounded-borders"
-            style="width: 500px; display: flex; justify-content: space-around"
-          >
+          <q-list bordered class="rounded-borders card-category">
             <q-expansion-item
               label="Catégories"
               v-model="isExpanded"
@@ -270,6 +279,9 @@ const isExpanded = ref(true);
 const filteredThemes = ref([]);
 const listConnexion = ref([]);
 const openSearchBar = ref(false);
+const openDrawer = ref(false);
+const isMobile = ref(false);
+const drawerLeft = ref(false);
 
 const openSearchBarFunction = () => {
   console.log("test");
@@ -288,11 +300,6 @@ const getUserAuth = () => {
   const user = token_decoded.username;
   return user;
 };
-
-const openDrawer = ref(false);
-const isMobile = ref(false);
-
-const drawerLeft = ref(false);
 
 onMounted(async () => {
   drawerLeft.value = false;
@@ -461,5 +468,26 @@ const scrollToTop = () => {
 
 .width-searchbar {
   width: 500px;
+}
+
+.card-category {
+  width: 500px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.icon-close {
+  position: absolute;
+  margin: 5px;
+  top: 10px;
+  right: 10px;
+  color: #808080;
+  z-index: 1;
+}
+
+.h5 {
+  margin-bottom: 10px;
+  margin-left: 15px;
+  font-weight: bold;
 }
 </style>
