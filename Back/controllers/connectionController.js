@@ -36,9 +36,22 @@ exports.createConnection = async (req, res) => {
 exports.makeConnection = async (test) => {
   try {
     const connection = new Connection(test);
+    let highestIdConnexion=null;
+
+    if((await Connection.find()).length>1){
+      highestIdConnexion = await Connection.findOne().sort({ id: -1 });
+      
+    } else if((await Connection.find()).length==1) {
+      highestIdConnexion={id: 1}
+    }
+
+    const newId = highestIdConnexion ? highestIdConnexion.id + 1 : 1;
+
+    connection.id = newId;
+
     await connection.save();
   } catch (error) {
-    res.status(400).send(error.message);
+    console.error(error)
   }
 };
 

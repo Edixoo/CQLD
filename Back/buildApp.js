@@ -32,7 +32,8 @@ async function createUsers() {
     email: faker.internet.email(),
     role: faker.random.arrayElement(['admin', 'user']),
     created_at: faker.date.past(),
-    last_login: faker.date.recent()
+    last_login: faker.date.recent(), 
+    otp_number : '0'
   }));
 
   for(let user of users){
