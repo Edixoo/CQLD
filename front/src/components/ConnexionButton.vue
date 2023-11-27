@@ -26,8 +26,7 @@
 </template>
 
 <script setup>
-import { is } from "quasar";
-import { ref, getCurrentInstance, computed } from "vue";
+import { ref, getCurrentInstance } from "vue";
 
 const { proxy } = getCurrentInstance();
 
