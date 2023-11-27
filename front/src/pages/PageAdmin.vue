@@ -9,6 +9,7 @@
           <th class="text-right">Description</th>
           <th class="text-right">Inspecter</th>
           <th class="text-right">Approuver</th>
+          <th class="text-right">Refuser</th>
         </tr>
       </thead>
       <tbody>
@@ -29,6 +30,7 @@
           </td>
           <td class="text-right">
             <q-btn
+            color="positive"
               @click="approuverMot(connexion)"
               v-if="!connexion.approved"
               size="12px"
@@ -37,6 +39,18 @@
               round
               icon="check"
             >Approuver</q-btn>
+          </td>
+          <td class="text-right">
+            <q-btn
+            color="negative"
+              @click="refuserMot(connexion)"
+              v-if="!connexion.approved"
+              size="12px"
+              flat
+              dense
+              round
+              icon="close"
+            >Refuser</q-btn>
           </td>
         </tr>
       </tbody>
@@ -63,7 +77,7 @@ onMounted(async () => {
 });
 
 const inspectWord = (selectedMotId) => {
-  $router.push({ name: "inspect", params: { _id: selectedMotId } });
+  $router.push('/inspect/' + selectedMotId);
 };
 
 const approuverMot = async (connexion) => {
@@ -75,7 +89,7 @@ const approuverMot = async (connexion) => {
         message: "Le mot a bien été approuvé",
         icon: "done",
       });
-      $router.push('/');
+      $router.push('/admin');
     } else {
       console.error("Erreur lors de l'approbation du mot : ID non défini ou introuvable.");
     }
@@ -83,12 +97,25 @@ const approuverMot = async (connexion) => {
     console.error("Erreur lors de l'approbation du mot:", error);
   }
 };
+
+const refuserMot = async (connexion) => {
+  try {
+    if (connexion && connexion._id) {
+      await ConnexionServices.deleteConnection(connexion._id);
+      $q.notify({
+        color: "negative",
+        message: "Le mot a été refusé et supprimé",
+        icon: "close",
+      });
+      $router.push('/admin');
+    } else {
+      console.error("Erreur lors du refus et de la suppression du mot : ID non défini ou introuvable.");
+    }
+  } catch (error) {
+    console.error("Erreur lors du refus et de la suppression du mot :", error);
+  }
+};
 </script>
-
-<style>
-/* ... */
-</style>
-
 
 <style>
 .table {
