@@ -21,11 +21,9 @@ const login = (credentials) => {
     .then(response => {
       const token  = response.data.token;
       const role = response.data.role;
-      console.log(response.data.token + " : ", response.data.username);
       localStorage.setItem('userToken', token);
       localStorage.setItem('userRole', role);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      console.log(axios.defaults.headers);
     })
     .catch(error => {
       console.error('Login error', error);

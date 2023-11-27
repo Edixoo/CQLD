@@ -35,7 +35,6 @@ const approuverMot = async () => {
     await ConnexionServices.updateConnection(selectedMot.value._id, {
       approved: true,
     });
-    console.log("Mot approuvé");
   } catch (error) {
     console.error("Erreur lors de l'approbation du mot :", error);
   }
@@ -44,7 +43,6 @@ const approuverMot = async () => {
 const refuserMot = async () => {
   try {
     await ConnexionServices.deleteConnection(selectedMot.value._id);
-    console.log("Mot refusé et supprimé");
   } catch (error) {
     console.error("Erreur lors du refus et de la suppression du mot :", error);
   }

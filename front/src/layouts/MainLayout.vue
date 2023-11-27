@@ -365,7 +365,6 @@ const searchItems = async () => {
 const deconnexion = () => {
   UserServices.logout();
   window.location.reload();
-  console.log("Déconnexion");
 };
 
 const scrollToTop = () => {
