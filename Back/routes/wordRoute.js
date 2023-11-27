@@ -1,6 +1,6 @@
 const express = require('express');
 const wordController = require('../controllers/wordController');  
-const {authenticateToken} = require('../controllers/functionNeeded');
+// const {authenticateToken} = require('../controllers/functionNeeded');
 
 const router = express.Router();
 

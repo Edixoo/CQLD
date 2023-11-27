@@ -1,17 +1,24 @@
 const Theme = require('../models/themeModel');  // Adjust the path as needed
+<<<<<<< Updated upstream
 const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
 const { stringify } = require('querystring');
+=======
+// const bcrypt = require('bcrypt'); // Used for password comparison
+// const crypto = require('crypto');
+// const{ decryptField, encryptField} = require('../controllers/functionNeeded');
+// const { stringify } = require('querystring');
+const BASE_ERROR = "BACK ERROR"
+>>>>>>> Stashed changes
 
 
 exports.listThemes = async (req, res) => {
   try {
     const themes = await Theme.find();
-    console.log("header" + stringify(req.headers));
     res.status(200).send(themes);
 
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -21,7 +28,7 @@ exports.createTheme = async (req, res) => {
     await theme.save();
     res.status(201).send(theme);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -39,25 +46,29 @@ exports.getThemeById = async (req, res) => {
   try {
     const theme = await Theme.findById(req.params.id);
     if (!theme) {
-      return res.status(404).send('Theme not found');
+      return res.status(504).send('Theme not found');
     }
 
     res.status(200).send(theme);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
 exports.getlistThemeContain = async (req, res) => {
   try {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     const listTheme = await Theme.find({ theme_name: { $regex: new RegExp(req.params.word, 'i') } });
     if (!listTheme) {
-      return res.status(404).send('Theme not found');
+      return res.status(504).send('Theme not found');
     }
 
     res.status(200).send(listTheme);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -66,12 +77,12 @@ exports.getThemeByName = async (req, res) => {
     const theme = await Theme.findOne({ theme_name: req.params.name });
 
     if (!theme) {
-      return res.status(404).send('Theme not found');
+      return res.status(504).send('Theme not found');
     }
 
     res.status(200).send(theme);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -79,11 +90,11 @@ exports.updateTheme = async (req, res) => {
   try {
     const theme = await Theme.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!theme) {
-      return res.status(404).send('Theme not found');
+      return res.status(504).send('Theme not found');
     }
     res.status(200).send(theme);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -91,11 +102,11 @@ exports.deleteTheme = async (req, res) => {
   try {
     const theme = await Theme.findByIdAndDelete(req.params.id);
     if (!theme) {
-      return res.status(404).send('Theme not found');
+      return res.status(504).send('Theme not found');
     }
     res.status(200).send({ message: 'Theme deleted successfully!' });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -105,7 +116,10 @@ exports.addManyThemes = async (req, res) => {
     const result = await Theme.insertMany(themes);
     res.status(201).send(result);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
+
+
+
 

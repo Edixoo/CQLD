@@ -3,7 +3,7 @@ const faker = require('faker');
 const User = require('./models/userModel');
 const Theme = require('./models/themeModel');
 const Word = require('./models/wordModel');
-const Connection = require('./models/connectionModel');
+// const Connection = require('./models/connectionModel');
 const{ decryptField} = require('./controllers/functionNeeded');
 const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
 

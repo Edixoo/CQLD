@@ -1,28 +1,27 @@
 const User = require('../models/userModel');
-const bcrypt = require('bcrypt'); // Used for password comparison
+// const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const { stringify } = require('querystring');
+// const { stringify } = require('querystring');
 const nodemailer = require('nodemailer');
 const{ decryptField, encryptField} = require('../controllers/functionNeeded');
+const BASE_ERROR = "BACK ERROR"
 
 
 // Register a new user
-
 
 exports.register = async (req, res) => {
   try {
     const { name, surname, username, password, email, role } = req.body;
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
-      return res.status(400).send("User with the given username or email already exists.");
+      return res.status(500).send("User with the given username or email already exists.");
     }
     const user = new User({ name, surname, username, password, email, role });
     await user.save();
     res.status(201).send({ message: "User registered successfully!", user_id: user._id });
   } catch (error) {
-    res.status(400).send(error.message);
-
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -31,12 +30,13 @@ exports.createUser = async (test) => {
     const { name, surname, username, password, email, role } = test;
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
-      return ("user Existing");
+      return res.status(500).send("User with the given username already exists.");
     }
     const user = new User({ name, surname, username, password, email, role });
     await user.save();
   } catch (error) {
-    return ("toto");
+    console.error(BASE_ERROR)
+    return null;
   }
 };
 
@@ -46,19 +46,16 @@ exports.login = async (req, res) => {
 
     const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
     // Encrypt the incoming username using the same method and key as when it was originally encrypted
-    //const encryptedUsername = encryptField(req.body.username, secretKey);
-    //console.log(encryptedUsername)
-    // Retrieve the user by the encrypted username
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
-      return res.status(401).json({ message: 'Login failed: User not found.' });
+      return res.status(501).json({ message: 'Login failed: User not found.' });
     }
 
     // Check if the password is correct
     const isMatch = await bcrypt.compare(req.body.password, user.password);
     //console.log(isMatch)  
     if (!isMatch) {
-      return res.status(401).json({ message: 'Login failed: Incorrect password.' });
+      return res.status(501).json({ message: 'Login failed: Incorrect password.' });
     }
 
     // User authenticated, generate a JWT
@@ -85,12 +82,12 @@ exports.getProfile = async (req, res) => {
     const user = await User.findById(userId).select('-password'); // Exclude password
 
     if (!user) {
-      return res.status(404).send('User not found');
+      return res.status(504).send('User not found');
     }
 
     res.json(user);
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -100,11 +97,11 @@ exports.updateProfile = async (req, res) => {
     const updates = req.body; // Get updates from request
     const user = await User.findByIdAndUpdate(req.userId, updates, { new: true });
     if (!user) {
-      return res.status(404).send("User not found.");
+      return res.status(504).send("User not found.");
     }
     res.status(200).send(user);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -113,11 +110,11 @@ exports.deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.userId);
     if (!user) {
-      return res.status(404).send("User not found.");
+      return res.status(504).send("User not found.");
     }
     res.status(200).send({ message: "User deleted successfully!" });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -140,7 +137,7 @@ exports.listUsers = async (req, res) => {
 
     res.status(200).send(users);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -150,7 +147,7 @@ exports.addManyUsers = async (req, res) => {
     const result = await User.insertMany(users);
     res.status(201).send(result);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -158,16 +155,16 @@ exports.sendMail = async (req, res) => {
   try {
     const { username, email, text } = req.body;
 
-    // Configurer le transporteur Nodemailer
+    // Configuration of nodeMailer
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: 'cqld.iut@gmail.com',
-        pass: 'nvvf oprc gtly zftp',
+        pass: Buffer.from(process.env.MDP_MAIL, 'hex')
       },
     });
 
-    // Définir le contenu de l'e-mail
+    // Defining the content of the mail
     const mailOptions = {
       from: email,
       to: 'cqld.iut@gmail.com',
@@ -184,7 +181,7 @@ exports.sendMail = async (req, res) => {
       res.status(200).send('E-mail envoyé : ' + info.response);
     });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -229,7 +226,7 @@ exports.sendMailWithOTP = async (req, res) => {
 
 
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -252,7 +249,7 @@ exports.updatePassword = async (req, res) => {
     }    
     res.status(200).send(user);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 
@@ -270,7 +267,7 @@ exports.getOTP = async (req, res) => {
     const otp = user.otp_number
     res.status(200).send(otp);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(500).send(BASE_ERROR);
   }
 };
 

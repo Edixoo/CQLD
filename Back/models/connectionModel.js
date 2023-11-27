@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
-const {encryptField} = require('../controllers/functionNeeded');
+// const bcrypt = require('bcrypt');
+// const crypto = require('crypto');
+// const {encryptField} = require('../controllers/functionNeeded');
 
 require('dotenv').config();
 

@@ -23,7 +23,6 @@ const login = (credentials) => {
       const role = response.data.role;
       console.log(response.data.token + " : ", response.data.username);
       localStorage.setItem('userToken', token);
-      localStorage.setItem('userRole', role);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       console.log(axios.defaults.headers);
     })
@@ -70,6 +69,8 @@ const updatePassword = (userData) => {
 const getOTP = async (userData) => {
   return await apiClient.post('/api/users/getOTP', userData).then((response) => { return response.data});
 };
+
+  
 
 
 

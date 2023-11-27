@@ -1,10 +1,11 @@
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
-
+// const BASE_ERROR = "BACK ERROR"
 const fixedIV = Buffer.alloc(16, 0); // Fixed IV
+const axios = require('axios');
 
 const decryptField = (encryptedData, secretKey) => {
   try {
@@ -57,10 +58,8 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
-
-
 module.exports = {
     decryptField, 
     encryptField,
-    authenticateToken
+    authenticateToken,
 }

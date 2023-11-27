@@ -2,7 +2,7 @@ import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
 import * as jwtDecode from 'jwt-decode';
-import { is } from 'quasar';
+// import { is } from 'quasar';
 
 
 /*

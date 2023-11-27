@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {encryptField} = require('../controllers/functionNeeded');
+// const {encryptField} = require('../controllers/functionNeeded');
 
 require('dotenv').config();
 
