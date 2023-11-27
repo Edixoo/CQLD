@@ -26,8 +26,7 @@
               dense
               round
               icon="search"
-              >Inspecter</q-btn
-            >
+            >Inspecter</q-btn>
           </td>
           <td class="text-right">
             <q-btn
@@ -39,20 +38,7 @@
               dense
               round
               icon="check"
-              >Approuver</q-btn
-            >
-          </td>
-          <td class="text-right">
-            <q-btn
-            color="negative"
-              @click="refuserMot(connexion)"
-              v-if="!connexion.approved"
-              size="12px"
-              flat
-              dense
-              round
-              icon="close"
-            >Refuser</q-btn>
+            >Approuver</q-btn>
           </td>
           <td class="text-right">
             <q-btn
@@ -86,10 +72,7 @@ onMounted(async () => {
   try {
     mots.value = await ConnexionServices.getConnectionsByApproved();
   } catch (error) {
-    console.error(
-      "Erreur lors de la récupération des connexions non approuvées:",
-      error
-    );
+    console.error("Erreur lors de la récupération des connexions non approuvées:", error);
   }
 });
 
@@ -100,9 +83,7 @@ const inspectWord = (selectedMotId) => {
 const approuverMot = async (connexion) => {
   try {
     if (connexion && connexion._id) {
-      await ConnexionServices.updateConnection(connexion._id, {
-        approved: true,
-      });
+      await ConnexionServices.updateConnection(connexion._id, { approved: true });
       $q.notify({
         color: "positive",
         message: "Le mot a bien été approuvé",
@@ -110,9 +91,7 @@ const approuverMot = async (connexion) => {
       });
       $router.push('/admin');
     } else {
-      console.error(
-        "Erreur lors de l'approbation du mot : ID non défini ou introuvable."
-      );
+      console.error("Erreur lors de l'approbation du mot : ID non défini ou introuvable.");
     }
   } catch (error) {
     console.error("Erreur lors de l'approbation du mot:", error);
@@ -140,17 +119,17 @@ const refuserMot = async (connexion) => {
 
 <style>
 .table {
-  overflow-y: auto;
+  overflow-y: auto; 
   max-height: 500px;
 }
 
 .header {
-  background-color: #54546c;
+  background-color: #54546C;
   color: white;
 }
 
 .button {
-  background-color: #54546c;
+  background-color: #54546C;
   color: white;
   font-size: x-small;
   padding: 6px;
