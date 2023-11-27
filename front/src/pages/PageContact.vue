@@ -1,18 +1,18 @@
 <template>
   <q-page>
     <q-page-container>
-      <q-card style="max-width: 800px" class="q-mx-auto q-pa-md">
+      <q-card class="q-mx-auto q-pa-md card-contact">
         <q-card-section>
           <div class="row q-space-between">
             <div class="col">
               <div class="q-gutter-md">
                 <q-form>
                   <h4 class="text-h4">Emplacement</h4>
-                  <p style="margin: 0">Notre adresse postale :</p>
-                  <p style="margin: 0">
+                  <p class="paragraph">Notre adresse postale :</p>
+                  <p class="paragraph">
                     Rue Louis David BP 689 62228 Calais cedex
                   </p>
-                  <p style="margin: 0">Téléphone : +333 33 33333</p>
+                  <p class="paragraph">Téléphone : +333 33 33333</p>
 
                   <h4 class="text-h4">Suivez-nous</h4>
 
@@ -148,6 +148,14 @@ const contact = async () => {
 
 <style>
 h4 {
-  margin-bottom: 20px; /* Supprime la marge en bas des titres h4 */
+  margin-bottom: 20px;
+}
+
+.card-contact {
+  max-width: 800px;
+}
+
+.paragraph {
+  margin: 0;
 }
 </style>

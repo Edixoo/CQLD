@@ -1,7 +1,6 @@
 const Theme = require('../models/themeModel');  // Adjust the path as needed
 const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
-const{ decryptField, encryptField} = require('../controllers/functionNeeded');
 const { stringify } = require('querystring');
 
 
@@ -51,8 +50,6 @@ exports.getThemeById = async (req, res) => {
 
 exports.getlistThemeContain = async (req, res) => {
   try {
-    // const theme = await Theme.findById(req.params.word);
-
     const listTheme = await Theme.find({ theme_name: { $regex: new RegExp(req.params.word, 'i') } });
     if (!listTheme) {
       return res.status(404).send('Theme not found');
@@ -63,10 +60,6 @@ exports.getlistThemeContain = async (req, res) => {
     res.status(400).send(error.message);
   }
 };
-
-
-
-
 
 exports.getThemeByName = async (req, res) => {
   try {

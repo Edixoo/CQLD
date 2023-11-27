@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <q-page-container>
-      <q-card style="max-width: 550px" class="q-mx-auto q-pa-md">
+      <q-card class="q-mx-auto q-pa-md q-card">
         <q-card-section>
           <div class="q-gutter-md">
             <q-form @submit="register">
@@ -104,7 +104,7 @@
               </q-input>
 
               <div class="q-mt-lg" style="display: flex">
-                <p class="q-mr-sm" style="font-weight: 500">Déjà un compte ?</p>
+                <p class="q-mr-sm title-font">Déjà un compte ?</p>
                 <a
                   @click="$router.push('/login')"
                   class="q-mb-xs"
@@ -128,8 +128,6 @@
     </q-page-container>
   </q-page>
 </template>
-
-<!-- Le reste de votre composant Vue -->
 
 <script setup>
 import UserServices from "../services/UserServices.js";
@@ -195,3 +193,13 @@ const register = async () => {
   }
 };
 </script>
+
+<style>
+.q-card {
+  max-width: 550px;
+}
+
+.title-font {
+  font-weight: 500;
+}
+</style>

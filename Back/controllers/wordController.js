@@ -3,13 +3,11 @@ const Theme = require('../models/themeModel');  // Adjust the path as needed
 
 const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
-const{ decryptField} = require('../controllers/functionNeeded');
 
 
 exports.listWords = async (req, res) => {
   try {
     const words = await Word.find().populate('theme');
-
     res.status(200).send(words);
   } catch (error) {
     res.status(400).send(error.message);
@@ -47,21 +45,6 @@ exports.makeWord = async (test) => {
 };
 
 exports.getWordById = async (req, res) => {
-  // try {
-  //   const word = await Word.findById(req.params.id).populate('theme');
-  //   if (!word) {
-  //     return res.status(404).send('Word not found');
-  //   }
-
-  //   const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
-  //   word.word = decryptField(word.word, secretKey);
-  //   word.added_by = decryptField(word.added_by, secretKey);
-
-  //   res.status(200).send(word);
-  // } catch (error) {
-  //   res.status(400).send(error.message);
-  // }
-
    try { 
     const word = await Word.findOne({ _id: req.params.id });
 
@@ -75,7 +58,6 @@ exports.getWordById = async (req, res) => {
   }
 };
 
-// In your wordController.js
 
 exports.getWordByName = async (req, res) => {
   try {
@@ -93,7 +75,7 @@ exports.getWordByName = async (req, res) => {
 
 exports.getWordsByTheme = async (req, res) => {
   try {
-    const themeName = req.body.theme; // Get theme ID from request body
+    const themeName = req.body.theme;
     const theme_id = (await Theme.findOne({theme_name: themeName}))._id;
 
     if (!Word.find({ theme: theme_id })) {
@@ -133,7 +115,7 @@ exports.deleteWord = async (req, res) => {
 
 exports.addManyWords = async (req, res) => {
   try {
-    const words = req.body;  // Assume an array of words is passed in the request body
+    const words = req.body;  
     const result = await Word.insertMany(words);
     res.status(201).send(result);
   } catch (error) {
