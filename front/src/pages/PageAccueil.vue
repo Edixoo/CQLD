@@ -1,33 +1,35 @@
 <template>
   <q-page>
     <q-space />
-    <div class="col q-pt-lg">
-      <h1 class="row flex-center carterOne">C'est quoi la différence ?</h1>
-      <div class="row flex-center q-mb-xl">
+    <div class="page-container">
+      <h1 class="row flex-center carterOne page-title">
+        C'est quoi la différence ?
+      </h1>
+      <div class="button-container">
         <q-btn
           color="primary"
           label="Lien Aléatoire"
           :to="'/liens/' + alea"
           @click="DefineAleatoire()"
-          class="q-pa-sm q-ma-xl"
+          class="q-pa-sm q-ma-xl button-resp"
           size="lg"
-          style="width: 200px"
         />
         <CreateLink
           v-if="connexion ? (chemin = '/create') : (chemin = '/create')"
           :to="chemin"
-          class="q-ma-xl q-pa-sm"
+          class="q-ma-xl q-pa-sm button-resp"
           size="lg"
-          style="width: 200px"
         />
       </div>
 
       <q-card class="content q-pb-lg">
         <q-card-section>
-          <h2 class="q-mt-xl carterOne">Qu'est ce que c'est ?</h2>
+          <h2 class="q-mt-xl carterOne content-title-card">
+            Qu'est ce que c'est ?
+          </h2>
         </q-card-section>
         <q-separator />
-        <q-card-section class="q-mt-lg">
+        <q-card-section class="q-mt-lg content-text">
           <p>
             <strong
               >C'est quoi la différence entre "content" et "heureux"?</strong
@@ -114,6 +116,56 @@ h1 {
     margin-bottom: 20px;
     color: $third;
     width: 80%;
+  }
+}
+
+.page-container {
+  padding: 24px;
+}
+
+.page-title {
+  font-weight: 500;
+  font-size: 70px;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.button-resp {
+  width: 200px;
+}
+
+.content-text {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 450px), screen and (orientation: portrait) {
+  .page-title {
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .button-resp {
+    width: 200px;
+    font-size: 13px !important;
+  }
+
+  .content-title-card {
+    font-weight: 500;
+    font-size: 28px;
+  }
+
+  .content-text {
+    text-align: left;
+    margin-bottom: 20px;
   }
 }
 </style>

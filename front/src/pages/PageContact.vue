@@ -16,43 +16,7 @@
 
                   <h4 class="text-h4">Suivez-nous</h4>
 
-                  <div class="row">
-                    <a
-                      href="https://www.instagram.com/votreprofil"
-                      target="_blank"
-                      class="q-px-xs"
-                    >
-                      <img
-                        src="~assets/social-icons/instagram.png"
-                        alt="Instagram"
-                        style="width: 32px; height: 32px"
-                      />
-                    </a>
-
-                    <a
-                      href="https://www.facebook.com/votreprofil"
-                      target="_blank"
-                      class="q-px-xs"
-                    >
-                      <img
-                        src="~assets/social-icons/facebook.png"
-                        alt="facebook"
-                        style="width: 32px; height: 32px"
-                      />
-                    </a>
-
-                    <a
-                      href="https://www.twitter.com/votreprofil"
-                      target="_blank"
-                      class="q-px-xs"
-                    >
-                      <img
-                        src="~assets/social-icons/twitter.png"
-                        alt="twitter"
-                        style="width: 32px; height: 32px"
-                      />
-                    </a>
-                  </div>
+                  <logo-social-networks class="logo"></logo-social-networks>
                 </q-form>
               </div>
             </div>
@@ -118,6 +82,7 @@
 <script setup>
 import { ref } from "vue";
 import UserServices from "../services/UserServices.js";
+import logoSocialNetworks from "src/components/logoSocialNetworks.vue";
 
 const username = ref("");
 const email = ref("");
@@ -157,5 +122,9 @@ h4 {
 
 .paragraph {
   margin: 0;
+}
+
+.logo {
+  text-align: left !important;
 }
 </style>

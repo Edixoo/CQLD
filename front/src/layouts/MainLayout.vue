@@ -2,6 +2,17 @@
   <q-layout>
     <q-header elevated class="header">
       <q-toolbar>
+        <q-btn
+          v-if="isMobile"
+          flat
+          color="primary"
+          icon="menu"
+          @click="drawerLeft = !drawerLeft"
+          round
+          dense
+          class="q-mr-md color-btn"
+        />
+
         <a href="/" class="q-mr-xl">
           <q-img
             alt="logo_CQLD"
@@ -10,7 +21,12 @@
           />
         </a>
 
-        <q-btn-dropdown label="CATÉGORIES" flat class="q-mr-md">
+        <q-btn-dropdown
+          v-if="!isMobile"
+          label="CATÉGORIES"
+          flat
+          class="q-mr-md"
+        >
           <q-list v-for="theme in themes" :key="theme._id">
             <q-item
               clickable
@@ -25,12 +41,14 @@
         </q-btn-dropdown>
 
         <q-btn
+          v-if="!isMobile"
           flat
           color="primary"
           label="QUI SOMMES NOUS ?"
           text-color="white"
           to="/contact"
         />
+
         <q-space />
 
         <q-input
@@ -86,17 +104,8 @@
       </q-toolbar>
     </q-header>
 
-    <q-dialog v-model="openSearchBar" persistent>
-      <q-card class="q-pa-sm width-searchbar">
-        <div class="text-h6 q-ml-md q-mt-md">Rechercher</div>
-        <q-btn
-          flat
-          icon="close"
-          @click="closeSearchBarFunction()"
-          class="icon-close"
-          style="font-size: 14px"
-        />
-
+    <q-dialog v-model="openSearchBar">
+      <q-card class="q-pa-sm" style="width: 500px">
         <q-card-section class="row justify-center">
           <q-input
             v-model="SearchBarValue"
@@ -104,7 +113,8 @@
             borderless
             clearable
             placeholder="Rechercher"
-            class="width-searchbar"
+            style="width: 500px"
+            @update:model-value="searchItems"
           >
             <template v-slot:append>
               <q-icon name="search" />
@@ -157,46 +167,54 @@
       </q-card>
     </q-dialog>
 
+    <!-- Version responsive -->
+    <q-drawer
+      v-model="drawerLeft"
+      show-if-above
+      :width="200"
+      :breakpoint="700"
+      elevated
+      class="bg-primary text-white"
+    >
+      <q-scroll-area class="fit">
+        <a href="/" class="q-mr-xl">
+          <q-img
+            alt="logo_CQLD"
+            src="~assets/logo_CQLD.svg"
+            class="logo_size q-ma-md"
+          />
+        </a>
+        <q-space />
+
+        <q-btn
+          flat
+          color="primary"
+          label="QUI SOMMES NOUS ?"
+          text-color="white"
+          to="/contact"
+        />
+
+        <q-space />
+        <q-btn-dropdown label="CATÉGORIES" flat class="q-mr-md">
+          <q-list v-for="theme in themes" :key="theme._id">
+            <q-item
+              clickable
+              v-close-popup
+              @click="$router.push(`/categories/` + theme.theme_name)"
+            >
+              <q-item-section>
+                <q-item-label>{{ theme.theme_name }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+      </q-scroll-area>
+    </q-drawer>
+
     <q-footer elevated class="row bg-secondary">
       <div class="footer-content">
         <div class="footer-column">
-          <div class="footer-section" style="text-align: center">
-            <a
-              href="https://www.instagram.com/votreprofil"
-              target="_blank"
-              class="q-px-xs"
-            >
-              <img
-                src="~assets/social-icons/instagram.png"
-                alt="Instagram"
-                style="width: 25px; height: 25px; margin-top: 15px"
-              />
-            </a>
-
-            <a
-              href="https://www.facebook.com/votreprofil"
-              target="_blank"
-              class="q-px-xs"
-            >
-              <img
-                src="~assets/social-icons/facebook.png"
-                alt="facebook"
-                style="width: 25px; height: 25px; margin-top: 15px"
-              />
-            </a>
-
-            <a
-              href="https://www.twitter.com/votreprofil"
-              target="_blank"
-              class="q-px-xs"
-            >
-              <img
-                src="~assets/social-icons/twitter.png"
-                alt="twitter"
-                style="width: 25px; height: 25px; margin-top: 15px"
-              />
-            </a>
-          </div>
+          <logo-social-networks></logo-social-networks>
 
           <div class="footer-section middle-section" style="text-align: center">
             <router-link to="/" class="router-link"
@@ -235,6 +253,8 @@
 import { onMounted, onUpdated, ref, watch } from "vue";
 
 import ConnexionButton from "src/components/ConnexionButton.vue";
+import logoSocialNetworks from "src/components/logoSocialNetworks.vue";
+
 import themesServices from "src/services/ThemeServices";
 import ConnexionServices from "src/services/ConnexionServices";
 
@@ -252,6 +272,7 @@ const listConnexion = ref([]);
 const openSearchBar = ref(false);
 
 const openSearchBarFunction = () => {
+  console.log("test");
   openSearchBar.value = true;
 };
 
@@ -268,16 +289,31 @@ const getUserAuth = () => {
   return user;
 };
 
+const openDrawer = ref(false);
+const isMobile = ref(false);
+
+const drawerLeft = ref(false);
+
 onMounted(async () => {
+  drawerLeft.value = false;
+
   themes.value = await themesServices.listThemes();
   if (localStorage.getItem("userToken")) {
     const decoded = jwtDecode(localStorage.getItem("userToken"));
     connexion.value = true;
   }
+
+  isMobile.value = window.innerWidth <= 600;
+
+  window.addEventListener("resize", () => {
+    isMobile.value = window.innerWidth <= 600;
+  });
 });
 
 watch(SearchBarValue, async (newSearchBar, oldSearchBar) => {
+  console.log(SearchBarValue);
   if (SearchBarValue.value.length > 0) {
+    console.log("test");
     openSearchBarFunction();
   }
   searchItems();
@@ -404,6 +440,10 @@ const scrollToTop = () => {
   align-items: center;
   width: 100%;
   color: $negative;
+}
+
+.color-btn {
+  background-color: white;
 }
 
 .icon-close {
