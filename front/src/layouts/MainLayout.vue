@@ -284,7 +284,6 @@ const isMobile = ref(false);
 const drawerLeft = ref(false);
 
 const openSearchBarFunction = () => {
-  console.log("test");
   openSearchBar.value = true;
 };
 
@@ -318,9 +317,7 @@ onMounted(async () => {
 });
 
 watch(SearchBarValue, async (newSearchBar, oldSearchBar) => {
-  console.log(SearchBarValue);
   if (SearchBarValue.value.length > 0) {
-    console.log("test");
     openSearchBarFunction();
   }
   searchItems();
