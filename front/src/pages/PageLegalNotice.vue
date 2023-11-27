@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="q-pa-md" style="padding: 0%; margin: 0%">
+    <div class="q-pa-md section-legal-notice">
       <div class="legal-content">
         <div class="width">
           <h4 class="h4">Mentions légales</h4>
@@ -20,7 +20,6 @@
         <section class="width">
           <h6 class="h6">Contact</h6>
           <p>Adresse e-mail : cqld-iut@gmail.com</p>
-          <p>Téléphone : [Numéro de téléphone]</p>
         </section>
 
         <section class="width">
@@ -130,5 +129,10 @@ p {
 
 .width:last-child {
   margin-bottom: 80px;
+}
+
+.section-legal-notice {
+  padding: 0%;
+  margin: 0%;
 }
 </style>

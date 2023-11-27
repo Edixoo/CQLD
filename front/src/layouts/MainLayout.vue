@@ -1,14 +1,6 @@
 <template>
   <q-layout>
-    <q-header
-      elevated
-      style="
-        height: 70px;
-        align-items: center;
-        display: flex;
-        justify-content: center;
-      "
-    >
+    <q-header elevated class="header">
       <q-toolbar>
         <a href="/" class="q-mr-xl">
           <q-img
@@ -70,7 +62,7 @@
             <img src="~assets/profile.svg" />
           </q-avatar>
 
-          <q-menu ref="menu" @hide="resetMenu">
+          <q-menu ref="menu">
             <q-list style="min-width: 150px">
               <q-item
                 v-close-popup
@@ -95,7 +87,7 @@
     </q-header>
 
     <q-dialog v-model="openSearchBar" persistent>
-      <q-card class="q-pa-sm" style="width: 500px">
+      <q-card class="q-pa-sm width-searchbar">
         <div class="text-h6 q-ml-md q-mt-md">Rechercher</div>
         <q-btn
           flat
@@ -112,7 +104,7 @@
             borderless
             clearable
             placeholder="Rechercher"
-            style="width: 500px"
+            class="width-searchbar"
           >
             <template v-slot:append>
               <q-icon name="search" />
@@ -175,7 +167,7 @@
               class="q-px-xs"
             >
               <img
-                src="~assets/instagram.png"
+                src="~assets/social-icons/instagram.png"
                 alt="Instagram"
                 style="width: 25px; height: 25px; margin-top: 15px"
               />
@@ -187,7 +179,7 @@
               class="q-px-xs"
             >
               <img
-                src="~assets/facebook.png"
+                src="~assets/social-icons/facebook.png"
                 alt="facebook"
                 style="width: 25px; height: 25px; margin-top: 15px"
               />
@@ -199,7 +191,7 @@
               class="q-px-xs"
             >
               <img
-                src="~assets/twitter.png"
+                src="~assets/social-icons/twitter.png"
                 alt="twitter"
                 style="width: 25px; height: 25px; margin-top: 15px"
               />
@@ -243,7 +235,6 @@
 import { onMounted, onUpdated, ref, watch } from "vue";
 
 import ConnexionButton from "src/components/ConnexionButton.vue";
-import CreateLink from "src/components/CreateLink.vue";
 import themesServices from "src/services/ThemeServices";
 import ConnexionServices from "src/services/ConnexionServices";
 
@@ -256,10 +247,8 @@ const SearchBarValue = ref("");
 const themes = ref([]);
 const connexion = ref(false);
 const isExpanded = ref(true);
-
 const filteredThemes = ref([]);
 const listConnexion = ref([]);
-
 const openSearchBar = ref(false);
 
 const openSearchBarFunction = () => {
@@ -268,9 +257,9 @@ const openSearchBarFunction = () => {
 
 const closeSearchBarFunction = () => {
   openSearchBar.value = false;
-  SearchBarValue.value = ""; // Réinitialise la valeur de la barre de recherche
-  filteredThemes.value = []; // Réinitialise les thèmes filtrés
-  listConnexion.value = []; // Réinitialise la liste de connexions
+  SearchBarValue.value = "";
+  filteredThemes.value = [];
+  listConnexion.value = [];
 };
 
 const getUserAuth = () => {
@@ -287,7 +276,7 @@ onMounted(async () => {
   }
 });
 
-watch(SearchBarValue, async (newQuestion, oldQuestion) => {
+watch(SearchBarValue, async (newSearchBar, oldSearchBar) => {
   if (SearchBarValue.value.length > 0) {
     openSearchBarFunction();
   }
@@ -297,8 +286,6 @@ watch(SearchBarValue, async (newQuestion, oldQuestion) => {
 const searchItems = async () => {
   try {
     const searchValue = SearchBarValue.value;
-
-    // Search for themes
     const themeResult = await themesServices.getlistThemeContain(searchValue);
     filteredThemes.value = themeResult.map((item) => item.theme_name);
 
@@ -335,50 +322,11 @@ const searchItems = async () => {
   }
 };
 
-// const searchItems = async () => {
-//   try {
-//     const result = await themesServices.getlistThemeContain(
-//       SearchBarValue.value
-//     );
-//     filteredThemes.value = result.map((item) => item.theme_name);
-
-//     const result_connexion = await ConnexionServices.getConnexionContainWord(
-//       SearchBarValue.value
-//     );
-
-//     for (let i = 0; i < result_connexion.length; i++) {
-//       const mot1 = await WordServices.getWordById(result_connexion[i].word1);
-//       const mot1_value = mot1.word;
-
-//       const mot2 = await WordServices.getWordById(result_connexion[i].word2);
-//       const mot2_value = mot2.word;
-
-//       const connexionStr = {
-//         liaison: `${mot1_value} VS ${mot2_value}`,
-//         id_liaison: result_connexion[i].id,
-//       };
-
-//       // Si la connexion est déjà dans la liste : on ne l'ajoute ps
-//       if (
-//         !listConnexion.value.some(
-//           (conn) => conn.id_liaison === connexionStr.id_liaison
-//         )
-//       ) {
-//         listConnexion.value.push(connexionStr);
-//       }
-//     }
-//   } catch (error) {
-//     console.log("Erreur lors de la recherche", error);
-//   }
-// };
-
 const deconnexion = () => {
   UserServices.logout();
   window.location.reload();
   console.log("Déconnexion");
 };
-
-const user = ref(null);
 
 const scrollToTop = () => {
   window.scrollTo({
@@ -411,7 +359,7 @@ const scrollToTop = () => {
   margin-left: 0px;
   margin-right: 5px;
   font-weight: bold;
-  color: #252530;
+  color: $third;
 }
 
 .footer-section p {
@@ -431,10 +379,6 @@ const scrollToTop = () => {
   margin-bottom: 2px;
   cursor: pointer;
   transition: color 0.3s ease;
-
-  &:hover {
-    color: #54546c;
-  }
 }
 .q-header {
   display: flex;
@@ -466,5 +410,16 @@ const scrollToTop = () => {
   position: absolute;
   right: 0px;
   top: 0px;
+}
+
+.header {
+  height: 70px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.width-searchbar {
+  width: 500px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <q-page-container>
-      <q-card style="max-width: 600px" class="q-mx-auto q-pa-md q-py-md">
+      <q-card class="q-mx-auto q-pa-md q-py-md card-create">
         <q-card-section>
           <div class="q-gutter-md">
             <q-form @submit="createWord">
@@ -86,7 +86,6 @@ import { ref, onMounted } from "vue";
 import { useQuasar } from "quasar";
 import { jwtDecode } from "jwt-decode";
 
-
 const $q = useQuasar();
 const mot1 = ref("");
 const mot2 = ref("");
@@ -116,24 +115,23 @@ const resetForm = () => {
 
 const createWord = async () => {
   try {
-
     const theme = await ThemeServices.getThemeByName(selectedCategory.value);
     const themeId = theme._id;
 
-  if (mot1.value && mot2.value && selectedCategory.value) {
-    WordServices.createWord({
-      word: mot1.value,
-      theme: themeId,
-      added_by: getUserAuth(),
-      approved: true,
-    });
+    if (mot1.value && mot2.value && selectedCategory.value) {
+      WordServices.createWord({
+        word: mot1.value,
+        theme: themeId,
+        added_by: getUserAuth(),
+        approved: true,
+      });
 
-    WordServices.createWord({
-      word: mot2.value,
-      theme: themeId,
-      added_by: getUserAuth(),
-      approved: true,
-    });
+      WordServices.createWord({
+        word: mot2.value,
+        theme: themeId,
+        added_by: getUserAuth(),
+        approved: true,
+      });
 
       const id_word1 = await WordServices.getWordByName(mot1.value);
       const id1 = id_word1._id;
@@ -141,13 +139,13 @@ const createWord = async () => {
       const id_word2 = await WordServices.getWordByName(mot2.value);
       const id2 = id_word2._id;
 
-    await ConnexionServices.createConnection({
-      word1: id1,
-      word2: id2,
-      theme: themeId,
-      description: description.value,
-      proposed_by: getUserAuth()
-    });
+      await ConnexionServices.createConnection({
+        word1: id1,
+        word2: id2,
+        theme: themeId,
+        description: description.value,
+        proposed_by: getUserAuth(),
+      });
 
       $q.notify({
         type: "positive",
@@ -173,5 +171,9 @@ const createWord = async () => {
 .label-large {
   font-size: 16px;
   font-weight: 500;
+}
+
+.card-create {
+  max-width: 600px;
 }
 </style>
