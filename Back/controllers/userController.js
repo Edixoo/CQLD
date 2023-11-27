@@ -69,7 +69,7 @@ exports.login = async (req, res) => {
     );
 
     // Respond with the JWT and potentially the username if needed
-    res.json({ token, username: req.body.username }); // Do not send encryptedUsername to the client
+    res.json({ token, username: req.body.username, user: user }); // Do not send encryptedUsername to the client
   } catch (error) {
     res.status(500).json({ message: 'Server error during the login process.' });
   }

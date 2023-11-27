@@ -250,6 +250,9 @@ import ConnexionServices from "src/services/ConnexionServices";
 import { jwtDecode } from "jwt-decode";
 import UserServices from "src/services/UserServices";
 import WordServices from "src/services/WordServices";
+import { useUserStore } from "src/stores/userStore";
+
+const userStore = useUserStore();
 
 const SearchBarValue = ref("");
 
@@ -274,17 +277,22 @@ const closeSearchBarFunction = () => {
 };
 
 const getUserAuth = () => {
-  const token_decoded = jwtDecode(localStorage.getItem("userToken"));
-  const user = token_decoded.username;
+  const user= userStore.username;
   return user;
 };
 
-onMounted(async () => {
-  themes.value = await themesServices.listThemes();
-  if (localStorage.getItem("userToken")) {
-    const decoded = jwtDecode(localStorage.getItem("userToken"));
+watch(() => userStore.username, () => {
+
+  if (userStore.username) {
     connexion.value = true;
+  } else {
+    connexion.value = false;
   }
+});
+
+onMounted(async () => {
+  console.log(userStore.username)
+  themes.value = await themesServices.listThemes();
 });
 
 watch(SearchBarValue, async (newQuestion, oldQuestion) => {

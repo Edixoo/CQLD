@@ -158,6 +158,9 @@ import UserServices from "../services/UserServices.js";
 import { onUnmounted, ref } from "vue";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
+import { useUserStore } from "../stores/userStore.js";
+
+const userStore = useUserStore();
 
 const $q = useQuasar();
 const $router = useRouter();
@@ -254,15 +257,13 @@ const login = async () => {
     await UserServices.login({
       username: username.value,
       password: password.value,
-    }).then(() => {
+    }).then(async () => {
       $q.notify({
         type: "positive",
         message: "Vous êtes connecté.",
       });
+      $router.push("/");
     });
-
-    window.location.reload();
-    $router.push("/");
   } else {
     $q.notify({
       type: "negative",
