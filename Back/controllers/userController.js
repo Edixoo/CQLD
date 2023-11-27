@@ -45,7 +45,6 @@ exports.login = async (req, res) => {
   try {
 
     const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
-    // Encrypt the incoming username using the same method and key as when it was originally encrypted
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
       return res.status(501).json({ message: 'Login failed: User not found.' });
@@ -53,7 +52,6 @@ exports.login = async (req, res) => {
 
     // Check if the password is correct
     const isMatch = await bcrypt.compare(req.body.password, user.password);
-    //console.log(isMatch)  
     if (!isMatch) {
       return res.status(501).json({ message: 'Login failed: Incorrect password.' });
     }
@@ -66,7 +64,7 @@ exports.login = async (req, res) => {
     );
 
     // Respond with the JWT and potentially the username if needed
-    res.json({ token, username: req.body.username }); // Do not send encryptedUsername to the client
+    res.json({ token, username: req.body.username, user: user }); // Do not send encryptedUsername to the client
   } catch (error) {
     res.status(500).json({ message: 'Server error during the login process.' });
   }
@@ -153,6 +151,8 @@ exports.addManyUsers = async (req, res) => {
 
 exports.sendMail = async (req, res) => {
   try {
+    const KEY_MAIL = process.env.KEY_MAIL;
+
     const { username, email, text } = req.body;
 
     // Configuration of nodeMailer
@@ -160,7 +160,7 @@ exports.sendMail = async (req, res) => {
       service: 'gmail',
       auth: {
         user: 'cqld.iut@gmail.com',
-        pass: Buffer.from(process.env.MDP_MAIL, 'hex')
+        pass: KEY_MAIL,
       },
     });
 
@@ -188,17 +188,18 @@ exports.sendMail = async (req, res) => {
 
 exports.sendMailWithOTP = async (req, res) => {
   try {
+    const KEY_MAIL = process.env.KEY_MAIL;
+
     const { email } = req.body;
 
     const otp = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-
 
     // Configurer le transporteur Nodemailer
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: 'cqld.iut@gmail.com',
-        pass: 'nvvf oprc gtly zftp',
+        pass: KEY_MAIL,
       },
     });
 

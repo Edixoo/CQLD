@@ -1,9 +1,9 @@
 // UserService.js
 import axios from 'axios';
-
+import { useUserStore } from 'src/stores/userStore';
 // Set up the base URL from an environment variable or hardcoded, if you prefer
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000';
-
+const userStore = useUserStore();
 // Axios instance can be customized for the needs of your app, e.g., setting headers
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -16,15 +16,14 @@ const register = (userData) => {
   return apiClient.post('/api/users/register', userData);
 };
 
-const login = (credentials) => {
-  return apiClient.post('/api/users/login', credentials)
+const login = async (credentials) => {
+  return await apiClient.post('/api/users/login', credentials)
     .then(response => {
       const token  = response.data.token;
-      const role = response.data.role;
-      console.log(response.data.token + " : ", response.data.username);
       localStorage.setItem('userToken', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       console.log(axios.defaults.headers);
+      userStore.setUser(response.data.user);
     })
     .catch(error => {
       console.error('Login error', error);

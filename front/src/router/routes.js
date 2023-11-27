@@ -67,6 +67,12 @@ const routes = [
     children: [{ path: "", component: () => import("pages/PageEdit.vue") }],
     meta: { requiresAuth: true,  roles: ['user', 'admin'] }
   },
+  {
+    path: '/inspect/:_id', 
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/PageInspect.vue") }],
+    meta: { requiresAuth: true, role: 'admin' } 
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

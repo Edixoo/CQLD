@@ -31,31 +31,30 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('userToken') !== null;
-    console.log(isAuthenticated);
     const token = localStorage.getItem('userToken');
     let userRole = null;
 
     if (token) {
       const decodedToken = jwtDecode.jwtDecode(token);
       userRole = decodedToken.role;
-      if (userRole)console.log(userRole + " userName : " + decodedToken.username);
+      
     }
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
       if (!isAuthenticated) {
-        console.log(1);
+    
         next({ path: '/login' });
       } else if (to.meta.role && userRole !== to.meta.role) {
-        console.log(2);
+       
         next({ path: '/' });
       } else {
     
-        console.log(3);
+   
         
         next();
       }
     } else {
-      console.log(4);
+  
      
       next();
     }

@@ -2,6 +2,17 @@
   <q-layout>
     <q-header elevated class="header">
       <q-toolbar>
+        <q-btn
+          v-if="isMobile"
+          flat
+          color="primary"
+          icon="menu"
+          @click="drawerLeft = !drawerLeft"
+          round
+          dense
+          class="q-mr-md color-btn"
+        />
+
         <a href="/" class="q-mr-xl">
           <q-img
             alt="logo_CQLD"
@@ -10,7 +21,12 @@
           />
         </a>
 
-        <q-btn-dropdown label="CATÉGORIES" flat class="q-mr-md">
+        <q-btn-dropdown
+          v-if="!isMobile"
+          label="CATÉGORIES"
+          flat
+          class="q-mr-md"
+        >
           <q-list v-for="theme in themes" :key="theme._id">
             <q-item
               clickable
@@ -25,12 +41,14 @@
         </q-btn-dropdown>
 
         <q-btn
+          v-if="!isMobile"
           flat
           color="primary"
           label="QUI SOMMES NOUS ?"
           text-color="white"
           to="/contact"
         />
+
         <q-space />
 
         <q-input
@@ -55,7 +73,6 @@
           label=""
           v-if="connexion"
           class="q-ml-md"
-          @click="showMenu"
           ref="menuBtn"
         >
           <q-avatar size="42px">
@@ -86,18 +103,22 @@
       </q-toolbar>
     </q-header>
 
-    <q-dialog v-model="openSearchBar" persistent>
+    <q-dialog v-model="openSearchBar">
       <q-card class="q-pa-sm width-searchbar">
-        <div class="text-h6 q-ml-md q-mt-md">Rechercher</div>
-        <q-btn
-          flat
-          icon="close"
-          @click="closeSearchBarFunction()"
-          class="icon-close"
-          style="font-size: 14px"
-        />
+        <div>
+          <h5 class="h5">Barre de recherche</h5>
+          <q-btn
+            class="icon-close"
+            flat
+            round
+            dense
+            @click="closeSearchBarFunction"
+          >
+            <q-icon name="close" />
+          </q-btn>
+        </div>
 
-        <q-card-section class="row justify-center">
+        <q-card-section class="row justify-center q-card-section">
           <q-input
             v-model="SearchBarValue"
             filled
@@ -105,6 +126,7 @@
             clearable
             placeholder="Rechercher"
             class="width-searchbar"
+            @update:model-value="searchItems"
           >
             <template v-slot:append>
               <q-icon name="search" />
@@ -115,11 +137,7 @@
         <q-separator />
 
         <q-card-section class="row justify-center">
-          <q-list
-            bordered
-            class="rounded-borders"
-            style="width: 500px; display: flex; justify-content: space-around"
-          >
+          <q-list bordered class="rounded-borders card-category">
             <q-expansion-item
               label="Catégories"
               v-model="isExpanded"
@@ -157,46 +175,54 @@
       </q-card>
     </q-dialog>
 
+    <!-- Version responsive -->
+    <q-drawer
+      v-model="drawerLeft"
+      show-if-above
+      :width="200"
+      :breakpoint="700"
+      elevated
+      class="bg-primary text-white"
+    >
+      <q-scroll-area class="fit">
+        <a href="/" class="q-mr-xl">
+          <q-img
+            alt="logo_CQLD"
+            src="~assets/logo_CQLD.svg"
+            class="logo_size q-ma-md"
+          />
+        </a>
+        <q-space />
+
+        <q-btn
+          flat
+          color="primary"
+          label="QUI SOMMES NOUS ?"
+          text-color="white"
+          to="/contact"
+        />
+
+        <q-space />
+        <q-btn-dropdown label="CATÉGORIES" flat class="q-mr-md">
+          <q-list v-for="theme in themes" :key="theme._id">
+            <q-item
+              clickable
+              v-close-popup
+              @click="$router.push(`/categories/` + theme.theme_name)"
+            >
+              <q-item-section>
+                <q-item-label>{{ theme.theme_name }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+      </q-scroll-area>
+    </q-drawer>
+
     <q-footer elevated class="row bg-secondary">
       <div class="footer-content">
         <div class="footer-column">
-          <div class="footer-section" style="text-align: center">
-            <a
-              href="https://www.instagram.com/votreprofil"
-              target="_blank"
-              class="q-px-xs"
-            >
-              <img
-                src="~assets/social-icons/instagram.png"
-                alt="Instagram"
-                style="width: 25px; height: 25px; margin-top: 15px"
-              />
-            </a>
-
-            <a
-              href="https://www.facebook.com/votreprofil"
-              target="_blank"
-              class="q-px-xs"
-            >
-              <img
-                src="~assets/social-icons/facebook.png"
-                alt="facebook"
-                style="width: 25px; height: 25px; margin-top: 15px"
-              />
-            </a>
-
-            <a
-              href="https://www.twitter.com/votreprofil"
-              target="_blank"
-              class="q-px-xs"
-            >
-              <img
-                src="~assets/social-icons/twitter.png"
-                alt="twitter"
-                style="width: 25px; height: 25px; margin-top: 15px"
-              />
-            </a>
-          </div>
+          <logo-social-networks></logo-social-networks>
 
           <div class="footer-section middle-section" style="text-align: center">
             <router-link to="/" class="router-link"
@@ -235,12 +261,17 @@
 import { onMounted, onUpdated,getCurrentInstance,ref, watch } from "vue";
 
 import ConnexionButton from "src/components/ConnexionButton.vue";
+import logoSocialNetworks from "src/components/logoSocialNetworks.vue";
+
 import themesServices from "src/services/ThemeServices";
 import ConnexionServices from "src/services/ConnexionServices";
 
 import { jwtDecode } from "jwt-decode";
 import UserServices from "src/services/UserServices";
 import WordServices from "src/services/WordServices";
+import { useUserStore } from "src/stores/userStore";
+
+const userStore = useUserStore();
 import checkApiHealth from "src/services/checkBack";
 
 const { proxy } = getCurrentInstance();
@@ -252,6 +283,9 @@ const isExpanded = ref(true);
 const filteredThemes = ref([]);
 const listConnexion = ref([]);
 const openSearchBar = ref(false);
+const openDrawer = ref(false);
+const isMobile = ref(false);
+const drawerLeft = ref(false);
 
 const openSearchBarFunction = () => {
   openSearchBar.value = true;
@@ -265,21 +299,38 @@ const closeSearchBarFunction = () => {
 };
 
 const getUserAuth = () => {
-  const token_decoded = jwtDecode(localStorage.getItem("userToken"));
-  const user = token_decoded.username;
+  const user= userStore.username;
   return user;
 };
+
+watch(() => userStore.username, () => {
+
+  if (userStore.username) {
+    connexion.value = true;
+  } else {
+    connexion.value = false;
+  }
+});
 
 onMounted(async () => {
   const isApiHealthy = await checkApiHealth.checkApiHealth();
   if (!isApiHealthy) {
     proxy.$router.push("/no-api"); 
   }
+  drawerLeft.value = false;
   themes.value = await themesServices.listThemes();
   if (localStorage.getItem("userToken")) {
     const decoded = jwtDecode(localStorage.getItem("userToken"));
-    connexion.value = true;
   }
+
+  const decoded= jwtDecode(localStorage.getItem("userToken"));
+  userStore.username= decoded.username;
+
+  isMobile.value = window.innerWidth <= 600;
+
+  window.addEventListener("resize", () => {
+    isMobile.value = window.innerWidth <= 600;
+  });
 });
 
 watch(SearchBarValue, async (newSearchBar, oldSearchBar) => {
@@ -331,7 +382,6 @@ const searchItems = async () => {
 const deconnexion = () => {
   UserServices.logout();
   window.location.reload();
-  console.log("Déconnexion");
 };
 
 const scrollToTop = () => {
@@ -412,6 +462,10 @@ const scrollToTop = () => {
   color: $negative;
 }
 
+.color-btn {
+  background-color: white;
+}
+
 .icon-close {
   position: absolute;
   right: 0px;
@@ -427,5 +481,26 @@ const scrollToTop = () => {
 
 .width-searchbar {
   width: 500px;
+}
+
+.card-category {
+  width: 500px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.icon-close {
+  position: absolute;
+  margin: 5px;
+  top: 10px;
+  right: 10px;
+  color: #808080;
+  z-index: 1;
+}
+
+.h5 {
+  margin-bottom: 10px;
+  margin-left: 15px;
+  font-weight: bold;
 }
 </style>

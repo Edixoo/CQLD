@@ -32,14 +32,14 @@ async function createUsers() {
     email: faker.internet.email(),
     role: faker.random.arrayElement(['admin', 'user']),
     created_at: faker.date.past(),
-    last_login: faker.date.recent()
+    last_login: faker.date.recent(), 
+    otp_number : '0'
   }));
 
   for(let user of users){
     await userController.createUser(user);
   }
 
-  console.log('Users populated');
 }
 
 async function createThemes() {
@@ -50,7 +50,6 @@ async function createThemes() {
   for(let theme of themes){
     await themeController.makeTheme(theme);
   }
-  console.log('Themes populated');
 }
 
 async function createWords() {
@@ -68,7 +67,6 @@ async function createWords() {
   for(let word of words){
     await wordController.makeWord(word);
   }
-  console.log('Words populated');
 }
 
 async function createConnections() {
@@ -90,7 +88,6 @@ async function createConnections() {
   for(let connection of connections){
     await connectionController.makeConnection(connection);
   }
-  console.log('Connections populated');
 }
 
 
@@ -101,7 +98,6 @@ async function generateData() {
   await createConnections();
 
   mongoose.connection.close();
-  console.log('Database population complete!');
 }
 
 generateData();
