@@ -1,15 +1,18 @@
 <template>
   <q-layout>
-    <q-header
-      elevated
-      style="
-        height: 70px;
-        align-items: center;
-        display: flex;
-        justify-content: center;
-      "
-    >
+    <q-header elevated class="header">
       <q-toolbar>
+        <q-btn
+          v-if="isMobile"
+          flat
+          color="primary"
+          icon="menu"
+          @click="drawerLeft = !drawerLeft"
+          round
+          dense
+          class="q-mr-md color-btn"
+        />
+
         <a href="/" class="q-mr-xl">
           <q-img
             alt="logo_CQLD"
@@ -18,7 +21,12 @@
           />
         </a>
 
-        <q-btn-dropdown label="CATÉGORIES" flat class="q-mr-md">
+        <q-btn-dropdown
+          v-if="!isMobile"
+          label="CATÉGORIES"
+          flat
+          class="q-mr-md"
+        >
           <q-list v-for="theme in themes" :key="theme._id">
             <q-item
               clickable
@@ -33,12 +41,14 @@
         </q-btn-dropdown>
 
         <q-btn
+          v-if="!isMobile"
           flat
           color="primary"
           label="QUI SOMMES NOUS ?"
           text-color="white"
           to="/contact"
         />
+
         <q-space />
 
         <q-input
@@ -70,7 +80,7 @@
             <img src="~assets/profile.svg" />
           </q-avatar>
 
-          <q-menu ref="menu" @hide="resetMenu">
+          <q-menu ref="menu">
             <q-list style="min-width: 150px">
               <q-item
                 v-close-popup
@@ -94,25 +104,30 @@
       </q-toolbar>
     </q-header>
 
-    <q-dialog v-model="openSearchBar" persistent>
-      <q-card class="q-pa-sm" style="width: 500px">
-        <div class="text-h6 q-ml-md q-mt-md">Rechercher</div>
-        <q-btn
-          flat
-          icon="close"
-          @click="closeSearchBarFunction()"
-          class="icon-close"
-          style="font-size: 14px"
-        />
+    <q-dialog v-model="openSearchBar">
+      <q-card class="q-pa-sm width-searchbar">
+        <div>
+          <h5 class="h5">Barre de recherche</h5>
+          <q-btn
+            class="icon-close"
+            flat
+            round
+            dense
+            @click="closeSearchBarFunction"
+          >
+            <q-icon name="close" />
+          </q-btn>
+        </div>
 
-        <q-card-section class="row justify-center">
+        <q-card-section class="row justify-center q-card-section">
           <q-input
             v-model="SearchBarValue"
             filled
             borderless
             clearable
             placeholder="Rechercher"
-            style="width: 500px"
+            class="width-searchbar"
+            @update:model-value="searchItems"
           >
             <template v-slot:append>
               <q-icon name="search" />
@@ -123,11 +138,7 @@
         <q-separator />
 
         <q-card-section class="row justify-center">
-          <q-list
-            bordered
-            class="rounded-borders"
-            style="width: 500px; display: flex; justify-content: space-around"
-          >
+          <q-list bordered class="rounded-borders card-category">
             <q-expansion-item
               label="Catégories"
               v-model="isExpanded"
@@ -165,46 +176,54 @@
       </q-card>
     </q-dialog>
 
+    <!-- Version responsive -->
+    <q-drawer
+      v-model="drawerLeft"
+      show-if-above
+      :width="200"
+      :breakpoint="700"
+      elevated
+      class="bg-primary text-white"
+    >
+      <q-scroll-area class="fit">
+        <a href="/" class="q-mr-xl">
+          <q-img
+            alt="logo_CQLD"
+            src="~assets/logo_CQLD.svg"
+            class="logo_size q-ma-md"
+          />
+        </a>
+        <q-space />
+
+        <q-btn
+          flat
+          color="primary"
+          label="QUI SOMMES NOUS ?"
+          text-color="white"
+          to="/contact"
+        />
+
+        <q-space />
+        <q-btn-dropdown label="CATÉGORIES" flat class="q-mr-md">
+          <q-list v-for="theme in themes" :key="theme._id">
+            <q-item
+              clickable
+              v-close-popup
+              @click="$router.push(`/categories/` + theme.theme_name)"
+            >
+              <q-item-section>
+                <q-item-label>{{ theme.theme_name }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+      </q-scroll-area>
+    </q-drawer>
+
     <q-footer elevated class="row bg-secondary">
       <div class="footer-content">
         <div class="footer-column">
-          <div class="footer-section" style="text-align: center">
-            <a
-              href="https://www.instagram.com/votreprofil"
-              target="_blank"
-              class="q-px-xs"
-            >
-              <img
-                src="~assets/social-icons/instagram.png"
-                alt="Instagram"
-                style="width: 25px; height: 25px; margin-top: 15px"
-              />
-            </a>
-
-            <a
-              href="https://www.facebook.com/votreprofil"
-              target="_blank"
-              class="q-px-xs"
-            >
-              <img
-                src="~assets/social-icons/facebook.png"
-                alt="facebook"
-                style="width: 25px; height: 25px; margin-top: 15px"
-              />
-            </a>
-
-            <a
-              href="https://www.twitter.com/votreprofil"
-              target="_blank"
-              class="q-px-xs"
-            >
-              <img
-                src="~assets/social-icons/twitter.png"
-                alt="twitter"
-                style="width: 25px; height: 25px; margin-top: 15px"
-              />
-            </a>
-          </div>
+          <logo-social-networks></logo-social-networks>
 
           <div class="footer-section middle-section" style="text-align: center">
             <router-link to="/" class="router-link"
@@ -243,7 +262,8 @@
 import { onMounted, onUpdated, ref, watch } from "vue";
 
 import ConnexionButton from "src/components/ConnexionButton.vue";
-import CreateLink from "src/components/CreateLink.vue";
+import logoSocialNetworks from "src/components/logoSocialNetworks.vue";
+
 import themesServices from "src/services/ThemeServices";
 import ConnexionServices from "src/services/ConnexionServices";
 
@@ -259,11 +279,12 @@ const SearchBarValue = ref("");
 const themes = ref([]);
 const connexion = ref(false);
 const isExpanded = ref(true);
-
 const filteredThemes = ref([]);
 const listConnexion = ref([]);
-
 const openSearchBar = ref(false);
+const openDrawer = ref(false);
+const isMobile = ref(false);
+const drawerLeft = ref(false);
 
 const openSearchBarFunction = () => {
   openSearchBar.value = true;
@@ -271,9 +292,9 @@ const openSearchBarFunction = () => {
 
 const closeSearchBarFunction = () => {
   openSearchBar.value = false;
-  SearchBarValue.value = ""; // Réinitialise la valeur de la barre de recherche
-  filteredThemes.value = []; // Réinitialise les thèmes filtrés
-  listConnexion.value = []; // Réinitialise la liste de connexions
+  SearchBarValue.value = "";
+  filteredThemes.value = [];
+  listConnexion.value = [];
 };
 
 const getUserAuth = () => {
@@ -291,11 +312,22 @@ watch(() => userStore.username, () => {
 });
 
 onMounted(async () => {
-  console.log(userStore.username)
+  drawerLeft.value = false;
+
   themes.value = await themesServices.listThemes();
+  if (localStorage.getItem("userToken")) {
+    const decoded = jwtDecode(localStorage.getItem("userToken"));
+    connexion.value = true;
+  }
+
+  isMobile.value = window.innerWidth <= 600;
+
+  window.addEventListener("resize", () => {
+    isMobile.value = window.innerWidth <= 600;
+  });
 });
 
-watch(SearchBarValue, async (newQuestion, oldQuestion) => {
+watch(SearchBarValue, async (newSearchBar, oldSearchBar) => {
   if (SearchBarValue.value.length > 0) {
     openSearchBarFunction();
   }
@@ -305,8 +337,6 @@ watch(SearchBarValue, async (newQuestion, oldQuestion) => {
 const searchItems = async () => {
   try {
     const searchValue = SearchBarValue.value;
-
-    // Search for themes
     const themeResult = await themesServices.getlistThemeContain(searchValue);
     filteredThemes.value = themeResult.map((item) => item.theme_name);
 
@@ -346,10 +376,7 @@ const searchItems = async () => {
 const deconnexion = () => {
   UserServices.logout();
   window.location.reload();
-  console.log("Déconnexion");
 };
-
-const user = ref(null);
 
 const scrollToTop = () => {
   window.scrollTo({
@@ -382,7 +409,7 @@ const scrollToTop = () => {
   margin-left: 0px;
   margin-right: 5px;
   font-weight: bold;
-  color: #252530;
+  color: $third;
 }
 
 .footer-section p {
@@ -402,10 +429,6 @@ const scrollToTop = () => {
   margin-bottom: 2px;
   cursor: pointer;
   transition: color 0.3s ease;
-
-  &:hover {
-    color: #54546c;
-  }
 }
 .q-header {
   display: flex;
@@ -433,9 +456,45 @@ const scrollToTop = () => {
   color: $negative;
 }
 
+.color-btn {
+  background-color: white;
+}
+
 .icon-close {
   position: absolute;
   right: 0px;
   top: 0px;
+}
+
+.header {
+  height: 70px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.width-searchbar {
+  width: 500px;
+}
+
+.card-category {
+  width: 500px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.icon-close {
+  position: absolute;
+  margin: 5px;
+  top: 10px;
+  right: 10px;
+  color: #808080;
+  z-index: 1;
+}
+
+.h5 {
+  margin-bottom: 10px;
+  margin-left: 15px;
+  font-weight: bold;
 }
 </style>

@@ -146,18 +146,14 @@ const updateWord = async () => {
 
 
     await WordServices.getWordByName(mot1.value).then(async (word) => {
-      console.log('mot:' + word)
       if (word !== 'Word not found') {
         connexion.value.word1 = word._id;
       } else {
-        console.log('test')
         await WordServices.createWord({ word: mot1.value, theme: themeId, added_by: userId.value, approved: true }).then((word) => {
-          console.log(word)
           connexion.value.word1 = word._id;
         });
       }
     }).catch((err) => {
-      console.log('toto')
     });
     await WordServices.getWordByName(mot2.value).then(async (word) => {
       if (word !== 'Word not found') {
@@ -169,9 +165,7 @@ const updateWord = async () => {
       }
     });
 
-    console.log(connexion.value)
     await ConnexionServices.updateConnection(connexion.value._id, connexion.value).then((result) => {
-      console.log(result)
       $q.notify({
         type: "positive",
         message: "La connexion a été modifiée avec succès.",

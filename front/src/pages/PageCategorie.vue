@@ -135,7 +135,6 @@ onUpdated(async () => {
   editCategorie.value = false;
 });
 
-//findOne dans les catégories avec l'id en paramètres
 </script>
 
 <style lang="scss">

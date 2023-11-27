@@ -103,50 +103,6 @@ exports.getConnexionContainWord = async (req, res) => {
 
 }
 
-
-  // try {
-
-  //   const listWordIds = await Word.distinct('_id', { word: { $regex: new RegExp(req.params.word, 'i') } });
-
-
-
-    // const motsSalut = db.mot.find({ mot: /salut/i }).map(function(doc) {
-    //     return doc._id;
-    // });
-
-    // // Requête pour récupérer les connexions avec id_mots1 ou id_mots2 dans la liste d'IDs obtenue précédemment
-    // const result = db.connexion.find({
-    //     $or: [
-    //         { id_mot1: { $in: motsSalut } },
-    //         { id_mot2: { $in: motsSalut } }
-    //     ]
-    // });
-
-    // // Affichage des résultats
-    // printjson(result.toArray());
-
-
-
-
-
-    // const connection = await Connection.find({theme: req.params.id}).populate(['word1', 'word2']);
-  //   if (!listWordIds) {
-  //     return res.status(404).send('Connection not found');
-  //   }
-  //   res.status(200).send(connection);
-  // } catch (error) {
-  //   res.status(400).send(error.message);
-  // }
-
-
-
-
-
-
-
-
-
-
 exports.getConnectionByApproved = async (req, res) => {
   try {
     const connection = await Connection.find({approved: false}).populate(['word1', 'word2']);

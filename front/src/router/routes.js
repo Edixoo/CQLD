@@ -59,13 +59,19 @@ const routes = [
     path: "/create",
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/PageCreate.vue") }],
-    meta: { requiresAuth: true, role: 'user' }
+    meta: { requiresAuth: true,  roles: ['user', 'admin'] }
   },
   {
     path: "/edit/:id",
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/PageEdit.vue") }],
-    meta: { requiresAuth: true, role: 'user' }
+    meta: { requiresAuth: true,  roles: ['user', 'admin'] }
+  },
+  {
+    path: '/inspect/:_id', 
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/PageInspect.vue") }],
+    meta: { requiresAuth: true, role: 'admin' } 
   },
   // Always leave this as last one,
   // but you can also remove it
@@ -73,6 +79,7 @@ const routes = [
     path: "/:catchAll(.*)*",
     component: () => import("pages/ErrorNotFound.vue"),
   },
+
 ];
 
 export default routes;

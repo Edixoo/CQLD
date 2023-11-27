@@ -12,7 +12,6 @@ require('dotenv').config();
 
 const app = express();
 
-console.log(process.env.MONGODB_URI);
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -27,5 +26,5 @@ app.use('/api/words', wordRoutes);
 app.use('/api/connections', connectionRoutes);
 
 app.listen(process.env.PORT || 80, () => {
-  console.log(`Server is running on port ${process.env.PORT || 80}`);
+  
 });

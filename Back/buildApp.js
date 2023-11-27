@@ -40,7 +40,6 @@ async function createUsers() {
     await userController.createUser(user);
   }
 
-  console.log('Users populated');
 }
 
 async function createThemes() {
@@ -51,7 +50,6 @@ async function createThemes() {
   for(let theme of themes){
     await themeController.makeTheme(theme);
   }
-  console.log('Themes populated');
 }
 
 async function createWords() {
@@ -69,7 +67,6 @@ async function createWords() {
   for(let word of words){
     await wordController.makeWord(word);
   }
-  console.log('Words populated');
 }
 
 async function createConnections() {
@@ -91,7 +88,6 @@ async function createConnections() {
   for(let connection of connections){
     await connectionController.makeConnection(connection);
   }
-  console.log('Connections populated');
 }
 
 
@@ -102,7 +98,6 @@ async function generateData() {
   await createConnections();
 
   mongoose.connection.close();
-  console.log('Database population complete!');
 }
 
 generateData();

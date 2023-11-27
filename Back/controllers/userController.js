@@ -45,10 +45,6 @@ exports.login = async (req, res) => {
   try {
 
     const secretKey = Buffer.from(process.env.SECRET_KEY, 'hex');
-    // Encrypt the incoming username using the same method and key as when it was originally encrypted
-    //const encryptedUsername = encryptField(req.body.username, secretKey);
-    //console.log(encryptedUsername)
-    // Retrieve the user by the encrypted username
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
       return res.status(401).json({ message: 'Login failed: User not found.' });
@@ -56,7 +52,6 @@ exports.login = async (req, res) => {
 
     // Check if the password is correct
     const isMatch = await bcrypt.compare(req.body.password, user.password);
-    //console.log(isMatch)  
     if (!isMatch) {
       return res.status(401).json({ message: 'Login failed: Incorrect password.' });
     }
@@ -156,6 +151,8 @@ exports.addManyUsers = async (req, res) => {
 
 exports.sendMail = async (req, res) => {
   try {
+    const KEY_MAIL = process.env.KEY_MAIL;
+
     const { username, email, text } = req.body;
 
     // Configurer le transporteur Nodemailer
@@ -163,7 +160,7 @@ exports.sendMail = async (req, res) => {
       service: 'gmail',
       auth: {
         user: 'cqld.iut@gmail.com',
-        pass: 'nvvf oprc gtly zftp',
+        pass: KEY_MAIL,
       },
     });
 
@@ -191,17 +188,18 @@ exports.sendMail = async (req, res) => {
 
 exports.sendMailWithOTP = async (req, res) => {
   try {
+    const KEY_MAIL = process.env.KEY_MAIL;
+
     const { email } = req.body;
 
     const otp = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-
 
     // Configurer le transporteur Nodemailer
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: 'cqld.iut@gmail.com',
-        pass: 'nvvf oprc gtly zftp',
+        pass: KEY_MAIL,
       },
     });
 

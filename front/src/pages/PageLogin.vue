@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <q-page-container>
-      <q-card style="max-width: 400px" class="q-mx-auto q-pa-md">
+      <q-card class="q-mx-auto q-pa-md q-card-login">
         <q-card-section>
           <div class="q-gutter-md">
             <q-form @submit="login">
@@ -97,7 +97,7 @@
     </q-dialog>
 
     <q-dialog v-model="popUpOTP">
-      <q-card class="q-pa-md" style="width: 500px">
+      <q-card class="q-pa-md q-card-modif-pwd">
         <q-card-section>
           <div class="text-h5 title-card">Vérification de votre identité</div>
           <div class="q-mt-md">
@@ -123,7 +123,7 @@
     </q-dialog>
 
     <q-dialog v-model="PopUpChangePwd">
-      <q-card class="q-pa-md" style="width: 500px">
+      <q-card class="q-pa-md q-card-modif-pwd">
         <q-card-section>
           <div class="text-h5 title-card">Modification du mot de passe</div>
           <div class="q-mt-md">
@@ -136,8 +136,16 @@
             filled
             v-model="PopUpChangePwdValue"
             label="Nouveau mot de passe"
+            :type="isPwd ? 'password' : 'text'"
             placeholder="Entrer le nouveau mot de passe"
-          />
+          >
+            <template v-slot:append>
+              <q-icon
+                :name="isPwd ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="isPwd = !isPwd"
+              /> </template
+          ></q-input>
         </q-card-section>
 
         <q-card-actions align="right">
@@ -177,6 +185,7 @@ const popUpOTPValue = ref("");
 const PopUpChangePwd = ref(false);
 const PopUpChangePwdValue = ref("");
 
+const isPwd = ref(true);
 const openPopUpForgotPwd = () => {
   popUpForgotPwd.value = true;
 };
@@ -276,5 +285,13 @@ const login = async () => {
 <style>
 .title-card {
   text-align: center;
+}
+
+.q-card-login {
+  max-width: 400px;
+}
+
+.q-card-modif-pwd {
+  width: 500px;
 }
 </style>

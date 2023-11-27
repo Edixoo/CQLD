@@ -8,24 +8,49 @@
           <th class="text-right">Catégorie</th>
           <th class="text-right">Description</th>
           <th class="text-right">Inspecter</th>
+          <th class="text-right">Approuver</th>
+          <th class="text-right">Refuser</th>
         </tr>
       </thead>
-      <tbody template v-for="(mot, index) in mots" :key="index">
-        <tr>
-          <td class="text-left">{{ mot.mot1 }}</td>
-          <td class="text-right">{{ mot.mot2 }}</td>
-          <td class="text-right">{{ mot.categorie }}</td>
-          <td class="text-right">{{ mot.description }}</td>
+      <tbody>
+        <tr v-for="(connexion, index) in mots" :key="index">
+          <td class="text-left">{{ connexion.word1.word }}</td>
+          <td class="text-right">{{ connexion.word2.word }}</td>
+          <td class="text-right">{{ connexion.theme }}</td>
+          <td class="text-right">{{ connexion.description }}</td>
           <td class="text-right">
             <q-btn
-              @click="inspectWord(index)"
+              @click="inspectWord(connexion._id)"
               size="12px"
               flat
               dense
               round
               icon="search"
-              >Inspecter</q-btn
-            >
+            >Inspecter</q-btn>
+          </td>
+          <td class="text-right">
+            <q-btn
+            color="positive"
+              @click="approuverMot(connexion)"
+              v-if="!connexion.approved"
+              size="12px"
+              flat
+              dense
+              round
+              icon="check"
+            >Approuver</q-btn>
+          </td>
+          <td class="text-right">
+            <q-btn
+            color="negative"
+              @click="refuserMot(connexion)"
+              v-if="!connexion.approved"
+              size="12px"
+              flat
+              dense
+              round
+              icon="close"
+            >Refuser</q-btn>
           </td>
         </tr>
       </tbody>
@@ -34,127 +59,79 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import ConnexionServices from "../services/ConnexionServices";
+import { useQuasar } from "quasar";
+import { useRouter } from "vue-router";
 
-const mots = [
-  {
-    mot1: "Paul",
-    mot2: "Pol",
-    categorie: "Prénom",
-    description: "Pas la même sglkdflfmkgjffldmfgjldklgllgofdhidgjfoskpêkogjpihopgk",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },{
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
+const $q = useQuasar();
+const $router = useRouter();
+const mots = ref([]);
+
+onMounted(async () => {
+  try {
+    mots.value = await ConnexionServices.getConnectionsByApproved();
+  } catch (error) {
+    console.error("Erreur lors de la récupération des connexions non approuvées:", error);
   }
-];
+});
 
-const dialog=ref(true)
-const inspectWord = (index) => {
-  console.log("Inspecting word at index:", index);
+const inspectWord = (selectedMotId) => {
+  $router.push('/inspect/' + selectedMotId);
+};
+
+const approuverMot = async (connexion) => {
+  try {
+    if (connexion && connexion._id) {
+      await ConnexionServices.updateConnection(connexion._id, { approved: true });
+      $q.notify({
+        color: "positive",
+        message: "Le mot a bien été approuvé",
+        icon: "done",
+      });
+      $router.push('/admin');
+    } else {
+      console.error("Erreur lors de l'approbation du mot : ID non défini ou introuvable.");
+    }
+  } catch (error) {
+    console.error("Erreur lors de l'approbation du mot:", error);
+  }
+};
+
+const refuserMot = async (connexion) => {
+  try {
+    if (connexion && connexion._id) {
+      await ConnexionServices.deleteConnection(connexion._id);
+      $q.notify({
+        color: "negative",
+        message: "Le mot a été refusé et supprimé",
+        icon: "close",
+      });
+      $router.push('/admin');
+    } else {
+      console.error("Erreur lors du refus et de la suppression du mot : ID non défini ou introuvable.");
+    }
+  } catch (error) {
+    console.error("Erreur lors du refus et de la suppression du mot :", error);
+  }
 };
 </script>
 
 <style>
-.table{
+.table {
   overflow-y: auto; 
   max-height: 500px;
 }
 
-.header{
+.header {
   background-color: #54546C;
   color: white;
 }
 
-.button{
+.button {
   background-color: #54546C;
   color: white;
-  font-size:x-small;
+  font-size: x-small;
   padding: 6px;
 }
 </style>
