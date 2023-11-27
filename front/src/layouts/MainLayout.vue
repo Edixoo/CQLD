@@ -232,7 +232,7 @@
   </q-layout>
 </template>
 <script setup>
-import { onMounted, onUpdated, ref, watch } from "vue";
+import { onMounted, onUpdated,getCurrentInstance,ref, watch } from "vue";
 
 import ConnexionButton from "src/components/ConnexionButton.vue";
 import themesServices from "src/services/ThemeServices";
@@ -241,7 +241,9 @@ import ConnexionServices from "src/services/ConnexionServices";
 import { jwtDecode } from "jwt-decode";
 import UserServices from "src/services/UserServices";
 import WordServices from "src/services/WordServices";
+import checkApiHealth from "src/services/checkBack";
 
+const { proxy } = getCurrentInstance();
 const SearchBarValue = ref("");
 
 const themes = ref([]);
@@ -269,6 +271,10 @@ const getUserAuth = () => {
 };
 
 onMounted(async () => {
+  const isApiHealthy = await checkApiHealth.checkApiHealth();
+  if (!isApiHealthy) {
+    proxy.$router.push("/no-api"); 
+  }
   themes.value = await themesServices.listThemes();
   if (localStorage.getItem("userToken")) {
     const decoded = jwtDecode(localStorage.getItem("userToken"));

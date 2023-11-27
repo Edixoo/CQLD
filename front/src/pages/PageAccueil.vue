@@ -68,8 +68,11 @@
 
 <script setup>
 import CreateLink from "src/components/CreateLink.vue";
-import { onMounted, ref } from "vue";
+import { onMounted,getCurrentInstance, ref } from "vue";
 import ConnexionServices from "src/services/ConnexionServices";
+import checkApiHealth from "src/services/checkBack";
+const { proxy } = getCurrentInstance();
+
 const alea = ref(0);
 const chemin = ref("connect");
 const connexion = ref(true);
@@ -79,7 +82,13 @@ const DefineAleatoire = async () => {
   alea.value = Math.floor(Math.random() * maxDiff);
 };
 
-onMounted(DefineAleatoire);
+onMounted(async () => {
+  const isApiHealthy = await checkApiHealth.checkApiHealth();
+  if (!isApiHealthy) {
+    proxy.$router.push("/no-api"); 
+  }
+  await DefineAleatoire();
+  });
 </script>
 
 <style lang="scss">

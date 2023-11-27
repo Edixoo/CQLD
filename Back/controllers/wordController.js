@@ -1,16 +1,13 @@
 const Word = require('../models/wordModel');  // Adjust the path as needed
 const Theme = require('../models/themeModel');  // Adjust the path as needed
-<<<<<<< Updated upstream
 
 const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
 
-=======
 // const bcrypt = require('bcrypt'); // Used for password comparison
 // const crypto = require('crypto');
 // const{ decryptField} = require('../controllers/functionNeeded');
 const BASE_ERROR = "BACK ERROR";
->>>>>>> Stashed changes
 
 exports.listWords = async (req, res) => {
   try {
@@ -52,8 +49,6 @@ exports.makeWord = async (test) => {
 };
 
 exports.getWordById = async (req, res) => {
-<<<<<<< Updated upstream
-=======
   // try {
   //   const word = await Word.findById(req.params.id).populate('theme');
   //   if (!word) {
@@ -69,7 +64,6 @@ exports.getWordById = async (req, res) => {
   //   res.status(500).send(BASE_ERROR);
   // }
 
->>>>>>> Stashed changes
    try { 
     const word = await Word.findOne({ _id: req.params.id });
 

@@ -80,6 +80,10 @@ const routes = [
     children: [{ path: "", component: () => import("pages/PageInspect.vue") }],
     meta: { requiresAuth: true, role: 'admin' } 
   },
+  {
+    path: '/no-api',
+    component: () => import('pages/PageNoApi.vue')
+  }
 ];
 
 export default routes;

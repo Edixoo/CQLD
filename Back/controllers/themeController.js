@@ -1,15 +1,12 @@
 const Theme = require('../models/themeModel');  // Adjust the path as needed
-<<<<<<< Updated upstream
 const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
 const { stringify } = require('querystring');
-=======
 // const bcrypt = require('bcrypt'); // Used for password comparison
 // const crypto = require('crypto');
 // const{ decryptField, encryptField} = require('../controllers/functionNeeded');
 // const { stringify } = require('querystring');
 const BASE_ERROR = "BACK ERROR"
->>>>>>> Stashed changes
 
 
 exports.listThemes = async (req, res) => {
@@ -57,10 +54,7 @@ exports.getThemeById = async (req, res) => {
 
 exports.getlistThemeContain = async (req, res) => {
   try {
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
     const listTheme = await Theme.find({ theme_name: { $regex: new RegExp(req.params.word, 'i') } });
     if (!listTheme) {
       return res.status(504).send('Theme not found');
