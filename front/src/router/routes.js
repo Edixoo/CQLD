@@ -73,6 +73,14 @@ const routes = [
     path: "/:catchAll(.*)*",
     component: () => import("pages/ErrorNotFound.vue"),
   },
+
+  {
+    path: '/inspect/:id',
+    name: 'InspectPage',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/PageInspect.vue') }],
+    meta: { requiresAuth: true, role: 'admin' } 
+  },
 ];
 
 export default routes;

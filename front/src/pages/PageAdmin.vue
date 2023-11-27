@@ -8,14 +8,15 @@
           <th class="text-right">Catégorie</th>
           <th class="text-right">Description</th>
           <th class="text-right">Inspecter</th>
+          <th class="text-right">Approuver</th>
         </tr>
       </thead>
-      <tbody template v-for="(mot, index) in mots" :key="index">
-        <tr>
-          <td class="text-left">{{ mot.mot1 }}</td>
-          <td class="text-right">{{ mot.mot2 }}</td>
-          <td class="text-right">{{ mot.categorie }}</td>
-          <td class="text-right">{{ mot.description }}</td>
+      <tbody>
+        <tr v-for="(connexion, index) in mots" :key="index">
+          <td class="text-left">{{ connexion.mot1 }}</td>
+          <td class="text-right">{{ connexion.mot2 }}</td>
+          <td class="text-right">{{ connexion.theme }}</td>
+          <td class="text-right">{{ connexion.description }}</td>
           <td class="text-right">
             <q-btn
               @click="inspectWord(index)"
@@ -24,8 +25,18 @@
               dense
               round
               icon="search"
-              >Inspecter</q-btn
-            >
+            >Inspecter</q-btn>
+          </td>
+          <td class="text-right">
+            <q-btn
+              @click="approuverMot(index)"
+              v-if="!connexion.approved"
+              size="12px"
+              flat
+              dense
+              round
+              icon="check"
+            >Approuver</q-btn>
           </td>
         </tr>
       </tbody>
@@ -34,109 +45,45 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import ConnexionServices from "../services/ConnexionServices";
+import { useQuasar } from "quasar";
+import { useRouter, useRoute } from "vue-router";
 
-const mots = [
-  {
-    mot1: "Paul",
-    mot2: "Pol",
-    categorie: "Prénom",
-    description: "Pas la même sglkdflfmkgjffldmfgjldklgllgofdhidgjfoskpêkogjpihopgk",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },{
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
-  },
-  {
-    mot1: "Mot1B",
-    mot2: "Mot2B",
-    categorie: "CatégorieB",
-    description: "DescriptionB",
+const $q = useQuasar();
+const $router = useRouter();
+const route = useRoute(); 
+const mots = ref([]);
+const connexion = ref(null);
+
+const liensId = route.params.id;
+
+onMounted(async () => {
+  try {
+    
+    mots.value = await ConnexionServices.getConnectionsByApproved();
+  } catch (error) {
+    console.error("Erreur lors de la récupération des connexions non approuvées:", error);
   }
-];
+});
 
-const dialog=ref(true)
 const inspectWord = (index) => {
-  console.log("Inspecting word at index:", index);
+  const selectedMotId = mots.value[index]._id;
+  $router.push({ name: "PageInspect", params: { id: selectedMotId } });
+};
+
+const approuverMot = async (index) => {
+  try {
+    await ConnexionServices.updateConnection(connexion.value._id, { approved: true });
+    $q.notify({
+      color: "positive",
+      message: "Le mot a bien été approuvé",
+      icon: "done",
+    });
+    $router.push('/');
+  } catch (error) {
+    console.error("Erreur lors de l'approbation du mot:", error);
+  }
 };
 </script>
 
