@@ -45,5 +45,3 @@ const decryptField = (encryptedData, secretKey) => {
 
 const secretKey = Buffer.from("4ddd91d77880676211c363d798834ae0143c6ca18893d3adf1f1ba808adbb2ea", 'hex');
 let encryptedTest = encryptField("toto",secretKey)
-console.log(encryptedTest)
-console.log(decryptField(encryptedTest, secretKey))

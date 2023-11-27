@@ -20,7 +20,7 @@ exports.createWord = async (req, res) => {
 
     const existingWord = await Word.findOne({ word: req.body.word });
     if (existingWord) {
-      console.log("Word Existing")
+      res.status(400).send(error.message);
     }
     else {
       await word.save();
@@ -37,7 +37,7 @@ exports.makeWord = async (test) => {
     const word = new Word(test);
     const existingWord = await Word.findOne({ $or: [word] });
     if (existingWord) {
-      console.log("Word Existing")
+      res.status(400).send(error.message);
     }
     await word.save();
   } catch (error) {

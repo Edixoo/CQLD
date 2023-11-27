@@ -39,12 +39,10 @@ async function createUsers() {
   }));
 
   for(let user of users){
-    console.log(user.username + " : " + user.password);
     await userController.createUser(user);
   }
-  //console.log(users.length);
 
-  console.log('Users populated');
+
 }
 
 async function createThemes() {
@@ -55,16 +53,12 @@ async function createThemes() {
   for(let theme of themes){
     await themeController.makeTheme(theme);
   }
-  //console.log(themes.length);
-  console.log('Themes populated');
 }
 
 async function createWords() {
 
   const themes = await Theme.find();
-  //console.log(themes);
   const users = await User.find();
-  //console.log(users);
 
   const words = Array.from({ length: NUM_WORDS }).map(() => ({
     word: faker.lorem.word(),
@@ -75,19 +69,16 @@ async function createWords() {
     approved: faker.datatype.boolean(),
     created_at: faker.date.past()
   }));
-  //console.log(words);
   for(let word of words){
     await wordController.makeWord(word);
   }
   const the_words = await Word.find();
   
-  console.log('Words populated');
 }
 
 async function createConnections() {
   const words = await Word.find();
   const users = await User.find();
-  console.log(words);
   const connections = Array.from({ length: NUM_CONNECTIONS }).map(() => ({
     word1: faker.random.arrayElement(words).word,
     word2: faker.random.arrayElement(words).word,
@@ -100,7 +91,6 @@ async function createConnections() {
   for(let connection of connections){
     await connectionController.makeConnection(connection);
   }
-  console.log('Connections populated');
 }
 
 
@@ -111,7 +101,6 @@ async function generateData() {
   await createConnections();
 
   mongoose.connection.close();
-  console.log('Database population complete!');
 }
 
 generateData();

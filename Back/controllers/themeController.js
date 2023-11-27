@@ -7,7 +7,7 @@ const { stringify } = require('querystring');
 exports.listThemes = async (req, res) => {
   try {
     const themes = await Theme.find();
-    console.log("header" + stringify(req.headers));
+    
     res.status(200).send(themes);
 
   } catch (error) {
@@ -29,9 +29,10 @@ exports.makeTheme = async (test) => {
   try {
     const theme = new Theme(test);
     await theme.save();
+    res.status(200).send(theme);
 
   } catch (error) {
-    console.log(error.message)
+    res.status(400).send(error.message);
   }
 };
 

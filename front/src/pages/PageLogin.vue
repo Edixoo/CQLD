@@ -136,8 +136,16 @@
             filled
             v-model="PopUpChangePwdValue"
             label="Nouveau mot de passe"
+            :type="isPwd ? 'password' : 'text'"
             placeholder="Entrer le nouveau mot de passe"
-          />
+          >
+            <template v-slot:append>
+              <q-icon
+                :name="isPwd ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="isPwd = !isPwd"
+              /> </template
+          ></q-input>
         </q-card-section>
 
         <q-card-actions align="right">
@@ -174,6 +182,7 @@ const popUpOTPValue = ref("");
 const PopUpChangePwd = ref(false);
 const PopUpChangePwdValue = ref("");
 
+const isPwd = ref(true);
 const openPopUpForgotPwd = () => {
   popUpForgotPwd.value = true;
 };

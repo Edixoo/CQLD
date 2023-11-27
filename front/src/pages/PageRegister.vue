@@ -133,7 +133,8 @@
 import UserServices from "../services/UserServices.js";
 import { useQuasar } from "quasar";
 
-import { ref } from "vue";
+import { ref, getCurrentInstance } from "vue";
+const { proxy } = getCurrentInstance();
 
 const username = ref("");
 const firstName = ref("");
@@ -163,6 +164,8 @@ const register = async () => {
         role: "user",
       });
 
+      proxy.$router.push("/login");
+
       $q.notify({
         type: "positive",
         message: "Inscription réussie. Vous pouvez maintenant vous connecter.",
@@ -181,7 +184,7 @@ const register = async () => {
       } else {
         $q.notify({
           type: "negative",
-          message: "Une erreur s'est produite lors de l'inscription.",
+          message: "Mail déjà utilisé.",
         });
       }
     }
