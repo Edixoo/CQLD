@@ -9,14 +9,16 @@
           label="Lien Aléatoire"
           :to="'/liens/' + alea"
           @click="DefineAleatoire()"
-          class="q-pa-sm q-ma-xl width-accueil"
+          class="q-pa-sm q-ma-xl"
           size="lg"
+          style="width: 200px"
         />
         <CreateLink
           v-if="connexion ? (chemin = '/create') : (chemin = '/create')"
           :to="chemin"
-          class="q-ma-xl q-pa-sm width-accueil"
+          class="q-ma-xl q-pa-sm"
           size="lg"
+          style="width: 200px"
         />
       </div>
 
@@ -113,9 +115,5 @@ h1 {
     color: $third;
     width: 80%;
   }
-}
-
-.width-accueil {
-  width: 200px;
 }
 </style>

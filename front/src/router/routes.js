@@ -59,13 +59,13 @@ const routes = [
     path: "/create",
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/PageCreate.vue") }],
-    meta: { requiresAuth: true, role: 'user' }
+    meta: { requiresAuth: true,  roles: ['user', 'admin'] }
   },
   {
     path: "/edit/:id",
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/PageEdit.vue") }],
-    meta: { requiresAuth: true, role: 'user' }
+    meta: { requiresAuth: true,  roles: ['user', 'admin'] }
   },
   // Always leave this as last one,
   // but you can also remove it
