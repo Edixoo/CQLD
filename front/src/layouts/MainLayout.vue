@@ -73,7 +73,6 @@
           label=""
           v-if="connexion"
           class="q-ml-md"
-          @click="showMenu"
           ref="menuBtn"
         >
           <q-avatar size="42px">
@@ -313,12 +312,13 @@ watch(() => userStore.username, () => {
 
 onMounted(async () => {
   drawerLeft.value = false;
-
   themes.value = await themesServices.listThemes();
   if (localStorage.getItem("userToken")) {
     const decoded = jwtDecode(localStorage.getItem("userToken"));
-    connexion.value = true;
   }
+
+  const decoded= jwtDecode(localStorage.getItem("userToken"));
+  userStore.username= decoded.username;
 
   isMobile.value = window.innerWidth <= 600;
 
