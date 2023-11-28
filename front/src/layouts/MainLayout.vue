@@ -95,7 +95,14 @@
                 v-close-popup
                 style="text-align: center; font-weight: bold"
               >
-                <q-item-section>{{ getUserAuth() }}</q-item-section>
+                <q-item-section class="row">{{ getUserAuth() }}</q-item-section>
+                
+              </q-item>
+              
+              <q-item v-close-popup style="text-align: center; font-weight: bold">
+                <q-item-section>
+                  {{ userStore.role === "admin" ? "Administrateur" : "" }}
+                </q-item-section>
               </q-item>
 
               <q-separator inset />
