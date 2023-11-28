@@ -1,10 +1,10 @@
 <template>
   <q-page>
-    <div>
+    <div v-if="categorie && connexions">
       <div class="title-button-section">
-        <app-title v-if="categorie" :title="categorie.theme_name" />
+        <app-title :title="categorie.theme_name" />
         <q-btn
-          v-if="categorie"
+          v-if="admin"
           class="q-ml-xl q-mb-xl button"
           color="primary"
           icon="edit"
@@ -12,8 +12,16 @@
           @click="() => (editCategorie = !editCategorie)"
         />
       </div>
-      <div class="text-h3 q-ma-xl carterOne">Liens</div>
-      <div v-if="connexions">
+      <div class="text-h3 q-ml-xl q-mt-xl q-mb-md carterOne">
+        Liens de la catégorie
+      </div>
+      <q-btn
+        class="q-ml-xl q-mb-xl button"
+        color="primary"
+        label="Créer un lien"
+        to="/create"
+        />
+      <div>
         <div v-if="connexions.length" class="ajust-items">
           <q-list v-for="connexion in connexions" :key="connexion._id">
             <q-item>
@@ -34,12 +42,12 @@
         </div>
       </div>
 
-      <div v-else class="q-mt-xl center-chargement">
-        <q-spinner size="100px" color="primary" />
-        <div class="text-h4 q-mt-xl q-ml-xl">Chargement en cours...</div>
-      </div>
     </div>
-
+    <div v-else class="q-mt-xl center-chargement">
+      <q-spinner size="100px" color="primary" />
+      <div class="text-h4 q-mt-xl q-ml-xl">Chargement en cours...</div>
+    </div>
+    
     <q-dialog v-model="editCategorie" persistent>
       <q-card style="width: 500px">
         <q-card-section class="text-h5"> Modifier la catégorie </q-card-section>
@@ -93,14 +101,17 @@ import { useRoute, useRouter } from "vue-router";
 import AppCardVS from "src/components/categoriePage/AppCardVS.vue";
 import ThemeServices from "../services/ThemeServices";
 import ConnectionsServices from "../services/ConnexionServices";
+import { useUserStore } from "src/stores/userStore";
 
 const route = useRoute();
 const router = useRouter();
+const userStore = useUserStore();
 
 const categorie = ref(null);
 const connexions = ref(null);
 const editCategorie = ref(false);
 const categorieNameModel = ref("");
+const admin=ref(false);
 
 const PopUpEdit = async () => {
   await ThemeServices.updateTheme(categorie.value._id, {
@@ -123,6 +134,11 @@ onMounted(async () => {
     categorie.value._id
   );
   categorieNameModel.value = categorie.value.theme_name;
+  if(userStore.role === "admin") {
+    admin.value = true
+  } else {
+    admin.value = false
+  }
 });
 
 onUpdated(async () => {

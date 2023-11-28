@@ -2,7 +2,7 @@
   <q-page>
     <div v-if="connexion">
       <app-title :title="connexion.word1.word + ' vs ' + connexion.word2.word" />
-      <div>
+      <div v-if="admin">
         <q-btn color="primary" label="Modifier le lien" class="q-ma-md" icon="edit" :to="'/edit/' + connexion.id" />
         <q-btn color="negative" label="Supprimer le lien" class="q-ma-md" icon="delete" @click="() => deleteVerif=!deleteVerif"/>
       </div>
@@ -51,19 +51,27 @@ import { useRoute, useRouter } from "vue-router";
 import ConnexionServices from "../services/ConnexionServices";
 import CreateLink from "src/components/CreateLink.vue";
 import { useQuasar } from "quasar";
+import { useUserStore } from "../stores/userStore";
 
 
 const $q = useQuasar();
 const route= useRoute();
 const $router=useRouter();
+const userStore = useUserStore();
 
 const deleteVerif=ref(false);
 const connexion=ref(null);
-
+const admin=ref(false);
 const liensId=route.params.id;
 
 onMounted(async () => {
   connexion.value=await ConnexionServices.getConnectionByIdInt(liensId);
+
+  if(userStore.role==='admin'){
+    admin.value=true;
+  } else{
+    admin.value=false;
+  }
 })
 
 const DeleteActions=async ()=>{
