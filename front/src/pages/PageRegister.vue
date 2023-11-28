@@ -205,4 +205,10 @@ const register = async () => {
 .title-font {
   font-weight: 500;
 }
+
+@media (max-width: 450px), screen and (orientation: portrait) {
+  .q-card.q-mx-auto.q-pa-md.q-card {
+    max-width: 90%;
+  }
+}
 </style>

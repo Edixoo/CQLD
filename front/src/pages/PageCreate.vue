@@ -176,4 +176,10 @@ const createWord = async () => {
 .card-create {
   max-width: 600px;
 }
+
+@media (max-width: 450px), screen and (orientation: portrait) {
+  .card-create {
+    max-width: 90%;
+  }
+}
 </style>

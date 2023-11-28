@@ -294,4 +294,10 @@ const login = async () => {
 .q-card-modif-pwd {
   width: 500px;
 }
+
+@media (max-width: 450px), screen and (orientation: portrait) {
+  .q-card-login {
+    max-width: 90%;
+  }
+}
 </style>

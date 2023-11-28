@@ -70,7 +70,7 @@
 
 <script setup>
 import CreateLink from "src/components/CreateLink.vue";
-import { onMounted,getCurrentInstance, ref } from "vue";
+import { onMounted, getCurrentInstance, ref } from "vue";
 import ConnexionServices from "src/services/ConnexionServices";
 import checkApiHealth from "src/services/checkBack";
 const { proxy } = getCurrentInstance();
@@ -87,10 +87,10 @@ const DefineAleatoire = async () => {
 onMounted(async () => {
   const isApiHealthy = await checkApiHealth.checkApiHealth();
   if (!isApiHealthy) {
-    proxy.$router.push("/no-api"); 
+    proxy.$router.push("/no-api");
   }
   await DefineAleatoire();
-  });
+});
 </script>
 
 <style lang="scss">
@@ -175,6 +175,17 @@ h1 {
   .content-text {
     text-align: left;
     margin-bottom: 20px;
+  }
+
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .button-resp {
+    margin-bottom: 15px;
+    margin-top: 15px;
   }
 }
 </style>
