@@ -7,7 +7,7 @@
       label="Créer une catégorie"
       @click="newThemeAffichage = !newThemeAffichage"
       />
-    <q-markup-table class="q-mt-xl">
+    <q-markup-table class="q-mt-xl" v-if="affichage">
       <thead style="background-color: #54546c; color: white">
         <tr>
           <th class="text-left">Mot1</th>
@@ -62,6 +62,7 @@
         </tr>
       </tbody>
     </q-markup-table>
+    <app-chargement v-else/>
   </div>
 
 
@@ -103,12 +104,14 @@ import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import ThemeServices from "src/services/ThemeServices";
 import AppTitle from "src/components/ui/AppTitle.vue";
+import AppChargement from "src/components/AppChargement.vue";
 
 const $q = useQuasar();
 const $router = useRouter();
 const mots = ref([]);
 const newThemeAffichage = ref(false);
 const theme_name = ref("");
+const affichage= ref(false);
 
 const getThemeName= (async (themeId) => {
   const theme = await ThemeServices.getThemeById(themeId)
@@ -127,6 +130,7 @@ onMounted(async () => {
     for (let i = 0; i < mots.value.length; i++) {
       mots.value[i].theme = await getThemeName(mots.value[i].theme);
     }
+    affichage.value=true;
   } catch (error) {
     console.error("Erreur lors de la récupération des connexions non approuvées:", error);
   }

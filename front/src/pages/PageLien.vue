@@ -18,12 +18,7 @@
 
       <create-link class="q-ma-md"/>
     </div>
-    <div v-else class="q-mt-xl center-chargement">
-      <q-spinner size="100px" color="primary" />
-      <div class="text-h4 q-mt-xl q-ml-xl">
-        Chargement en cours...
-        </div>
-    </div>
+    <app-chargement v-else/>
 
 
     <q-dialog v-model="deleteVerif">
@@ -52,7 +47,7 @@ import ConnexionServices from "../services/ConnexionServices";
 import CreateLink from "src/components/CreateLink.vue";
 import { useQuasar } from "quasar";
 import { useUserStore } from "../stores/userStore";
-
+import AppChargement from "src/components/AppChargement.vue";
 
 const $q = useQuasar();
 const route= useRoute();
@@ -87,13 +82,3 @@ const DeleteActions=async ()=>{
 
 }
 </script>
-
-<style lang="scss">
-
-.center-chargement {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-</style>

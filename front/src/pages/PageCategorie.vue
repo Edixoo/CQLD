@@ -5,7 +5,7 @@
         <app-title :title="categorie.theme_name" />
         <q-btn
           v-if="admin"
-          class="q-ml-xl q-mb-xl button"
+          class="q-ma-xl"
           color="primary"
           icon="edit"
           label="Modifier la catégorie"
@@ -16,7 +16,7 @@
         Liens de la catégorie
       </div>
       <q-btn
-        class="q-ml-xl q-mb-xl button"
+        class="q-ml-xl q-mb-xl q-mt-md"
         color="primary"
         label="Créer un lien"
         to="/create"
@@ -43,10 +43,7 @@
       </div>
 
     </div>
-    <div v-else class="q-mt-xl center-chargement">
-      <q-spinner size="100px" color="primary" />
-      <div class="text-h4 q-mt-xl q-ml-xl">Chargement en cours...</div>
-    </div>
+    <app-chargement v-else />
     
     <q-dialog v-model="editCategorie" persistent>
       <q-card style="width: 500px">
@@ -102,6 +99,7 @@ import AppCardVS from "src/components/categoriePage/AppCardVS.vue";
 import ThemeServices from "../services/ThemeServices";
 import ConnectionsServices from "../services/ConnexionServices";
 import { useUserStore } from "src/stores/userStore";
+import AppChargement from "src/components/AppChargement.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -158,13 +156,6 @@ onUpdated(async () => {
   display: flex;
   font-size: 25px;
   color: $negative;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.center-chargement {
-  display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
