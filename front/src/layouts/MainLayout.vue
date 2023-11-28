@@ -47,7 +47,17 @@
           label="QUI SOMMES NOUS ?"
           text-color="white"
           to="/contact"
+          class="q-mr-md"
         />
+
+        <q-btn
+        v-if="!isMobile && admin"
+        flat
+        color="primary"
+        label="Administration"
+        text-color="white"
+        to="/admin"
+      />
 
         <q-space />
 
@@ -283,9 +293,10 @@ const isExpanded = ref(true);
 const filteredThemes = ref([]);
 const listConnexion = ref([]);
 const openSearchBar = ref(false);
-const openDrawer = ref(false);
+// const openDrawer = ref(false);
 const isMobile = ref(false);
 const drawerLeft = ref(false);
+const admin = ref(false);
 
 const openSearchBarFunction = () => {
   openSearchBar.value = true;
@@ -312,6 +323,14 @@ watch(() => userStore.username, () => {
   }
 });
 
+watch(() => userStore.role, () => {
+  if (userStore.role === "admin") {
+    admin.value = true;
+  } else {
+    admin.value = false;
+  }
+});
+
 onMounted(async () => {
   const isApiHealthy = await checkApiHealth.checkApiHealth();
   if (!isApiHealthy) {
@@ -321,10 +340,11 @@ onMounted(async () => {
   themes.value = await themesServices.listThemes();
   if (localStorage.getItem("userToken")) {
     const decoded = jwtDecode(localStorage.getItem("userToken"));
+    userStore.username= decoded.username;
+    userStore.role= decoded.role;
   }
 
-  const decoded= jwtDecode(localStorage.getItem("userToken"));
-  userStore.username= decoded.username;
+
 
   isMobile.value = window.innerWidth <= 600;
 

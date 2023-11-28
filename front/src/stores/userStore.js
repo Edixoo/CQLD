@@ -41,9 +41,6 @@ export const useUserStore = defineStore('user', () => {
         }
     });
 
-    const getUsername = (() => {
-        return username.value;
-    });
     const changeName = ((newName) => {
         name.value=newName;
     });
@@ -61,6 +58,7 @@ export const useUserStore = defineStore('user', () => {
       
         return {
             username,
+            role,
             setUser,
             changeRole,
             changeName,
