@@ -1,5 +1,5 @@
 const User = require('../models/userModel');
-// const bcrypt = require('bcrypt'); // Used for password comparison
+const bcrypt = require('bcrypt'); // Used for password comparison
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 // const { stringify } = require('querystring');
