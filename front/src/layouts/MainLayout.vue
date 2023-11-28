@@ -61,6 +61,15 @@
 
         <q-space />
 
+        <q-btn
+        v-if="!isMobile"
+        label="Créer un lien"
+        to="/create"
+        text-color="primary"
+        class="q-mr-md"
+        color="white"
+        />
+
         <q-input
           dark
           v-model="SearchBarValue"
