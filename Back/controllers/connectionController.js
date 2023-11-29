@@ -89,7 +89,7 @@ exports.getConnexionContainWord = async (req, res) => {
         $or: [
             { word1: { $in: listWord} },
             { word2: { $in: listWord} }
-        ]
+        ], approved: true
     });
 
     if (!result) {

@@ -75,13 +75,15 @@
           dark
           v-model="SearchBarValue"
           borderless
+          @update:model-value="updateTheme"
+          debounce="2000"
           dense
           filled
           placeholder="Rechercher"
           style="background: #ffffff0d; width: 300px"
         >
           <template v-slot:append>
-            <q-icon name="search" />
+            <q-btn flat icon="search" @click="updateTheme" />
           </template>
         </q-input>
 
@@ -282,7 +284,6 @@
             >
             </q-btn>
 
-            <!-- Use v-show to conditionally show or hide q-card-section -->
             <q-card-section
               v-show="showCategoriesMenu"
               class="q-card-responsive"
@@ -433,16 +434,26 @@ onMounted(async () => {
   });
 });
 
-watch(SearchBarValue, async (newSearchBar, oldSearchBar) => {
-  if (SearchBarValue.value.length > 0) {
-    openSearchBarFunction();
-  }
+const updateTheme= () => {
+    if (SearchBarValue.value.length > 0) {
+      openSearchBarFunction();
+    }
   searchItems();
+};
+
+watch(() => SearchBarValue.value,() => {
+  if (SearchBarValue.value) {
+    searchItems();
+  } else {
+    filteredThemes.value = [];
+    listConnexion.value = [];
+  }
 });
 
 const searchItems = async () => {
   try {
     const searchValue = SearchBarValue.value;
+    listConnexion.value = [];
     const themeResult = await themesServices.getlistThemeContain(searchValue);
     filteredThemes.value = themeResult.map((item) => item.theme_name);
 
