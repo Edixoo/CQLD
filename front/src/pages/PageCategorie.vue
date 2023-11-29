@@ -2,25 +2,29 @@
   <q-page>
     <div v-if="categorie && connexions">
       <div class="title-button-section">
-        <app-title :title="categorie.theme_name" />
-        <q-btn
-          v-if="admin"
-          class="q-ma-xl"
-          color="primary"
-          icon="edit"
-          label="Modifier la catégorie"
-          @click="() => (editCategorie = !editCategorie)"
-        />
+        <app-title :title="categorie.theme_name" class="title-category" />
+        <div class="div-btn-admin">
+          <q-btn
+            v-if="admin"
+            class="q-ma-xl btn-admin"
+            color="primary"
+            icon="edit"
+            label="Modifier la catégorie"
+            @click="() => (editCategorie = !editCategorie)"
+          />
+        </div>
       </div>
       <div class="text-h3 q-ml-xl q-mt-xl q-mb-md carterOne">
         Liens de la catégorie
       </div>
-      <q-btn
-        class="q-ml-xl q-mb-xl q-mt-md"
-        color="primary"
-        label="Créer un lien"
-        to="/create"
+      <div class="div-btn-create-responsive">
+        <q-btn
+          class="q-ml-xl q-mb-xl q-mt-md create-link-responsive"
+          color="primary"
+          label="Créer un lien"
+          to="/create"
         />
+      </div>
       <div>
         <div v-if="connexions.length" class="ajust-items">
           <q-list v-for="connexion in connexions" :key="connexion._id">
@@ -37,14 +41,13 @@
               size="100px"
               color="negative"
             />
-            Aucun lien pour cette catégorie
+            <span>Aucun lien pour cette catégorie</span>
           </div>
         </div>
       </div>
-
     </div>
     <app-chargement v-else />
-    
+
     <q-dialog v-model="editCategorie" persistent>
       <q-card style="width: 500px">
         <q-card-section class="text-h5"> Modifier la catégorie </q-card-section>
@@ -109,7 +112,7 @@ const categorie = ref(null);
 const connexions = ref(null);
 const editCategorie = ref(false);
 const categorieNameModel = ref("");
-const admin=ref(false);
+const admin = ref(false);
 
 const PopUpEdit = async () => {
   await ThemeServices.updateTheme(categorie.value._id, {
@@ -132,10 +135,10 @@ onMounted(async () => {
     categorie.value._id
   );
   categorieNameModel.value = categorie.value.theme_name;
-  if(userStore.role === "admin") {
-    admin.value = true
+  if (userStore.role === "admin") {
+    admin.value = true;
   } else {
-    admin.value = false
+    admin.value = false;
   }
 });
 
@@ -148,7 +151,6 @@ onUpdated(async () => {
   categorieNameModel.value = categorie.value.theme_name;
   editCategorie.value = false;
 });
-
 </script>
 
 <style lang="scss">
@@ -174,6 +176,60 @@ onUpdated(async () => {
   .button {
     height: 30px;
     margin-right: 15px;
+  }
+}
+
+@media (max-width: 450px), screen and (orientation: portrait) {
+  h1.carterOne.q-mb-md {
+    font-size: 40px;
+  }
+
+  .text-h3.q-ml-xl.q-mt-xl.q-mb-md.carterOne {
+    font-size: 30px;
+  }
+  .create-link-responsive {
+    display: flex;
+    margin-left: 0px;
+    width: 200px;
+  }
+
+  .div-btn-create-responsive {
+    display: flex;
+    justify-content: center;
+  }
+
+  .title-button-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .no-content span {
+    text-align: center;
+  }
+
+  .ajust-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+  }
+
+  .btn-admin {
+    margin: 0px;
+    display: flex;
+  }
+
+  .div-btn-admin {
+    display: flex;
+  }
+
+  .title-category {
+    margin-left: 0px;
+  }
+
+  .title-category h1 {
+    margin-left: 0px;
   }
 }
 </style>

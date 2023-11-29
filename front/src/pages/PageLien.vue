@@ -2,17 +2,32 @@
   <q-page>
     <div v-if="connexion">
       <q-btn class="q-ma-md justify-center" flat label="Retour" icon="keyboard_double_arrow_left" @click="$router.go(-1)" />
-      <app-title :title="connexion.word1.word + ' vs ' + connexion.word2.word" />
-      <div v-if="admin">
-        <q-btn color="primary" label="Modifier le lien" class="q-ma-md" icon="edit" :to="'/edit/' + connexion.id" />
-        <q-btn color="negative" label="Supprimer le lien" class="q-ma-md" icon="delete" @click="() => deleteVerif=!deleteVerif"/>
+      <app-title
+        :title="connexion.word1.word + ' vs ' + connexion.word2.word"
+        class="title-page-link"
+      />
+      <div v-if="admin" class="btn-container">
+        <q-btn
+          color="primary"
+          label="Modifier le lien"
+          class="q-ma-md btn-page-link"
+          icon="edit"
+          :to="'/edit/' + connexion.id"
+        />
+        <q-btn
+          color="negative"
+          label="Supprimer le lien"
+          class="q-ma-md btn-page-link"
+          icon="delete"
+          @click="() => (deleteVerif = !deleteVerif)"
+        />
       </div>
 
       <div class="text-h3 carterOne marge-automatique q-mt-xl">
         Informations
       </div>
 
-      <div class="marge-automatique">
+      <div class="marge-automatique content-page-link">
         <div class="text-h4 q-mt-xl carterOne q-ml-lg">
           Catégorie
         </div>
@@ -28,9 +43,9 @@
         <create-link class="q-ma-md q-mb-xl"/>
       </div>
 
+      <create-link class="q-ma-md btn-page-link" />
     </div>
-    <app-chargement v-else/>
-
+    <app-chargement v-else />
 
     <q-dialog v-model="deleteVerif">
       <q-card class="q-pa-sm">
@@ -43,7 +58,12 @@
 
         <q-card-actions align="right">
           <q-btn color="negative" label="Annuler" flat outlined v-close-popup />
-          <q-btn color="positive" icon="delete" label="Confirmer" @click="DeleteActions"/>
+          <q-btn
+            color="positive"
+            icon="delete"
+            label="Confirmer"
+            @click="DeleteActions"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -62,41 +82,70 @@ import AppChargement from "src/components/AppChargement.vue";
 import ThemeServices from "../services/ThemeServices";
 
 const $q = useQuasar();
-const route= useRoute();
-const $router=useRouter();
+const route = useRoute();
+const $router = useRouter();
 const userStore = useUserStore();
 
-const deleteVerif=ref(false);
-const connexion=ref(null);
-const admin=ref(false);
-const liensId=route.params.id;
+const deleteVerif = ref(false);
+const connexion = ref(null);
+const admin = ref(false);
+const liensId = route.params.id;
 
 onMounted(async () => {
   connexion.value=await ConnexionServices.getConnectionByIdInt(liensId);
   connexion.value.theme=await ThemeServices.getThemeById(connexion.value.theme);
-  if(userStore.role==='admin' || connexion.value.proposed_by===userStore.id){
+  if(userStore.role === 'admin' || connexion.value.proposed_by === userStore.id){
     admin.value=true;
   } else{
     admin.value=false;
   }
-})
+});
 
-const DeleteActions=async ()=>{
-  await ConnexionServices.deleteConnection(connexion.value._id).then(()=>{
+const DeleteActions = async () => {
+  await ConnexionServices.deleteConnection(connexion.value._id).then(() => {
     $q.notify({
       color: "positive",
       message: "Le lien a bien été supprimé",
       icon: "done",
     });
-    $router.push('/');
-
-  })
-
-}
+    $router.push("/");
+  });
+};
 </script>
 
 <style lang="scss">
+@media (max-width: 450px), screen and (orientation: portrait) {
+  .title-page-link {
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+  }
 
+  .title-page-link h1 {
+    margin-left: 0px;
+    font-size: 40px;
+  }
+
+  .btn-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .btn-page-link {
+    font-size: 11px;
+  }
+
+  .text-h3 {
+    margin: 0px;
+    font-size: 30px;
+  }
+
+  .content-page-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
 .marge-automatique{
   margin-left: 50px;
 

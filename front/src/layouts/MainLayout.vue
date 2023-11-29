@@ -51,26 +51,27 @@
         />
 
         <q-btn
-        v-if="!isMobile && admin"
-        flat
-        color="primary"
-        label="Administration"
-        text-color="white"
-        to="/admin"
-      />
+          v-if="!isMobile && admin"
+          flat
+          color="primary"
+          label="Administration"
+          text-color="white"
+          to="/admin"
+        />
 
         <q-space />
 
         <q-btn
-        v-if="!isMobile"
-        label="Créer un lien"
-        to="/create"
-        text-color="primary"
-        class="q-mr-md"
-        color="white"
+          v-if="!isMobile"
+          label="Créer un lien"
+          to="/create"
+          text-color="primary"
+          class="q-mr-md"
+          color="white"
         />
 
         <q-input
+          v-if="!isMobile"
           dark
           v-model="SearchBarValue"
           borderless
@@ -83,6 +84,17 @@
             <q-icon name="search" />
           </template>
         </q-input>
+
+        <q-btn
+          round
+          color="primary"
+          label=""
+          v-if="isMobile"
+          class="q-ml-md"
+          @click="openSearchBarFunction()"
+        >
+          <q-icon name="search"
+        /></q-btn>
 
         <connexion-button v-if="!connexion" />
 
@@ -105,7 +117,6 @@
                 style="text-align: center; font-weight: bold"
               >
                 <q-item-section class="row">{{ getUserAuth() }}</q-item-section>
-                
               </q-item>
               
               <q-item v-close-popup style="text-align: center; font-weight: bold">
@@ -212,37 +223,84 @@
       class="bg-primary text-white"
     >
       <q-scroll-area class="fit">
-        <a href="/" class="q-mr-xl">
-          <q-img
-            alt="logo_CQLD"
-            src="~assets/logo_CQLD.svg"
-            class="logo_size q-ma-md"
-          />
-        </a>
-        <q-space />
-
-        <q-btn
-          flat
-          color="primary"
-          label="QUI SOMMES NOUS ?"
-          text-color="white"
-          to="/contact"
-        />
-
-        <q-space />
-        <q-btn-dropdown label="CATÉGORIES" flat class="q-mr-md">
-          <q-list v-for="theme in themes" :key="theme._id">
-            <q-item
-              clickable
-              v-close-popup
-              @click="$router.push(`/categories/` + theme.theme_name)"
+        <div class="responsive-menu">
+          <a href="/" class="q-mr-xl">
+            <q-img
+              alt="logo_CQLD"
+              src="~assets/logo_CQLD.svg"
+              class="logo_size q-ma-md"
+            />
+          </a>
+          <div class="responsive-menu-content">
+            <q-space />
+            <q-btn
+              flat
+              color="primary"
+              text-color="white"
+              to="/"
+              class="q-mb-md"
+              ><q-icon class="q-mr-md" name="home" /> Accueil</q-btn
             >
-              <q-item-section>
-                <q-item-label>{{ theme.theme_name }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+
+            <q-btn
+              flat
+              to="/admin"
+              class="q-mr-md q-mb-md"
+              color="primary"
+              text-color="white"
+              ><q-icon class="q-mr-md" name="security" /> Admin</q-btn
+            >
+
+            <q-btn
+              flat
+              color="primary"
+              text-color="white"
+              to="/contact"
+              class="q-mb-md"
+              ><q-icon class="q-mr-md" name="info" /> Notre équipe</q-btn
+            >
+
+            <q-btn
+              flat
+              to="/create"
+              class="q-mr-md q-mb-md"
+              color="primary"
+              text-color="white"
+              ><q-icon class="q-mr-md" name="add" /> Créer un lien</q-btn
+            >
+
+            <q-space />
+
+            <q-btn
+              flat
+              color="primary"
+              text-color="white"
+              icon="arrow_drop_down"
+              label="Catégories"
+              @click="changeValueShowMenuResponsive()"
+              class="q-mb-md q-btn-responsive"
+            >
+            </q-btn>
+
+            <!-- Use v-show to conditionally show or hide q-card-section -->
+            <q-card-section
+              v-show="showCategoriesMenu"
+              class="q-card-responsive"
+            >
+              <q-item
+                clickable
+                v-for="theme in themes"
+                :key="theme._id"
+                @click="$router.push(`/categories/` + theme.theme_name)"
+                class="q-item-responsive"
+              >
+                <q-item-section class="q-item-section-responsive">
+                  <q-item-label>{{ theme.theme_name }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-card-section>
+          </div>
+        </div>
       </q-scroll-area>
     </q-drawer>
 
@@ -285,7 +343,7 @@
   </q-layout>
 </template>
 <script setup>
-import { onMounted, onUpdated,getCurrentInstance,ref, watch } from "vue";
+import { onMounted, onUpdated, getCurrentInstance, ref, watch } from "vue";
 
 import ConnexionButton from "src/components/ConnexionButton.vue";
 import logoSocialNetworks from "src/components/logoSocialNetworks.vue";
@@ -313,6 +371,7 @@ const openSearchBar = ref(false);
 // const openDrawer = ref(false);
 const isMobile = ref(false);
 const drawerLeft = ref(false);
+const showCategoriesMenu = ref(false);
 const admin = ref(false);
 
 const openSearchBarFunction = () => {
@@ -327,39 +386,44 @@ const closeSearchBarFunction = () => {
 };
 
 const getUserAuth = () => {
-  const user= userStore.username;
+  const user = userStore.username;
   return user;
 };
 
-watch(() => userStore.username, () => {
-
-  if (userStore.username) {
-    connexion.value = true;
-  } else {
-    connexion.value = false;
+watch(
+  () => userStore.username,
+  () => {
+    if (userStore.username) {
+      connexion.value = true;
+    } else {
+      connexion.value = false;
+    }
   }
-});
+);
 
-watch(() => userStore.role, () => {
-  if (userStore.role === "admin") {
-    admin.value = true;
-  } else {
-    admin.value = false;
+watch(
+  () => userStore.role,
+  () => {
+    if (userStore.role === "admin") {
+      admin.value = true;
+    } else {
+      admin.value = false;
+    }
   }
-});
+);
 
 onMounted(async () => {
   const isApiHealthy = await checkApiHealth.checkApiHealth();
   if (!isApiHealthy) {
-    proxy.$router.push("/no-api"); 
+    proxy.$router.push("/no-api");
   }
   drawerLeft.value = false;
   themes.value = await themesServices.listThemes();
   if (localStorage.getItem("userToken")) {
     const decoded = jwtDecode(localStorage.getItem("userToken"));
-    userStore.username= decoded.username;
-    userStore.role= decoded.role;
-    userStore.id= decoded.userId;
+    userStore.username = decoded.username;
+    userStore.role = decoded.role;
+    userStore.id = decoded.userId;
   }
 
   isMobile.value = window.innerWidth <= 600;
@@ -413,6 +477,11 @@ const searchItems = async () => {
   } catch (error) {
     console.error("Erreur lors de la recherche", error);
   }
+};
+
+const changeValueShowMenuResponsive = () => {
+  console.log(showCategoriesMenu.value);
+  showCategoriesMenu.value = !showCategoriesMenu.value;
 };
 
 const deconnexion = () => {
@@ -538,5 +607,27 @@ const scrollToTop = () => {
   margin-bottom: 10px;
   margin-left: 15px;
   font-weight: bold;
+}
+
+.q-card-responsive {
+  padding: 16px;
+  margin-left: 20px;
+  padding-top: 2px;
+}
+
+.q-item-responsive {
+  margin-bottom: 0px;
+}
+
+.q-btn-responsive {
+  margin-bottom: 0px;
+}
+
+.responsive-menu {
+  margin-top: 15px;
+}
+
+.responsive-menu-content {
+  margin-top: 15px;
 }
 </style>
