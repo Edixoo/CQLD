@@ -1,22 +1,33 @@
 <template>
   <q-page>
     <div v-if="connexion">
+      <q-btn class="q-ma-md justify-center" flat label="Retour" icon="keyboard_double_arrow_left" @click="$router.go(-1)" />
       <app-title :title="connexion.word1.word + ' vs ' + connexion.word2.word" />
       <div v-if="admin">
         <q-btn color="primary" label="Modifier le lien" class="q-ma-md" icon="edit" :to="'/edit/' + connexion.id" />
         <q-btn color="negative" label="Supprimer le lien" class="q-ma-md" icon="delete" @click="() => deleteVerif=!deleteVerif"/>
       </div>
 
-      <div>
-        <div class="text-h3 q-mt-xl carterOne q-ml-xl">
-          Description
-        </div>
-        <div class="text-subtitle1 text-weight-medium q-ma-xl">
-          {{connexion.description}}
-        </div>
+      <div class="text-h3 carterOne marge-automatique q-mt-xl">
+        Informations
       </div>
 
-      <create-link class="q-ma-md"/>
+      <div class="marge-automatique">
+        <div class="text-h4 q-mt-xl carterOne q-ml-lg">
+          Catégorie
+        </div>
+        <div class="text-subtitle1 text-weight-medium q-ma-xl">
+          {{connexion.theme.theme_name}}
+        </div>
+        <div class="text-h4 q-mt-xl carterOne q-ml-lg">
+          Description
+        </div>
+        <div class="text-subtitle1 text-weight-medium q-mt-xl q-ml-xl q-mb-lg">
+          {{connexion.description}}
+        </div>
+        <create-link class="q-ma-md q-mb-xl"/>
+      </div>
+
     </div>
     <app-chargement v-else/>
 
@@ -48,6 +59,7 @@ import CreateLink from "src/components/CreateLink.vue";
 import { useQuasar } from "quasar";
 import { useUserStore } from "../stores/userStore";
 import AppChargement from "src/components/AppChargement.vue";
+import ThemeServices from "../services/ThemeServices";
 
 const $q = useQuasar();
 const route= useRoute();
@@ -61,8 +73,8 @@ const liensId=route.params.id;
 
 onMounted(async () => {
   connexion.value=await ConnexionServices.getConnectionByIdInt(liensId);
-
-  if(userStore.role==='admin'){
+  connexion.value.theme=await ThemeServices.getThemeById(connexion.value.theme);
+  if(userStore.role==='admin' || connexion.value.proposed_by===userStore.id){
     admin.value=true;
   } else{
     admin.value=false;
@@ -82,3 +94,14 @@ const DeleteActions=async ()=>{
 
 }
 </script>
+
+<style lang="scss">
+
+.marge-automatique{
+  margin-left: 50px;
+
+  .inner-wrap{
+    margin-left: 100px;
+  }
+}
+</style>
