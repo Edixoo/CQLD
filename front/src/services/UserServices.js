@@ -27,6 +27,7 @@ const login = async (credentials) => {
     })
     .catch(error => {
       console.error('Login error', error);
+      throw new Error(error.response.data.message || error.message);
     })
 };
 

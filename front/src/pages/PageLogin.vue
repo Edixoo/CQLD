@@ -266,12 +266,18 @@ const login = async () => {
     await UserServices.login({
       username: username.value,
       password: password.value,
-    }).then(async () => {
+    }).then(() => {
       $q.notify({
         type: "positive",
-        message: "Vous êtes connecté.",
+        message: "La connexion a été effectué avec succès.",
       });
-      $router.push("/");
+      $router.go(-1);
+    }).catch((err) => {
+      console.log(err)
+      $q.notify({
+        type: "negative",
+        message: "Le nom d'utilisateur ou le mot de passe est incorrect.",
+      });
     });
   } else {
     $q.notify({
