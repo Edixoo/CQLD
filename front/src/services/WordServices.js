@@ -15,8 +15,9 @@ const listWords = async () => {
   return await apiClient.get('/api/words/').then((response) => {return response.data});
 };
 
-const createWord = (wordData) => {
-  return apiClient.post('/api/words/', wordData);
+const createWord = async (wordData) => {
+  const res = await apiClient.post('/api/words/', wordData);
+  return res.data;
 };
 
 const getWordById = async (id) => {

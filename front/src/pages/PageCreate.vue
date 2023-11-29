@@ -84,7 +84,8 @@ import ThemeServices from "../services/ThemeServices.js";
 import ConnexionServices from "../services/ConnexionServices.js";
 import { ref, onMounted } from "vue";
 import { useQuasar } from "quasar";
-import { jwtDecode } from "jwt-decode";
+import { useUserStore } from "../stores/userStore.js";
+
 
 const $q = useQuasar();
 const mot1 = ref("");
@@ -92,12 +93,7 @@ const mot2 = ref("");
 const description = ref("");
 const selectedCategory = ref("");
 const categories = ref([]);
-
-const getUserAuth = () => {
-  const token_decoded = jwtDecode(localStorage.getItem("userToken"));
-  const userid = token_decoded.userId;
-  return userid;
-};
+const userStore=useUserStore()
 
 const fetchThemes = async () => {
   const result = await ThemeServices.listThemes();
@@ -119,32 +115,29 @@ const createWord = async () => {
     const themeId = theme._id;
 
     if (mot1.value && mot2.value && selectedCategory.value) {
-      WordServices.createWord({
+      const word1 = await WordServices.createWord({
         word: mot1.value,
         theme: themeId,
-        added_by: getUserAuth(),
+        added_by: userStore.id,
         approved: true,
       });
 
-      WordServices.createWord({
+      const word2 = await WordServices.createWord({
         word: mot2.value,
         theme: themeId,
-        added_by: getUserAuth(),
+        added_by: userStore.id,
         approved: true,
       });
 
-      const id_word1 = await WordServices.getWordByName(mot1.value);
-      const id1 = id_word1._id;
-
-      const id_word2 = await WordServices.getWordByName(mot2.value);
-      const id2 = id_word2._id;
+      const id1 = word1._id;
+      const id2 = word2._id;
 
       await ConnexionServices.createConnection({
         word1: id1,
         word2: id2,
         theme: themeId,
         description: description.value,
-        proposed_by: getUserAuth(),
+        proposed_by: userStore.id,
       });
 
       $q.notify({
@@ -160,9 +153,10 @@ const createWord = async () => {
       });
     }
   } catch (error) {
+    console.error(error.message)
     $q.notify({
       type: "negative",
-      message: "Une erreur est survenue",
+      message: "Une erreur est survenue:" + error.message,
     });
   }
 };
