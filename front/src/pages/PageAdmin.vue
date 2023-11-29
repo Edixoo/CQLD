@@ -32,8 +32,6 @@
                 @click="inspectWord(connexion._id)"
                 size="12px"
                 flat
-                dense
-                round
                 icon="search"
                 >Inspecter</q-btn
               >
@@ -45,8 +43,6 @@
                 v-if="!connexion.approved"
                 size="12px"
                 flat
-                dense
-                round
                 icon="check"
                 >Approuver</q-btn
               >
@@ -58,8 +54,6 @@
                 v-if="!connexion.approved"
                 size="12px"
                 flat
-                dense
-                round
                 icon="close"
                 >Refuser</q-btn
               >
