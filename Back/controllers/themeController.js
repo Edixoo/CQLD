@@ -11,7 +11,7 @@ const BASE_ERROR = "BACK ERROR"
 
 exports.listThemes = async (req, res) => {
   try {
-    const themes = await Theme.find();
+    const themes = await Theme.find().sort({ theme_name: 1 });
     res.status(200).send(themes);
 
   } catch (error) {
