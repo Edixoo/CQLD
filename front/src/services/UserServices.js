@@ -32,6 +32,15 @@ const login = async (credentials) => {
 };
 
 
+
+const getUserByID = async (userData) => {
+  return await apiClient.post('/api/users/getUserByID', userData).then((response) => { return response.data});
+};
+
+
+
+
+
 const logout = () => {
   localStorage.removeItem('userToken');
   delete axios.defaults.headers.common['Authorization'];
@@ -87,7 +96,8 @@ export default {
   sendMailWithOTP, 
 
   updatePassword, 
-  getOTP
+  getOTP, 
+  getUserByID
   
 };
 

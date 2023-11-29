@@ -104,6 +104,8 @@ router.post('/register', userController.register);
 router.post('/login', userController.login);
 
 
+
+
 /**
  * @swagger
  * /api/users/profile:
@@ -326,5 +328,69 @@ router.post('/updatePassword', userController.updatePassword)
  */
 router.post('/getOTP', userController.getOTP);
 
+/**
+ * @swagger
+ * /api/users/getUserByID:
+ *   post:
+ *     summary: Get user by ID
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               _id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userID:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *         example:
+ *           userID: 123
+ *           username: john_doe
+ *           email: john@example.com
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       500:
+ *         description: Internal error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ *     examples:
+ *       Success:
+ *         summary: Example of a successful request
+ *         value:
+ *           _id: 123
+ *       Failure:
+ *         summary: Example of a failed request
+ *         value:
+ *           _id: non_existent_user
+ */
+router.post('/getUserByID', userController.getUserByID);
 
 module.exports = router;
