@@ -32,7 +32,7 @@ const getConnectionById = async (id) => {
 };
 
 const getConnectionByIdInt = async (id) => {
-  return await apiClient.get(`/api/connections/int/${id}`).then((response) => {return response.data});
+  return await apiClient.get(`/api/connections/int/${id}`).then((response) => {return response.data}).catch((error) => { throw new Error(error.response.data) });
 };
 
 const updateConnection = (id, connectionData) => {

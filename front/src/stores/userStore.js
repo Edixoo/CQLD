@@ -57,6 +57,7 @@ export const useUserStore = defineStore('user', () => {
       });
       
         return {
+            id,
             username,
             role,
             setUser,

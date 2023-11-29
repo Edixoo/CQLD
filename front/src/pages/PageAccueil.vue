@@ -82,6 +82,9 @@ const connexion = ref(true);
 const DefineAleatoire = async () => {
   const maxDiff = (await ConnexionServices.listConnections()).length;
   alea.value = Math.floor(Math.random() * maxDiff);
+  await ConnexionServices.getConnectionByIdInt(alea.value).catch(() => {
+    DefineAleatoire();
+  });
 };
 
 onMounted(async () => {

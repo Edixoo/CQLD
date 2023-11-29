@@ -69,7 +69,7 @@ exports.getConnectionById = async (req, res) => {
 
 exports.getConnectionByTheme = async (req, res) => {
   try {
-    const connection = await Connection.find({theme: req.params.id}).populate(['word1', 'word2']);
+    const connection = await Connection.find({theme: req.params.id, approved: true }).populate(['word1', 'word2']);
     if (!connection) {
       return res.status(504).send('Connection not found');
     }
@@ -117,7 +117,7 @@ exports.getConnectionByApproved = async (req, res) => {
 
 exports.getConnectionByIdInt = async (req, res) => {
   try {
-    const connection = await Connection.findOne({id: req.params.id}).populate(['word1', 'word2']);
+    const connection = await Connection.findOne({id: req.params.id, approved: true}).populate(['word1', 'word2']);
     if (!connection) {
       return res.status(504).send('Connection not found');
     }
