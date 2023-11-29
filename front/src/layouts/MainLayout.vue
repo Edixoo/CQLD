@@ -110,6 +110,7 @@
               
               <q-item v-close-popup style="text-align: center; font-weight: bold">
                 <q-item-section>
+                  {{ userStore.role === 'user' ? "Utilisateur" : ""}}
                   {{ userStore.role === "admin" ? "Administrateur" : "" }}
                 </q-item-section>
               </q-item>
@@ -358,9 +359,8 @@ onMounted(async () => {
     const decoded = jwtDecode(localStorage.getItem("userToken"));
     userStore.username= decoded.username;
     userStore.role= decoded.role;
+    userStore.id= decoded.userId;
   }
-
-
 
   isMobile.value = window.innerWidth <= 600;
 
