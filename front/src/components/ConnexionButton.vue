@@ -35,8 +35,6 @@ const isLoginActive = ref(true);
 const activeTextColor = ref("primary");
 const inactiveTextColor = ref("white");
 
-const handleOkButtonClick = () => {};
-
 const handleButtonClick = (buttonType) => {
   if (buttonType === "register") {
     isRegisterActive.value = true;
