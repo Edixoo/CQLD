@@ -27,7 +27,7 @@
         Informations
       </div>
 
-      <div class="marge-automatique content-page-link">
+      <div class="marge-automatique">
         <div class="text-h4 q-mt-xl carterOne q-ml-lg">
           Catégorie
         </div>
@@ -40,10 +40,8 @@
         <div class="text-subtitle1 text-weight-medium q-mt-xl q-ml-xl q-mb-lg">
           {{connexion.description}}
         </div>
-        <create-link class="q-ma-md q-mb-xl"/>
+        <create-link class="q-ma-md q-mb-xl btn-page-link"/>
       </div>
-
-      <create-link class="q-ma-md btn-page-link" />
     </div>
     <app-chargement v-else />
 
