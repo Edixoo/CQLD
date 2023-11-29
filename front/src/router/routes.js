@@ -68,20 +68,7 @@ const routes = [
     meta: { requiresAuth: true,  roles: ['user', 'admin'] }
   },
   {
-    path: '/inspect/:_id', 
-    component: () => import("layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("pages/PageInspect.vue") }],
-    meta: { requiresAuth: true, role: 'admin' } 
-  },
-  // Always leave this as last one,
-  // but you can also remove it
-  {
-    path: "/:catchAll(.*)*",
-    component: () => import("pages/ErrorNotFound.vue"),
-  },
-
-  {
-    path: '/inspect/:_id', 
+    path: '/inspect/:id', 
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/PageInspect.vue") }],
     meta: { requiresAuth: true, role: 'admin' } 
@@ -89,7 +76,13 @@ const routes = [
   {
     path: '/no-api',
     component: () => import('pages/PageNoApi.vue')
-  }
+  },
+  // Always leave this as last one,
+  // but you can also remove it
+  {
+    path: "/:catchAll(.*)*",
+    component: () => import("pages/ErrorNotFound.vue"),
+  },
 ];
 
 export default routes;
