@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-page-container>
+    <q-page-container class="q-page-container">
       <q-card class="q-mx-auto q-pa-md q-py-md card-create">
         <q-card-section>
           <div class="q-gutter-md">
@@ -55,6 +55,7 @@
                 <label for="catégories" class="label-large">Catégories</label>
                 <div>
                   <q-select
+                    class="q-select"
                     v-model="selectedCategory"
                     filled
                     label="Choisir une catégorie"
@@ -177,9 +178,17 @@ const createWord = async () => {
   max-width: 600px;
 }
 
+.q-select {
+  width: 300px;
+}
+
 @media (max-width: 450px), screen and (orientation: portrait) {
   .card-create {
     max-width: 90%;
+  }
+
+  .q-select {
+    width: 100%;
   }
 }
 </style>

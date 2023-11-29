@@ -71,6 +71,7 @@
         />
 
         <q-input
+          v-if="!isMobile"
           dark
           v-model="SearchBarValue"
           borderless
@@ -83,6 +84,17 @@
             <q-icon name="search" />
           </template>
         </q-input>
+
+        <q-btn
+          round
+          color="primary"
+          label=""
+          v-if="isMobile"
+          class="q-ml-md"
+          @click="openSearchBarFunction()"
+        >
+          <q-icon name="search"
+        /></q-btn>
 
         <connexion-button v-if="!connexion" />
 
@@ -231,6 +243,15 @@
               to="/"
               class="q-mb-md"
               ><q-icon class="q-mr-md" name="home" /> Accueil</q-btn
+            >
+
+            <q-btn
+              flat
+              to="/admin"
+              class="q-mr-md q-mb-md"
+              color="primary"
+              text-color="white"
+              ><q-icon class="q-mr-md" name="security" /> Admin</q-btn
             >
 
             <q-btn
