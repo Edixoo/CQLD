@@ -18,7 +18,8 @@ const swaggerOptions = {
     openapi: '3.1.0',
     info: {
       title: 'CQLD API',
-      version: '1.0.0'
+      version: '1.0.0',
+      description: "Une API permettant aux utilisateurs de proposer et de découvrir des différences entre deux mots. Les utilisateurs s'identifient, sélectionnent ou créent deux mots, puis soumettent une description de la différence entre ces mots. Les propositions sont validées par un administrateur et sont consultables via un moteur de recherche sur la page d'accueil du site. Répondez désormais aux questions sur les différences avec confiance en disant simplement 'CQLD'."
     }
   },
   servers: [
