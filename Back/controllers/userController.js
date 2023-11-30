@@ -117,9 +117,7 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.getUserByID =  async (req, res) => {
-  console.log(req.body)
   try {
-    console.log(req.body._id)
     const user = await User.findOne({ _id : req.body._id });
     if (!user) {
       return res.status(504).send("User not found.");

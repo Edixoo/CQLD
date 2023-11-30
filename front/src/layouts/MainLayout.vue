@@ -498,7 +498,6 @@ const searchItems = async () => {
 };
 
 const changeValueShowMenuResponsive = () => {
-  console.log(showCategoriesMenu.value);
   showCategoriesMenu.value = !showCategoriesMenu.value;
 };
 
