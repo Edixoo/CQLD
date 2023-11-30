@@ -18,10 +18,10 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true
 });
 
-const NUM_USERS = 100;
-const NUM_THEMES = 100;
-const NUM_WORDS = 100;
-const NUM_CONNECTIONS = 100;
+const NUM_USERS = 1;
+const NUM_THEMES = 1;
+const NUM_WORDS = 2;
+const NUM_CONNECTIONS = 1;
 
 async function createUsers() {
   const users = Array.from({ length: NUM_USERS }).map(() => ({
