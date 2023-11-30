@@ -120,10 +120,13 @@
               >
                 <q-item-section class="row">{{ getUserAuth() }}</q-item-section>
               </q-item>
-              
-              <q-item v-close-popup style="text-align: center; font-weight: bold">
+
+              <q-item
+                v-close-popup
+                style="text-align: center; font-weight: bold"
+              >
                 <q-item-section>
-                  {{ userStore.role === 'user' ? "Utilisateur" : ""}}
+                  {{ userStore.role === "user" ? "Utilisateur" : "" }}
                   {{ userStore.role === "admin" ? "Administrateur" : "" }}
                 </q-item-section>
               </q-item>
@@ -245,6 +248,7 @@
             >
 
             <q-btn
+              v-if="userStore.role === 'admin'"
               flat
               to="/admin"
               class="q-mr-md q-mb-md"
@@ -434,21 +438,24 @@ onMounted(async () => {
   });
 });
 
-const updateTheme= () => {
-    if (SearchBarValue.value.length > 0) {
-      openSearchBarFunction();
-    }
+const updateTheme = () => {
+  if (SearchBarValue.value.length > 0) {
+    openSearchBarFunction();
+  }
   searchItems();
 };
 
-watch(() => SearchBarValue.value,() => {
-  if (SearchBarValue.value) {
-    searchItems();
-  } else {
-    filteredThemes.value = [];
-    listConnexion.value = [];
+watch(
+  () => SearchBarValue.value,
+  () => {
+    if (SearchBarValue.value) {
+      searchItems();
+    } else {
+      filteredThemes.value = [];
+      listConnexion.value = [];
+    }
   }
-});
+);
 
 const searchItems = async () => {
   try {
