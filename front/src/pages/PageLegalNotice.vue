@@ -28,12 +28,6 @@
         </section>
 
         <section class="width">
-          <h6 class="h6">Hébergement</h6>
-          <p>Nom de l'hébergeur : [Nom de l'hébergeur]</p>
-          <p>Adresse : [Adresse de l'hébergeur]</p>
-        </section>
-
-        <section class="width">
           <h6 class="h6">Propriété Intellectuelle</h6>
           <p>
             L'ensemble des contenus de ce site (textes, images, vidéos, etc.)
@@ -65,9 +59,9 @@
           <p>
             Les données personnelles collectées sur ce site sont uniquement
             destinées à CQLD et ne seront en aucun cas cédées à des tiers.
-            Conformément à la loi "Informatique et Libertés" du [Date de la
-            loi], vous disposez d'un droit d'accès, de modification, de
-            rectification et de suppression des données qui vous concernent.
+            Conformément à la loi "Informatique et Libertés", vous disposez d'un
+            droit d'accès, de modification, de rectification et de suppression
+            des données qui vous concernent.
           </p>
         </section>
 
