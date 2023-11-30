@@ -26,7 +26,7 @@
             <td class="text-left">{{ connexion.word1.word }}</td>
             <td class="text-right">{{ connexion.word2.word }}</td>
             <td class="text-right">{{ connexion.theme }}</td>
-            <td class="text-right">{{ connexion.description }}</td>
+            <td class="text-right max-description">{{ connexion.description }}</td>
             <td class="text-right">
               <q-btn
                 @click="inspectWord(connexion._id)"
@@ -245,5 +245,11 @@ h1.carterOne.q-mb-md {
     justify-content: center;
     align-items: center;
   }
+}
+
+.max-description {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

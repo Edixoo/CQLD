@@ -3,7 +3,6 @@
     <div v-if="connexion">
       <q-btn
         class="q-ma-md justify-center"
-        flat
         label="Retour"
         icon="keyboard_double_arrow_left"
         @click="$router.go(-1)"
@@ -42,7 +41,7 @@
         <div class="text-subtitle1 text-weight-medium q-mt-xl q-ml-xl q-mb-lg">
           {{ connexion.description }}
 
-          <div class="font-owner">Proposé par : {{ proprio }}</div>
+          <div class="font-owner q-mt-xl">Proposé par : {{ proprio }}</div>
         </div>
 
         <create-link class="q-ma-md q-mb-xl btn-page-link" />
@@ -95,7 +94,7 @@ const connexion = ref(null);
 const admin = ref(false);
 const liensId = route.params.id;
 
-let proprio = ""; // Utilisez "let" plutôt que "const" ici
+const proprio = ref(""); // Utilisez "let" plutôt que "const" ici
 
 onMounted(async () => {
   connexion.value = await ConnexionServices.getConnectionByIdInt(liensId);
@@ -103,16 +102,14 @@ onMounted(async () => {
     connexion.value.theme
   );
 
-  console.log(connexion.value.proposed_by);
   // const user = await UserServices.getProfile()
 
   const user = await UserServices.getUserByID({
     _id: connexion.value.proposed_by,
   });
 
-  proprio = user.username;
+  proprio.value = user.username;
 
-  console.log("user", user.username);
 
   if (
     userStore.role === "admin" ||

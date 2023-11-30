@@ -17,10 +17,6 @@
                     filled
                     v-model="mot1"
                     lazy-rules
-                    :rules="[
-                      (val) =>
-                        (val && val.length > 0) || 'Veuillez entrer le mot 1',
-                    ]"
                     class="q-mr-md"
                   />
                 </div>
@@ -31,10 +27,6 @@
                     filled
                     v-model="mot2"
                     lazy-rules
-                    :rules="[
-                      (val) =>
-                        (val && val.length > 0) || 'Veuillez entrer le mot 2',
-                    ]"
                   />
                 </div>
               </div>

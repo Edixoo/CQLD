@@ -107,8 +107,8 @@
                 <p class="q-mr-sm title-font">Déjà un compte ?</p>
                 <a
                   @click="$router.push('/login')"
-                  class="q-mb-xs"
-                  style="text-decoration: none"
+                  class="q-mb-xs cursor-pointer"
+                  
                 >
                   Connectez-vous</a
                 >
@@ -133,9 +133,12 @@
 import UserServices from "../services/UserServices.js";
 import { useQuasar } from "quasar";
 
-import { ref, getCurrentInstance } from "vue";
+import { ref, getCurrentInstance, onUnmounted } from "vue";
 const { proxy } = getCurrentInstance();
 
+onUnmounted(() => {
+  window.location.reload();
+})
 const username = ref("");
 const firstName = ref("");
 const lastName = ref("");
@@ -206,9 +209,6 @@ const register = async () => {
   font-weight: 500;
 }
 
-.q-page-container {
-  background: rgb(217, 217, 217);
-}
 
 @media (max-width: 450px), screen and (orientation: portrait) {
   .q-card.q-mx-auto.q-pa-md.q-card {

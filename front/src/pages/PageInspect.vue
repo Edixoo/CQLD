@@ -1,15 +1,25 @@
 <template>
-  <div class="inspect-details">
-    <h2>Détails du lien</h2>
-    <div v-if="selectedMot">
-      <p><strong>Mot1: </strong>{{ selectedMot.word1.word }}</p>
-      <p><strong>Mot2: </strong>{{ selectedMot.word2.word }}</p>
-      <p><strong>Catégorie: </strong>{{ selectedMot.theme.theme_name }}</p>
-      <p><strong>Description: </strong>{{ selectedMot.description }}</p>
-      <q-btn label="Accepter" color="positive" @click="approuverMot" class="q-ma-md" />
-      <q-btn label="Refuser" color="negative" @click="refuserMot" class="q-ma-md" />
-    </div>
+  <q-page>
+  <q-btn
+        class="q-ma-md justify-center"
+        label="Retour"
+        icon="keyboard_double_arrow_left"
+        @click="$router.go(-1)"
+      />
+  <div class="div-class">
+    <q-card class="inspect-details">
+      <h2 class="carterOne">Détails du lien</h2>
+      <div v-if="selectedMot" class="self-center">
+        <p><strong>Mot1: </strong>{{ selectedMot.word1.word }}</p>
+        <p><strong>Mot2: </strong>{{ selectedMot.word2.word }}</p>
+        <p><strong>Catégorie: </strong>{{ selectedMot.theme.theme_name }}</p>
+        <p><strong>Description: </strong>{{ selectedMot.description }}</p>
+        <q-btn label="Accepter" color="positive" @click="approuverMot" class="q-ma-md" />
+        <q-btn label="Refuser" color="negative" @click="refuserMot" class="q-ma-md" />
+      </div>
+    </q-card>
   </div>
+  </q-page>
 </template>
 
 <script setup>
@@ -27,7 +37,6 @@ const router = useRouter();
 onMounted(async () => {
 
   const params = route.params.id;
-  console.log(params);
   selectedMot.value = await ConnexionServices.getConnectionById(params);
   selectedMot.value.theme = await ThemeServices.getThemeById(selectedMot.value.theme);
 });
@@ -67,6 +76,13 @@ const refuserMot = async () => {
 
 <style>
 .inspect-details {
-  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 50%;
+  padding: 2rem;
+  margin-top: 2rem;
 }
 </style>

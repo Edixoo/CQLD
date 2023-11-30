@@ -13,7 +13,6 @@ export const useUserStore = defineStore('user', () => {
     const last_login = ref('');
       
     const setUser = ((newUser) => {
-        console.log(newUser)
         id.value=newUser._id;
         name.value=newUser.name;
         surname.value=newUser.surname;

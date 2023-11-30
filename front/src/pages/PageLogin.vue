@@ -45,8 +45,7 @@
                 <p class="q-mr-sm" style="font-weight: 500">Pas de compte ?</p>
                 <a
                   @click="$router.push('/register')"
-                  class="q-mb-xs"
-                  style="text-decoration: none"
+                  class="q-mb-xs cursor-pointer"
                   >Créez en un</a
                 >
               </div>
@@ -271,9 +270,8 @@ const login = async () => {
         type: "positive",
         message: "La connexion a été effectué avec succès.",
       });
-      $router.go(-1);
+      $router.push('/');
     }).catch((err) => {
-      console.log(err)
       $q.notify({
         type: "negative",
         message: "Le nom d'utilisateur ou le mot de passe est incorrect.",
