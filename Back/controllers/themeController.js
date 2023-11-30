@@ -33,10 +33,9 @@ exports.makeTheme = async (test) => {
   try {
     const theme = new Theme(test);
     await theme.save();
-    res.status(200).send(theme);
 
   } catch (error) {
-    res.status(400).send(error.message);
+    console.error(error)
   }
 };
 
