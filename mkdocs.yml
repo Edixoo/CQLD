@@ -1,5 +1,14 @@
 site_name: CQLD Documentation
 nav:
-  - Home: index.md
-  - About: about.md
+  - Accueil: index.md
+  - Documentation: 
+    - "Installation": installation.md
+    - "Configuration": configuration.md
+    - "Démarrage": demarrage.md
+    - "Navigation": navigation.md
+    - "Création de compte": creationAccount.md
+    - "Création de lien": createLink.md
+    - "Modification & Suppresion de lien": updateDelete.md
+    - "FAQ": faq.md
+    - "Crédits & Contact": credit.md
 theme: readthedocs
